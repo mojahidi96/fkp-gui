@@ -1,0 +1,12 @@
+<fieldset class="form-group cardSelection" [sncrValidationStyles]="hasErrors()">
+
+    <input type="hidden" [(ngModel)]="model" [name]="name">
+    <sncr-validation-messages *ngIf="hasErrors()" [messages]="getErrors()"></sncr-validation-messages>
+
+    <legend *ngIf="label">
+        {{label}}<span *ngIf="showAsterisk(null)" class="requiredField">*</span>
+    </legend>
+    <ng-content *ngIf="!label" select="legend"></ng-content>
+
+    <ng-content></ng-content>
+</fieldset>

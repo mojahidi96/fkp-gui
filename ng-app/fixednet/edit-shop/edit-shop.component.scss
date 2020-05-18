@@ -1,0 +1,77 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/mixins';
+@import '../../styles/modal';
+@import '../../styles/page-title';
+
+.card-header {
+  border-radius: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.contentPanelBody > .card {
+  & > .card-block {
+    padding: 20px;
+  }
+}
+
+.form-inline .form-control {
+  width: 100% !important;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.padding-0 {
+  padding: 0px;
+}
+
+h1.primaryTitle {
+  color: $primary;
+  margin: 15px 0px 0px 20px;
+
+  font-family: 'vodafone_rgregular', Arial, Helvetica, sans-serif;
+  font-size: 45px;
+}
+
+h5.subTitle {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+}
+
+.area {
+  background: $area-background;
+  padding: 5px 10px;
+  margin-bottom: 20px;
+}
+
+.customer-info {
+  margin: 0 0 -10px;
+  width: 174px;
+  float: left;
+  padding: 6px 0 0;
+}
+
+.break-word {
+  word-wrap: break-word !important;
+}
+
+::ng-deep .edit-shop-comp .tab-pane {
+  padding: 20px 20px 0px 20px;
+}
+
+.scroll-customerNo {
+  max-height: 200px;
+  overflow-y: auto;
+}
+.modal-body {
+  max-height: 350px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.Pbox {
+  height: 20px;
+}

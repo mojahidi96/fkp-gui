@@ -1,0 +1,69 @@
+/* autoprefixer grid: no-autoplace */
+
+@import '../../styles/vodafone';
+
+.notification {
+  border-radius: $radius-default;
+  border: 1px solid;
+  padding: 20px;
+  margin-bottom: 1rem;
+  position: relative;
+  display: grid;
+  grid-template: 'icon . content . close' max-content / 28px 20px 1fr 20px 20px;
+
+  &.-basic {
+    background-color: #f0f7f9;
+    border-color: #007c92;
+  }
+
+  &.-success {
+    background-color: $color-willow-brook;
+    border-color: $color-verdun-green;
+  }
+
+  &.-info,
+  &.-warning {
+    border-color: $color-international-orange;
+    background-color: $color-seashell-peach;
+  }
+
+  &.-error {
+    border-color: $color-vodafone-red;
+    background-color: $color-bridesmaid;
+  }
+
+  &.-info-gray {
+    border-color: #999999;
+    background-color: #f4f4f4;
+  }
+}
+
+.notification__icon {
+  grid-area: icon;
+}
+
+.notification__content {
+  grid-area: content;
+  padding-top: 4px;
+}
+
+.notification__heading {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.notification__message {
+  line-height: 20px;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.notification__close-wrapper {
+  grid-area: close;
+}

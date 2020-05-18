@@ -1,0 +1,11 @@
+<div>
+    <sncr-datatable [cols]="columns"
+                    [lazy]="lazy"
+                    [sortField]="'ban'"
+                    [sortOrder]="1"
+                    [lazyLoadUrl]="lazyLoadUrl"
+                    [resultMessage]="banReviewTranslations?.banReviewTotalCountMsg"
+                    [value]="editedDataCopy"
+                    #reviewTable>
+    </sncr-datatable>
+</div>

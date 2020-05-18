@@ -1,0 +1,24 @@
+<div class="loader-wrapper" *ngIf="firstLoad">
+    <sncr-loader></sncr-loader>
+</div>
+
+<div class="divPageMain" *ngIf="!legacy">
+    <div class="wrapper">
+        <sncr-top-bar></sncr-top-bar>
+
+        <div class="contentPanel">
+            <sncr-loader [isLoading]="(loading || translationsLoading) && !firstLoad"></sncr-loader>
+            <router-outlet></router-outlet>
+        </div>
+
+        <sncr-footer [showTariffDisclaimer]="showTariffDisclaimer" [tariffDisclaimer]="tariffDisclaimer"></sncr-footer>
+    </div>
+</div>
+
+<div *ngIf="legacy">
+    <div class="contentPanel">
+        <sncr-loader [isLoading]="(loading || translationsLoading)"></sncr-loader>
+        <router-outlet name="legacy"></router-outlet>
+    </div>
+</div>
+<timeout-popup *ngIf="!legacy"></timeout-popup>

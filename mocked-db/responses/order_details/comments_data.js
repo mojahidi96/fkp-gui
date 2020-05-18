@@ -1,0 +1,3 @@
+module.exports = {
+  rows: "[{\"date\":\"15.10.2018 06:59:56\",\"comment\":\"Auftrag Abschlussbestätigungs E-Mail erfolgreich gesendet\"},{\"date\":\"15.10.2018 06:59:40\",\"comment\":\"24RBDS ist fest im Tarif inkludiert und kann nicht erselzt / gelöscht werden\"},{\"date\":\"15.10.2018 05:15:50\",\"comment\":\"Email-Bestätigugn erfolgreich gesendet\"},{\"date\":\"15.10.2018 04:23:11\",\"comment\":\"Bestellung erhalten\"}]"
+};

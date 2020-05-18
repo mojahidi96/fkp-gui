@@ -1,0 +1,140 @@
+@import '../../styles/mixins';
+@import '../../styles/custom-variables';
+
+:host ::ng-deep .customTable {
+  .info-circleIcon {
+    background-image: url(~/public/icons/svg/vodafone/info-circle.svg);
+    @include icon-sizes24;
+  }
+
+  thead,
+  .span {
+    background: $pageTitleBg;
+  }
+
+  thead tr th {
+    padding: 15px 10px;
+    font-weight: bold;
+    border-bottom: 1px solid $primary !important;
+  }
+
+  tbody tr th {
+    padding: 15px 10px;
+    border-bottom: 1px solid $btn-primary-bg !important;
+  }
+
+  tbody tr td:not(.changeTariff) {
+    padding: 11px 10px;
+    border-bottom: 1px solid #d8d8d8 !important;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0 !important;
+  }
+
+  thead tr th,
+  tbody tr td {
+    border: 0;
+    text-align: right;
+  }
+
+  thead tr th:first-child,
+  tbody tr td:first-child {
+    text-align: left;
+  }
+}
+
+:host ::ng-deep .validation-holder + .popover {
+  position: relative !important;
+  bottom: 20px !important;
+}
+
+:host ::ng-deep .nav-hidden {
+  .nav-tabs {
+    display: none;
+  }
+}
+
+.stepCircle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f4f4f4;
+  float: left;
+  position: relative;
+  margin-right: 12px;
+}
+
+.align-left {
+  float: left;
+}
+
+:host ::ng-deep .nav-tabs {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  border: none;
+  margin-bottom: 30px;
+  width: 100%;
+  .nav-item {
+    &:nth-of-type(even) {
+      flex: auto;
+      margin: 0 10px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 0;
+      border-color: white;
+      color: #cccccc;
+      &.disabled {
+        cursor: default;
+      }
+      .number {
+        color: #ffffff;
+        top: 1px;
+      }
+      .rightLine span {
+        background: #fff;
+      }
+    }
+    .active {
+      color: #666666;
+      .rightLine:after {
+        background: #666666 !important;
+      }
+      .stepCircle {
+        background-color: #666666;
+      }
+    }
+  }
+}
+
+.stepper-horizontal-line {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-color: #dddddd;
+  flex: auto;
+  height: 0;
+  min-width: 32px;
+}
+
+:host ::ng-deep .loader {
+  margin-left: -63px !important;
+}
+
+.buttons {
+  display: flex;
+  margin-bottom: 30px;
+
+  & > *:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+
+.buttons_with_flexend {
+  justify-content: flex-end;
+}

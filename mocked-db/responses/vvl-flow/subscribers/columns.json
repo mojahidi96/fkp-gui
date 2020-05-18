@@ -1,0 +1,477 @@
+[
+  {
+    "title": "VVL-Datum",
+    "field": "6",
+    "sortable": "6",
+    "show": true,
+    "type": "date",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Kundennummer",
+    "field": "1",
+    "sortable": "1",
+    "show": true,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Rufnummer",
+    "field": "2",
+    "sortable": "2",
+    "show": true,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Name",
+    "field": "49",
+    "sortable": "49",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y",
+    "compoundField": "47,43,44,45,9,10,11"
+  },
+  {
+    "title": "Adresse",
+    "field": "50",
+    "sortable": "50",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y",
+    "compoundField": "46,12,13,14,17,16,42"
+  },
+  {
+    "title": "Interne Kennziffer",
+    "field": "28",
+    "sortable": "28",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Namensformat",
+    "field": "47",
+    "sortable": "47",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Anrede",
+    "field": "43",
+    "sortable": "43",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Titel",
+    "field": "44",
+    "sortable": "44",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Vorname",
+    "field": "45",
+    "sortable": "45",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Name 1",
+    "field": "9",
+    "sortable": "9",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Name 2",
+    "field": "10",
+    "sortable": "10",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Name 3",
+    "field": "11",
+    "sortable": "11",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Adressart",
+    "field": "46",
+    "sortable": "46",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Straße",
+    "field": "12",
+    "sortable": "12",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Hausnummer",
+    "field": "13",
+    "sortable": "13",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Postfach",
+    "field": "14",
+    "sortable": "14",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Postleitzahl",
+    "field": "17",
+    "sortable": "17",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Stadt",
+    "field": "16",
+    "sortable": "16",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Land",
+    "field": "42",
+    "sortable": "42",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Ansprechpartner",
+    "field": "18",
+    "sortable": "18",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Kontakt Telefon",
+    "field": "20",
+    "sortable": "20",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Kontakt Fax",
+    "field": "19",
+    "sortable": "19",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "e-Mail",
+    "field": "48",
+    "sortable": "48",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Neues Passwort",
+    "field": "53",
+    "sortable": "53",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Passwort zurücksetzen",
+    "field": "54",
+    "sortable": "54",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "SMS senden",
+    "field": "55",
+    "sortable": "55",
+    "show": false,
+    "type": "text"
+  },
+  {
+    "title": "Ländercode",
+    "field": "15",
+    "sortable": "15",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Tarif Typ",
+    "field": "26",
+    "sortable": "26",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Konditions-ID",
+    "field": "27",
+    "sortable": "27",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Tarifgruppe",
+    "field": "21",
+    "sortable": "21",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Tarif ID",
+    "field": "23",
+    "sortable": "23",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Tarifname",
+    "field": "24",
+    "sortable": "24",
+    "show": true,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Basispreis",
+    "field": "56",
+    "sortable": "56",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Subv. Tarif",
+    "field": "25",
+    "sortable": "25",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Kartenart",
+    "field": "8",
+    "sortable": "8",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "SIM-Nummer",
+    "field": "7",
+    "sortable": "7",
+    "show": false,
+    "type": "number",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "UltraCard 1 SIM-Typ",
+    "field": "32",
+    "sortable": "32",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "SIM-Nr. Ultracard 1",
+    "field": "29",
+    "sortable": "29",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Ultracard 1 Beschr.",
+    "field": "33",
+    "sortable": "33",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "UltraCard 2 SIM-Typ",
+    "field": "34",
+    "sortable": "34",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Ultracard 2 Beschr.",
+    "field": "35",
+    "sortable": "35",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "SIM-Nr. Ultracard 2",
+    "field": "30",
+    "sortable": "30",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Anz. UltraCards",
+    "field": "37",
+    "sortable": "37",
+    "show": false,
+    "type": "number",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Erstaktivierung",
+    "field": "3",
+    "sortable": "3",
+    "show": false,
+    "type": "date",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Gekündigt zum",
+    "field": "31",
+    "sortable": "31",
+    "show": false,
+    "type": "date",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Mögl. Vertragsende",
+    "field": "5",
+    "sortable": "5",
+    "show": false,
+    "type": "date",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Tarifgruppenbeschr.",
+    "field": "22",
+    "sortable": "22",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Vertragsbeginn",
+    "field": "4",
+    "sortable": "4",
+    "show": false,
+    "type": "date",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Tarifoptionen",
+    "field": "40",
+    "sortable": "40",
+    "show": true,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Art der Verbindungsübersicht",
+    "field": "38",
+    "sortable": "38",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Verkürzte Zielrufnummer Archiv",
+    "field": "39",
+    "sortable": "39",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Verkürzte Zielrufnummer",
+    "field": "41",
+    "sortable": "41",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Hardwareabrufberechtigt",
+    "field": "58",
+    "sortable": "58",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Vertragsverlöngerung möglich",
+    "field": "57",
+    "sortable": "57",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Rechnungsadresse",
+    "field": "52",
+    "sortable": "52",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Firmenadresse",
+    "field": "51",
+    "sortable": "51",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "Teilnehmerstatus",
+    "field": "36",
+    "sortable": "36",
+    "show": false,
+    "type": "text",
+    "nonEditable": "Y"
+  },{
+    "title": "VVL mit Hardware",
+    "field": "vvlHandyOnly",
+    "sortable": "vvlHandyOnly",
+    "show": true,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "VVL mit Hardwaregutschrift",
+    "field": "vvlCreditVoucher",
+    "sortable": "vvlCreditVoucher",
+    "show": true,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "VVL mit Hardwareabruf",
+    "field": "vvlDelayedSubsidy",
+    "sortable": "vvlDelayedSubsidy",
+    "show": true,
+    "type": "text",
+    "nonEditable": "Y"
+  },
+  {
+    "title": "VVL mit Tarifwechsel und Hardware",
+    "field": "vvlHandyTariff",
+    "sortable": "vvlHandyTariff",
+    "show": true,
+    "type": "text",
+    "nonEditable": "Y"
+  }
+]

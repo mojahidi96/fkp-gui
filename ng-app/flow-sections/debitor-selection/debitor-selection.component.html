@@ -1,0 +1,136 @@
+<div *ngIf="processing" class="pb-3">
+  <sncr-loader class="relative" [isLoading]="true"></sncr-loader>
+</div>
+
+<div *ngIf="!processing">
+  <div *ngIf="selectedAction === actions.SELECT">
+    <p class="infoText" [innerHTML]="getKey( '_SELECTION-SUB_TITLE_MSG')| translate:lang"></p>
+    <div *ngIf="pleaseSelectAddress" class="mb-4">
+      <sncr-notification [message]="getKey('_SELECTION-SELECT_WARNING') | translate:lang" type="warning">
+      </sncr-notification>
+    </div>
+    <div *ngIf="sammelDebitors?.length">
+      <div class="row p-0 mb-3">
+        <div class="col-4 text-left dropdowns">
+          <div l10nTranslate><strong>DEBITOR_SELECTION-SAMMEL_DEBITOR_LABEL<span class="requiredField">*</span></strong>
+          </div>
+          <div *ngIf="sammelDebitors?.length==1 && sammelDebitors[0].debitorNumber">
+            {{sammelDebitors[0].debitorNumber}}
+          </div>
+          <div *ngIf="sammelDebitors?.length > 1">
+            <sncr-select class="sammelDebitor" [(ngModel)]="debitorSelected">
+              <option *ngFor="let o of sammelDebitors" value="{{o.debitorId}}"  [selected]="o.debitorId === debitorSelected">{{o.debitorNumber}}</option>
+            </sncr-select>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="flowType !== 'OM'">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="subTitle" l10nTranslate>
+            DEBITOR_SELECTION-DEBITOR_ADDRESS
+          </div>
+          <div class="" *ngIf="(hideNewDebitor !== 'Y' && !newAddress || sammelDebitors.length> 0)">
+            <sncr-button type="secondary" class="pull-right" (click)="createAddress()" l10nTranslate>
+              <i class="fa fa-plus"></i>{{addressType + '_SELECTION-ADD_NEW'}}
+            </sncr-button>
+          </div>
+        </div>
+        <hr>
+        <span l10nTranslate>{{getKey(addressType +'_SELECTION-SELECT_WARNING' , true)}}</span>
+      </div>
+    </div>
+    <div *ngIf="hideNewDebitor !== 'Y' && !sammelDebitors?.length && flowType !== 'OM' && !newAddress" class="d-flex justify-content-end mb-3">
+      <sncr-button type="secondary" class="pull-right" (click)="createAddress()" l10nTranslate>
+        <i class="fa fa-plus"></i>{{addressType + '_SELECTION-ADD_NEW'}}
+      </sncr-button>
+    </div>
+
+    <sncr-datatable #debitorTable [cols]="cols" [prefix]="addressType" [value]="debitorAddressList"
+      [selectionMode]="'single'" (onRowSelect)="onAddressSelect($event)">
+    </sncr-datatable>
+  </div>
+  <create-edit-address *ngIf="selectedAction === actions.EDIT || selectedAction === actions.ADD" [address]="selectedRow"
+    [addressSelectionType]="addressType" [selectedAction]="selectedAction" [countries]="countries" [pattern]="pattern"
+    [isTechfundEnabled]="isTechfundEnabled" (output)="saveForm($event)" [disableOnceClicked]="disableOnceClicked">
+  </create-edit-address>
+</div>
+
+<ng-template #debitorNumberTemp let-context>
+  <div class="row">
+    <div [ngClass]="context.row.readOnly || disableOnceClicked ? 'col-sm-12 blacklistderow' : 'col-sm-12'">
+      {{context.row.debitorNumber}}
+      <i *ngIf="context.row.readOnly" class="fa fa-info-circle tooltipmar" l10nTranslate
+        [ngbTooltip]="getKey('_SELECTION-BLACKLISTED_DEBITOR') | translate:lang" container="body"
+        [autoClose]="true"></i>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #editOrDelete let-context>
+  <div *ngIf="!context.row.readOnly && hideDebitorDetails !== 'Y'">
+    <span class="icon-button icon-edit icon-24 preventRowClick" aria-hidden="true" (click)="editAddress(context.row)">
+    </span>
+    <span *ngIf="sammelDebitors?.length" class="icon-button icon-delete icon-24 ml-3 preventRowClick" aria-hidden="true"
+      (click)="deletePopUpModel(context.row)">
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #standard let-context>
+  <span *ngIf="!context.row?.newAddress && !context.row.readOnly" (click)="setDefaultAddress(context.row)">
+    <div *ngIf="defaultAddress?.addressId === context.row.addressId" class="boolean-true preventRowClick"><svg-icon name="vodafone/tick-or-solved" size="auto"></svg-icon></div>
+    <div *ngIf="defaultAddress?.addressId !== context.row.addressId" class="boolean-false preventRowClick"><svg-icon name="vodafone/minus-or-less" size="auto"></svg-icon></div>
+  </span>
+</ng-template>
+
+<ng-template #fullAddress let-context>
+  <ng-container *ngIf="hideDebitorDetails !== 'Y'">
+    <div class="row p-0 m-0" [ngClass]="{'blacklistderow': context.row.readOnly || disableOnceClicked}">
+      {{adressAction.getFullAddressPart1(context.row)}}
+    </div>
+    <div class="row p-0 m-0" [ngClass]="{'blacklistderow': context.row.readOnly || disableOnceClicked}">
+      {{adressAction.getFullAddressPart2(context.row)}}
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #fullName let-context>
+  <div class="row p-0 m-0" [ngClass]="{'blacklistderow': context.row.readOnly || disableOnceClicked}">{{getFullNamePart1(context.row)}}
+  </div>
+  <div class="row p-0 m-0" [ngClass]="{'blacklistderow': context.row.readOnly || disableOnceClicked}" *ngIf="hideDebitorDetails !== 'Y'">
+    {{adressAction.getFullNamePart2(context.row)}}
+  </div>
+</ng-template>
+
+<ng-template #techFund let-context>
+  <span *ngIf="context.row.debitorType === 'T'" class="row p-0 m-0 debType"
+    [ngClass]="{'blacklistderow': context.row.readOnly || disableOnceClicked}" l10nTranslate>{{getKey('_SELECTION-TECHFUND')}}</span>
+  <span *ngIf="context.row.debitorType === 'D'" class="row p-0 m-0 debType"
+    [ngClass]="{'blacklistderow': context.row.readOnly || disableOnceClicked}" l10nTranslate>{{getKey('_SELECTION-DEBITOR')}}</span>
+</ng-template>
+
+
+<ng-template #deletecontent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" l10nTranslate>SHIPMENT_SELECTION-DELETE_MSG_TOP</h4>
+    <button type="button" class="close-popup" aria-label="Close closePopup" (click)="modalRef.close()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row-1">
+      <div class="description" l10nTranslate>
+        SHIPMENT_SELECTION-DELETE_DESCRIPTION
+      </div>
+      <div class="description">
+        {{deletedRow.fullAddress}}
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <sncr-button type="secondary" (click)="modalRef.close()" l10nTranslate>
+      SHIPMENT_SELECTION-POPUP_CANCEL
+    </sncr-button>
+    <sncr-button l10nTranslate (click)="deleteAddress()" [disabled]="disableOnceClicked" [ngClass]="{disableFields:disableOnceClicked}">SHIPMENT_SELECTION-POPUP_DELETE</sncr-button>
+  </div>
+</ng-template>

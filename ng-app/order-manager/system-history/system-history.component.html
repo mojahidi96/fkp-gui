@@ -1,0 +1,5 @@
+<sncr-datatable #dataTable [cols]="cols" [value]="sysHistory"></sncr-datatable>
+
+<ng-template #sysHistoryTimeStamp let-context>
+  {{ (context.row.timestamp | date:'dd.MM.yyyy HH:mm:ss') }}
+</ng-template>

@@ -1,0 +1,23 @@
+<div class="form-check checkBoxMainDiv" [sncrValidationStyles]="hasErrors()" [ngClass]="{'form-check-inline': inline}">
+    <sncr-validation-messages *ngIf="hasErrors()" [messages]="getErrors()"></sncr-validation-messages>
+
+    <label class="form-check-label">
+        <div class="Checkbox">
+            <input type="checkbox"
+                   [id]="name"
+                   [name]="name"
+                   [(ngModel)]="model"
+                   class="form-check-input sncr-control"
+                   [checked]="checked"
+                   [disabled]="disabled"
+                   [required]="required"
+                   (change)="onChange()">
+            <div class="Checkbox-visible"></div>
+            <span class="content">{{label}}
+        	<ng-content *ngIf="!label"></ng-content></span>
+        </div>
+
+
+    </label>
+    <div class="clearfix"></div>
+</div>

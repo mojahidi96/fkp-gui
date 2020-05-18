@@ -1,0 +1,12 @@
+<div [formGroup]="panelForm">
+    <ng-container *ngFor="let row of rows">
+        <div class="row error-align" *ngIf="!isRowHidden(row)">
+            <ng-container *ngFor="let field of row">
+                <div class="pb-2" [ngClass]="getColClass(field)" *ngIf="shouldFieldShow(field)">
+                    <field-switch [field]="field" [(form)]="panelForm" [showValidation]="showValidation"
+                                  [readonly]="readonly"></field-switch>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+</div>

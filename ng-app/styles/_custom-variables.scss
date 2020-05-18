@@ -1,0 +1,120 @@
+// Bootstrap overrides
+//
+// Copy variables from `_variables.scss` to this file to override default values
+// without modifying source files.
+
+// Colors
+$primary: #e60000;
+$body-bg: #f4f4f4;
+$gray-900: #333;
+$text-muted: #6c757d;
+
+//Links style
+$link-color: #333;
+$blue-link: #0066ff;
+
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+$enable-shadows: true;
+
+// Grid containers
+//
+// Define the maximum width of `.container` for different screen sizes.
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 970px
+);
+
+// popover z-index
+$zindex-popover: 1039;
+
+// Buttons
+$input-btn-border-width: 0;
+$btn-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+$btn-padding-y: 10px;
+$btn-padding-x: 20px;
+$btn-focus-box-shadow: none;
+
+// Components
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
+$alert-border-radius: 3px;
+
+// Dropdowns
+$dropdown-border-width: 0;
+$dropdown-border-radius: 3px;
+$dropdown-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+
+// Fonts
+$font-family-base: Arial, Helvetica, sans-serif;
+
+$font-size-base: 0.875rem;
+$font-size-lg: 1rem * 0.75;
+$font-size-sm: 1rem * 0.75;
+$font-size-xs: 1rem * 0.75;
+
+$font-size-h1: 2.5rem * 0.75;
+$font-size-h2: 2.5rem * 0.75;
+$font-size-h3: 1.75rem * 0.75;
+$font-size-h4: 1.5rem * 0.75;
+$font-size-h5: 1.25rem * 0.75;
+$font-size-h6: 1rem * 0.75;
+
+// Other FKP Variable
+$error-message: #e60000;
+$toolTip: #e60000;
+
+// Buttons
+$btn-primary-color: #fff;
+$btn-primary-bg: #333;
+$btnStrong-bg: #333;
+$primary-btn-bg: #9d36a2;
+$secondary-btn-bg: #fff;
+
+$footer-color: #525252;
+$footer-border: #ececec;
+$topbar-links: #d6d6d6;
+$topbar-links-hover: #bd0000;
+$topbar-links-border: #d3d3d3;
+$topbar-links-separator: #df0000;
+$layout-border: #dbdbdb;
+$tabs-links-color: #4e4e4e;
+
+// Dropdowns
+$dropdown-hover-text: #323232;
+$subnav-background: #e0e0e0;
+$subnav-active-color: #c80000;
+$select-disabled: #cccccc;
+$select-separator: #b5b5b5;
+$select-icon-color: #939393;
+
+//right panel color Variables
+$right-inside-bg: #f7f7f7;
+
+//Accordion Variables
+$txt-white: #ffffff;
+$txt-black: #333;
+$pageTitleBg: #ebebeb;
+$muted: #ababab;
+$iconColor: #428600;
+$requiredColor: #e60000;
+
+//Banner
+$banner-background: #54545e;
+
+//Alerts
+$alert-danger-border: #a94442;
+
+//steps Variables
+$cardH-txt-color: #333333;
+$iconNumberColor: #666666;
+
+//input text Variables
+$input-text-border-color: #e9e9e9;
+
+$area-background: #ededed;
+$editDeleteBtnBg: #ffffff;

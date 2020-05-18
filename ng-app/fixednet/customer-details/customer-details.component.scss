@@ -1,0 +1,35 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/page-title';
+
+.dataTableCbillF {
+  padding: 0 20px;
+  margin-top: 30px;
+}
+
+::ng-deep .dataTableCbillF .alert-danger {
+  margin-bottom: 30px;
+}
+
+.break-word {
+  word-wrap: break-word !important;
+}
+
+.label {
+  font-weight: bolder !important;
+}
+.margin-top-20 {
+  margin-top: 20px;
+}
+.margin-bottom-20 {
+  margin-bottom: 20px !important;
+}
+
+::ng-deep .tab-content > .tab-pane.active {
+  margin-top: 24px;
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}

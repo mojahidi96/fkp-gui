@@ -1,0 +1,63 @@
+<ng-container [formGroup]="form" [ngSwitch]="field.type">
+    <ng-container *ngSwitchCase="'label'">
+        <legend class="label" [innerHTML]="field.label"></legend>
+
+        <span *ngIf="field.desc">{{field.desc}}</span>
+    </ng-container>
+    <ng-container *ngSwitchCase="'checkmark'">
+        <div class="text-center">
+            <h5>{{field.label}}</h5>
+            <i class="fa fa-check fa-2x"></i>
+        </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'checkbox'">
+        <div class="tariff-check">
+            <sncr-checkbox [formControlName]="field.fieldId" [label]="field.label"
+                           [showValidation]="showValidation">
+            </sncr-checkbox>
+        </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'date'">
+        <sncr-datepicker [formControlName]="field.fieldId" [label]="field.label" [readonly]="readonly"
+                         [showValidation]="showValidation" [minDate]="getMinDate(field.minDate)">
+        </sncr-datepicker>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'radio'">
+        <sncr-check-group [formControlName]="field.fieldId" [label]="field.label" [name]="field.fieldId" [readonly]="readonly"
+                          [showValidation]="showValidation" [inline]="field.inline">
+            <sncr-radio *ngFor="let o of field.values" [value]="o.value"
+                        [label]="o.label"></sncr-radio>
+        </sncr-check-group>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'select'">
+        <div class="tariff-select">
+            <sncr-select [label]="field.label" [formControlName]="field.fieldId" [disabled]="readonly"
+                         [showValidation]="showValidation">
+                <option value="">Auswählen</option>
+                <ng-container *ngFor="let o of field.values">
+                    <option  value="{{o.value}}" *ngIf="!isHidden(o, field)">{{o.label}}</option>
+                </ng-container>
+            </sncr-select>
+        </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'table'">
+        <sncr-datatable [value]="field.rows" [cols]="field.cols" [paginator]="false" [rows]="0"></sncr-datatable>
+    </ng-container>
+
+    <ng-container *ngSwitchDefault>
+        <sncr-input [type]="field.type" [formControlName]="field.fieldId"
+                    [showValidation]="showValidation" [readonly]="readonly">
+            {{field.label}}
+        </sncr-input>
+    </ng-container>
+</ng-container>
+
+<ng-template #tableField let-context>
+    <field-switch [ngClass]="{tableField: applyFieldClass(context)}" [readonly]="readonly"
+                  [(form)]="form" [field]="context.row[context.col.field]"
+                  [showValidation]="showValidation"></field-switch>
+</ng-template>

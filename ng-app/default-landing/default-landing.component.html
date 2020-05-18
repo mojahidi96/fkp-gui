@@ -1,0 +1,52 @@
+<div class="container nopadding" *ngIf="flowType === 'fixednet' || flowType == 'ed'">
+    <div class="banner">
+        <div>
+            <h2 l10nTranslate>FIXEDNET_DESC_HEADER</h2>
+            <p l10nTranslate>FIXEDNET_DESC_FOOTER</p>
+        </div>
+    </div>
+</div>
+<div *ngIf="flowType === 'mobile'">
+    <shopping-cart></shopping-cart>
+
+    <!-- JoinMedia - Start -->
+    <link href="/public/assets/jm/css/styles.css" rel="stylesheet" />
+    <script src="/public/assets/jm/js/main.js"></script>
+    <div *ngIf="bannerTemplate" [innerHtml]="bannerTemplate"></div>
+    <!-- JoinMedia - End -->
+</div>
+
+<div *ngIf="loading" class="loaderHeight">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<div class="clearfix">
+    <div [ngClass]="(flowType=='mobile')?'landing-panels-80':'landing-panels-100'" class="pull-left">
+        <ng-container *ngIf="!loading">
+            <ng-container *ngFor="let menu of menuJSON" style="float:left;width:970px">
+                <ng-container *ngFor="let submenu of menu.submenus">
+                    <div class="landNavPanel" *ngIf="submenu.links && submenu.links.length">
+                        <h2>{{submenu.title}}</h2>
+                        <ul>
+                            <li *ngFor="let link of submenu.links">
+                                <a *ngIf="!link.routerLink" [href]="link.url">
+                                    {{link.name}}
+                                </a>
+                                <a *ngIf="link.routerLink" [routerLink]="link.url" [queryParams]="link.queryParam">
+                                    {{link.name}}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="info-message" *ngIf="flowType === 'mobile' && banCount===0">
+                            <i class="info-icon">&nbsp;</i>
+                            <span l10nTranslate class="messageTxt">LANDING_PAGE-SHOP_NO_BANS_INFO_MSG</span>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <div class="contact-section pull-right" *ngIf="flowType === 'mobile'">
+        <contactimage-app></contactimage-app>
+    </div>
+</div>

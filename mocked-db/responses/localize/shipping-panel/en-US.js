@@ -1,0 +1,25 @@
+module.exports = {
+  'PROLONG_SHIPMENT-CONTINUE_TO_ORDER_REVIEW': 'Continue to order review',
+  'SHIPMENT_SELECTION-ACCEPT_NEW': 'Accept',
+  'SHIPMENT_SELECTION-ADD_NEW':	'Add new shipment',
+  'SHIPMENT_SELECTION-BAN_BILLING_ADDRESS':	'Ban Billing Address',
+  'SHIPMENT_SELECTION-BAN_LEGAL_ADDRESS':	'Ban Legal Address',
+  'SHIPMENT_SELECTION-CANCEL': 'Cancel',
+  'SHIPMENT_SELECTION-DEBITOR_ADDRESS':	'Debitor Address',
+  'SHIPMENT_SELECTION-DELETE_DESCRIPTION': 'Are you sure you want to DELETE the following address',
+  'SHIPMENT_SELECTION-DELETE_MSG_TOP': 'Address DELETE',
+  'SHIPMENT_SELECTION-EDIT_ADDRESS': 'Edit address',
+  'SHIPMENT_SELECTION-INFO_OPTION_DESC_B': 'Shipping to the billing address',
+  'SHIPMENT_SELECTION-INFO_OPTION_DESC_D': 'Shipping to the debtor address',
+  'SHIPMENT_SELECTION-INFO_OPTION_DESC_L': 'Shipping to the customer address',
+  'SHIPMENT_SELECTION-LABEL':	'Address',
+  'SHIPMENT_SELECTION-POPUP_CANCEL':	'abort',
+  'SHIPMENT_SELECTION-POPUP_DELETE': 'DELETE',
+  'SHIPMENT_SELECTION-RESET': 'Change To',
+  'SHIPMENT_SELECTION-SAVED_SHIPMENT': 'Saved Shipment Address',
+  'SHIPMENT_SELECTION-SELECT_WARNING': 'Please select Shipment Address',
+  'SHIPMENT_SELECTION-SHIPPING-TO':	'Shipping to:',
+  'SHIPMENT_SELECTION-SUB_TITLE_MSG':	'Please select a shipment',
+  'SHIPMENT_SELECTION-TITLE':	'Select shipment'
+
+};

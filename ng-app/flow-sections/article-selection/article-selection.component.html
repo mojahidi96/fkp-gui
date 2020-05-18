@@ -1,0 +1,282 @@
+<div class="sncr-planned-changes container p-0">
+    <div class="mb-4">
+        <sncr-notification [handler]="articleSelectionAlert"></sncr-notification>
+    </div>
+    <p class="infoText" *ngIf="displaySubsidies" [innerHTML]="'HARDWARE_SELECTION-SUB_TITLE_MSG'| translate:lang"></p>
+    <div class="row m-0">
+        <div class="col-sm-12 p-0" *ngIf="displaySubsidies">
+            <sncr-check-group [(ngModel)]="isArticleNotRequired" (ngModelChange)="loadArticles()">
+                <div class="radio-option" *ngFor="let o of subsidy">
+                    <sncr-radio [value]="o.value" l10nTranslate>{{o.text}}</sncr-radio>
+                    <div [ngClass]="isArticleNotRequired === o.value && o.value != 0 ? descriptions : description"
+                        *ngIf="isArticleNotRequired === o.value && o.value != 0">
+                        <div class="mainCardSel">
+                            <div *ngIf="isLoading" class="descInner">
+                                <sncr-loader class="relative" [isLoading]="isLoading"></sncr-loader>
+                            </div>
+                            <div *ngIf="!isLoading" class="descInner">
+                                <div class="desc-icon"><i class="fa infoIcon" aria-hidden="true"></i></div>
+                                <div class="infoCont"
+                                    [l10nTranslate]="{eligibleSubs: eligibleSubsCount, selectedSubs: totalSubsCount}"
+                                    [innerHTML]="successMsg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </sncr-check-group>
+        </div>
+    </div>
+
+    <sncr-notification *ngIf="isArticleNotRequired === 0 &&  currentHardware[0] && currentHardware[0]?.tariffLookupDetails" type="basic" [message]="'HARDWARE_SELECTION-SELECT_NEW_HARDWARE_INFO' | translate:lang"></sncr-notification>
+
+    <div class="row m-0" *ngIf="isArticleNotRequired === 0">
+        <div class="col-sm-12 p-0">
+            <span [innerHTML]="'HARDWARE_SELECTION-SELECT_NEW_HARDWARE_MSG' | translate:lang"></span>
+        </div>
+        <div class="col-sm-12 p-0" *ngIf="showNewESimMessage" >
+            <sncr-notification>
+                <div [innerHTML]="'HARDWARE_SELECTION-SELECT_NEW_HARDWARE_MSG2' | translate:lang"></div>
+                <div [innerHTML]="'HARDWARE_SELECTION-SELECT_NEW_HARDWARE_MSG3' | translate:lang"></div>
+            </sncr-notification>
+        </div>
+    </div>
+
+    <div class="next-button-right paddingr42" *ngIf="isArticleNotRequired === 0" >
+        <sncr-button type="{{showTiles?'primary':'secondary'}}" class="btn-grid" (click)="changeView(true)">
+            <span class="gridIcon"><svg-icon name="vodafone/grid-view" size="auto"></svg-icon></span>
+        </sncr-button>
+        <sncr-button type="{{!showTiles?'primary':'secondary'}}" class="btn-tiles" (click)="changeView(false)">
+            <span class="listIcon"><svg-icon name="vodafone/list-view" size="auto"></svg-icon></span>
+        </sncr-button>
+    </div>
+
+
+    <div *ngIf="isLoading" class="row m-0 pb-3">
+        <sncr-loader class="relative" [isLoading]="isLoading && isArticleNotRequired === 0"></sncr-loader>
+    </div>
+
+    <ng-container *ngIf="!isLoading && isArticleNotRequired === 0" [ngSwitch]="showTiles">
+        <ng-container *ngSwitchCase="true">
+            <div class="row m-0 filter">
+                <div class="col-md-7 pl-0 dropdowns">
+                    <sncr-select [label]="'HARDWARE_MANUFACTURER' | translate:lang" class="manufacturer"
+                        [(ngModel)]="manufacturer" (change)="dropDownChange()">
+                        <option value="" selected l10nTranslate>DROP_DOWN-SELECT</option>
+                        <option *ngFor="let o of manufacturers" value="{{o.value}}">{{o.text}}</option>
+                    </sncr-select>
+                    <sncr-select [label]="'HARDWARE_CATEGORY' | translate:lang" class="category" [(ngModel)]="category"
+                        (change)="dropDownChange()">
+                        <option value="" selected l10nTranslate>DROP_DOWN-SELECT</option>
+                        <option *ngFor="let o of categories" value="{{o.value}}">{{o.text}}</option>
+                    </sncr-select>
+                </div>
+
+                <div class="col-md-5" *ngIf="maximumPrice != 0">
+                    <sncr-slider [value]="priceRange" (change)="rangeChange($event)"
+                        [rangeMin]="0" [rangeMax]="maximumPrice"></sncr-slider>
+                </div>
+            </div>
+
+
+
+            <div class="article-eligibility">
+                <sncr-loader *ngIf="loadingEliSubs && articleSelected" class="relative small-loader" [isLoading]="loadingEliSubs"></sncr-loader>
+                <div class="pt-3" *ngIf="!loadingEliSubs && articleSelected && !noSubscriberEligiable"
+                    [l10nTranslate]="{count: eligibleSubsCount}">
+                    HARDWARE_SELECTION-ELIGIBLE_SUBS
+                </div>
+                <div class="pt-3 redfont"
+                    *ngIf="!loadingEliSubs && articleSelected && noSubscriberEligiable" l10nTranslate>
+                    HARDWARE_SELECTION-NO_ELIGIBLE_SUBS
+                </div>
+            </div>
+            <div class="col-md p-0 text-right" [l10nTranslate]="{count: getCount()}">
+                HARDWARE_SELECTION-RESULTS_FOUND
+            </div>
+
+            <sncr-check-group name="articleSelection">
+                <div class="row m-0">
+                    <sncr-paginator [totalRecords]="articlesProcessed.length" [first]="hardwareFirst"
+                        [rows]="hardwareRows" (onPageChange)="onPageChange($event)"></sncr-paginator>
+                    <div class="d-flex pl-0 pt-3 hardware-row">
+                        <div class="plr-10 mb-3 article-width" *ngFor="let article of currentHardware">
+                            <div *ngIf="article"
+                                class="d-flex flex-column justify-content-between carousal-box w-100 h-100"
+                                [class.active]="selectedArticle ? selectedArticle.value === article.value:false">
+                                <div class="carousal-body pb-0 w-100">
+                                    <h2>{{article.text}}</h2>
+                                </div>
+                                <div class="carousal-footer w-100 d-flex flex-column flex-fill">
+                                    <div class="carousal-footer-content flex-fill">
+                                        <div class="text-center w-100 mb-2">
+                                            <img alt="" src="{{article.images.LARGE}}"
+                                                onerror="this.src='./public/illustrations/svg/no-image-available.svg'" width="165"
+                                                height="235">
+                                            <div>{{'HARDWARE_SELECTION-ARTICLE_NUMBER' | translate:lang}}:{{article.articleNumber}}</div>
+                                        </div>
+                                        <div>
+                                            <a class="show-underline" (click)="openPopUp(article);"
+                                                l10nTranslate>HARDWARE_SELECTION-PRODUCT_DETAILS</a>
+                                        </div>
+
+                                        <div class="d-inline-flex">
+                                            <div class="mr-2">
+                                                <h2 class="textpadding">{{article.subsidizedPrice | currency:'EUR'}}</h2>
+                                            </div>
+                                            <div class="padT20" *ngIf="article?.tariffLookupDetails">
+                                                <a class="show-underline" placement="top" [ngbTooltip]="lookupDetails"
+                                                   triggers="click:blur" (click)="setLookUpPrice(article)" l10nTranslate>HARDWARE_SELECTION-PRODUCT_LOOKUP_DETAILS</a>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="article?.status === 'available'">
+                                            <span class="dot green-background-color"></span>
+                                            <span class="col-sm-2 text-title"
+                                                l10nTranslate>HARDWARE_SELECTION-AVAILABLE_HARDWARE</span>
+                                        </div>
+                                        <div
+                                            *ngIf="article?.status != 'available'">
+                                            <span class="dot yellow-background-color"></span>
+                                            <span class="col-sm-2 text-title"
+                                                l10nTranslate>HARDWARE_SELECTION-NO_RESPONSE_HARDWARE</span>
+                                        </div>
+
+                                        <div *ngIf="article?.depVendorId" class="mt-2">
+                                            <div class="d-flex mb-2" *ngIf="article?.depRelevance > 0">
+                                                <sncr-checkbox [(ngModel)]="article.displayDep"
+                                                    [label]="article.depVendorName"></sncr-checkbox>
+                                                <i class="fa infoGreyIcon ml-2" (click)="setDepDescription(article)"
+                                                    placement="top" [ngbTooltip]="tipContent" triggers="click:blur"></i>
+                                            </div>
+                                            <sncr-input *ngIf="article.displayDep" [label]="'HARDWARE_SELECTION-DEP_CUSTOMER_ID'| translate:lang"
+                                                [(ngModel)]="article.depCustomerId" [disabled]="!article.depOverride">
+                                            </sncr-input>
+                                        </div>
+                                    </div>
+
+                                    <div class="optionsCheck">
+                                        <sncr-radio [value]="article" (change)="onArticleSelection(article)">
+                                            {{((selectedArticle ? selectedArticle.value === article.value : false) ? 'HARDWARE_SELECTION-HARDWARE_SELECTED' : 'HARDWARE_SELECTION-SELECT_HARDWARE') | translate:lang}}
+                                        </sncr-radio>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <sncr-paginator [totalRecords]="articlesProcessed.length" [first]="hardwareFirst"
+                        [rows]="hardwareRows" (onPageChange)="onPageChange($event)"></sncr-paginator>
+                </div>
+            </sncr-check-group>
+        </ng-container>
+        <ng-container *ngSwitchCase="false">
+            <div class="article-eligibility">
+                <sncr-loader *ngIf="loadingEliSubs && articleSelected" class="relative small-loader" [isLoading]="loadingEliSubs"></sncr-loader>
+                <div class="pt-3" *ngIf="!loadingEliSubs && articleSelected && !noSubscriberEligiable"
+                    [l10nTranslate]="{count: eligibleSubsCount}">
+                    HARDWARE_SELECTION-ELIGIBLE_SUBS
+                </div>
+                <div class="pt-3 redfont" *ngIf="!loadingEliSubs && articleSelected && noSubscriberEligiable"
+                    l10nTranslate>
+                    HARDWARE_SELECTION-NO_ELIGIBLE_SUBS
+                </div>
+            </div>
+            <sncr-datatable [cols]="articleCols" [value]="articles" [selection]="selectedArticle" selectionMode="radio"
+                (onRadioChange)="onArticleSelection($event)" [sortOrder]="-1" [prefix]="prefix" radioSelectionName="article_selection">
+            </sncr-datatable>
+        </ng-container>
+    </ng-container>
+
+    <div class="row">
+        <div class="col-sm-12 next-button-right">
+            <sncr-button type="strong" (click)="saveHardware()" [disabled]="disableButton()"  [ngClass]="{disableFields:disableButton()}">
+                <span l10nTranslate>HARDWARE_SELECTION-NEXT_BUTTON</span>
+            </sncr-button>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #article let-context>
+    <div class="col-sm-2">
+        <span>{{context.row['articleNumber']}}</span>
+    </div>
+</ng-template>
+
+<ng-template #imageColumn let-context>
+    <div class="d-flex flex-column align-items-center">
+        <img class="product-image" alt="" src="{{context.row['images'].THUMB}}"
+            onerror="this.src='./public/illustrations/svg/no-image-available.svg'" width="50" height="75">
+        <a class="product-details-popup" (click)="openPopUp(context.row);"
+            l10nTranslate>HARDWARE_SELECTION-PRODUCT_DETAILS</a>
+    </div>
+</ng-template>
+
+<ng-template #available let-context>
+    <div *ngIf="context.row['status'] === 'available'">
+        <span class="dot green-background-color"></span>
+        <span class="col-sm-2" l10nTranslate>HARDWARE_SELECTION-AVAILABLE_HARDWARE</span>
+    </div>
+    <div class="d-flex align-items-center align-self-start"
+        *ngIf="context.row['status'] != 'available'">
+        <span class="dot yellow-background-color"></span>
+        <span class="col-sm-2" l10nTranslate>HARDWARE_SELECTION-NO_RESPONSE_HARDWARE</span>
+    </div>
+</ng-template>
+
+<ng-template #DEP let-context>
+    <div *ngIf="context.row['depRelevance'] > 0 && context.row['depVendorId']">
+        <sncr-checkbox [(ngModel)]="context.row['displayDep']" [label]="'HARDWARE_SELECTION-DEP_CUSTOMER_ID'|translate:lang"></sncr-checkbox>
+        <sncr-input *ngIf="context.row['displayDep']" [(ngModel)]="context.row['depCustomerId']"
+            [disabled]="!context.row['depOverride']"></sncr-input>
+    </div>
+</ng-template>
+
+<ng-template #subsidizedPrice let-context>
+    {{context.row['subsidizedPrice'] | currency:'EUR'}}
+</ng-template>
+
+<ng-template #tipContent>
+    <p> {{description}} <a href="{{url}}" target="_blank">{{urlText}}</a></p>
+</ng-template>
+
+<ng-template #lookupDetails>
+    <table class="font10">
+        <tr>
+            <th l10nTranslate>HARDWARE_SELECTION-LOOKUP_DETAILS_TARIF</th>
+            <th l10nTranslate>HARDWARE_SELECTION-LOOKUP_DETAILS_COUNT</th>
+            <th l10nTranslate>HARDWARE_SELECTION-LOOKUP_DETAILS_PRICE</th>
+        </tr>
+        <tr *ngFor="let details of articleLookUpPrice.tariffLookupDetails">
+            <td>{{details?.tariffName}}</td>
+            <td>{{details?.count}}</td>
+            <td>{{details?.tariffLookupPrice | currency:'EUR'}}</td>
+        </tr>
+        <tr>
+            <th l10nTranslate>HARDWARE_SELECTION-LOOKUP_DETAILS_AVG_PRICE</th>
+            <th></th>
+            <th>{{articleLookUpPrice?.subsidizedPrice | currency:'EUR'}}</th>
+        </tr>
+    </table>
+</ng-template>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div id="product-details-popup">
+        <div class="modal-header">
+            <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row" style="font-size: 30px;">
+                <span>{{articleHeader}}</span>
+            </div>
+            <ng-container *ngFor="let o of productDetails">
+                <div class="row">
+                    <div class="col-6 d-flex align-items-end" l10nTranslate>
+                        <label>{{o.value}}</label>
+                    </div>
+                    <div class="col-6">
+                        {{o.description}}
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,12 @@
+<ng-container *ngIf="dataLoading; else shipTrack">
+    <div class="row"><sncr-loader class="inline-loader" [isLoading]="true"></sncr-loader></div>
+</ng-container>
+<ng-template #shipTrack>
+    <sncr-datatable [cols]="cols" [value]="shipTrackDetails"></sncr-datatable>
+</ng-template>
+
+<ng-template #trackingNo let-context>
+    <div class="description">
+        <a href="{{context.row.url}}" target="_blank">{{context.row.trackingNum}}</a>
+    </div>
+</ng-template>

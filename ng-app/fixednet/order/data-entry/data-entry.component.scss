@@ -1,0 +1,120 @@
+@import '../../../styles/custom-variables';
+@import '../../../styles/table-radio-icons';
+@import '../../../styles/mixins';
+
+.fa-pencil-square-o,
+.fa-info-circle {
+  cursor: pointer;
+}
+
+.amount {
+  padding: 5px;
+}
+
+.fa-plus,
+.fa-minus {
+  line-height: 20px;
+  width: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+sncr-button.active ::ng-deep button {
+  color: $btn-primary-color;
+  background-color: $primary;
+}
+
+:host ::ng-deep form.ng-invalid {
+  .validationAccordion {
+    .col-sm-4 {
+      align-self: flex-end;
+    }
+  }
+}
+
+:host ::ng-deep .inner-panels .card {
+  border-radius: 0px !important;
+  border: none !important;
+  .card-header {
+    border: 1px solid rgba(0, 0, 0, 0.125) !important;
+    border-bottom: none !important;
+    .btn-link {
+      padding: 0px;
+      color: #333;
+      &:focus,
+      &:active {
+        border: none;
+        box-shadow: none;
+      }
+    }
+  }
+  .card-body {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-bottom: none !important;
+  }
+}
+
+:host ::ng-deep .validationAccordion {
+  .ng-valid {
+    .row:first-child {
+      .label {
+        margin-top: 0px;
+      }
+    }
+  }
+  ::ng-deep .form-check-label {
+    padding-left: 20px;
+  }
+  .label {
+    margin-bottom: 0px;
+    margin-top: 15px;
+  }
+}
+
+:host ::ng-deep .fm-select {
+  margin-bottom: 0px;
+}
+
+:host ::ng-deep .billsection {
+  padding-bottom: 25px;
+}
+
+:host ::ng-deep .billTable {
+  margin: 10px;
+}
+
+:host ::ng-deep tr:hover {
+  background-color: #e3e3e3;
+}
+
+:host ::ng-deep .highlighted {
+  background-color: #e3e3e3;
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+  width: 958px;
+  min-height: 225px;
+
+  .loader {
+    top: 40px;
+    position: relative;
+    margin: 3% auto !important;
+  }
+}
+
+.addRemoveWidth {
+  width: 12%;
+}
+
+.redColor {
+  color: red;
+}
+
+.greenColor {
+  color: green;
+}

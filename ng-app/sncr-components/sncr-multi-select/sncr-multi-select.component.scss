@@ -1,0 +1,209 @@
+@import '~font-awesome/scss/variables';
+@import '~font-awesome/scss/mixins';
+@import '../../styles/mixins';
+
+.d-inline-block::after {
+  @include fa-icon();
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: red;
+  right: 40px;
+  top: 5px;
+  background: url(~/public/icons/svg/vodafone/settings.svg) no-repeat left top;
+  background-size: 20px auto;
+  object-fit: contain;
+  content: '';
+}
+
+.datatable-toggle-check {
+  .dropdown-menu {
+    z-index: 1111;
+  }
+}
+
+::ng-deep .searchForm .form-group {
+  padding: 15px 10px 10px !important;
+  margin-bottom: 0px;
+  background: #f9f9f9;
+  .fa.fa-search {
+    position: absolute;
+    right: 25px;
+    top: 30px;
+  }
+  .form-control {
+    padding-right: 35px;
+    margin-top: -9px;
+  }
+}
+
+.custom-dropdown {
+  max-height: 328px;
+  overflow-y: scroll;
+  min-width: 320px;
+  height: auto;
+  overflow: auto;
+  clear: both;
+}
+
+.custom-button {
+  display: inline-block;
+  color: #8d9191;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  border-radius: 3px !important;
+  box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+  cursor: pointer;
+  vertical-align: middle;
+  max-width: 195px;
+  width: 195px;
+  padding: 4px 10px;
+  height: 31px;
+  text-align: left;
+  margin-bottom: 5px;
+  .dropDownTxt {
+    border-right: 1px solid #dadada;
+    display: inline-block;
+    width: 87%;
+    color: #333333;
+    font-weight: bold;
+  }
+}
+
+.dropdown .dropdown-toggle::after {
+  border-left: 0em solid transparent;
+  border-right: 0em solid transparent;
+  border-bottom: 0em solid;
+  content: '';
+}
+
+.fa.fa-chevron-down {
+  display: block;
+  float: right;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #666;
+}
+
+.dropdown.show .fa.fa-chevron-down {
+  display: none;
+}
+
+.dropdown .fa.fa-chevron-up {
+  display: none;
+}
+
+.dropdown.show .fa.fa-chevron-up {
+  display: block;
+  float: right;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #666;
+}
+
+.dropdown-item {
+  padding: 0px 5px 4px;
+  border-bottom: 0px solid #d7d7d7;
+}
+
+.dropdown-item:first-child {
+  border-top: 0px solid #d7d7d7;
+}
+
+.dropdown-item:last-child {
+  border-bottom: 0px solid #d7d7d7;
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  background-color: #f9f9f9;
+  color: #1d1e1f;
+  text-decoration: none;
+}
+
+.dropdown-item:active,
+.dropdown-item:active {
+  background-color: #f9f9f9;
+  color: #1d1e1f !important;
+  text-decoration: none;
+}
+
+.fa-lg.clickable {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+  margin-top: 0px;
+  padding-bottom: 0;
+  padding-top: 0;
+  font-size: 14px;
+  font-weight: normal;
+  z-index: 1050;
+}
+
+.dropdown-itemTxt {
+  padding-right: 10px;
+  position: relative;
+  white-space: normal;
+  width: auto;
+  word-break: normal;
+  padding-top: 3px;
+  font-weight: normal;
+}
+
+.dropdown-item:focus > .dropdown-itemTxt {
+  background-color: #f9f9f9;
+  color: #1d1e1f !important;
+  text-decoration: none;
+}
+
+.sortArrows {
+  float: right;
+  display: none;
+  margin-top: 3px;
+  position: relative;
+}
+
+.dropdown-item:hover .sortArrows {
+  display: inline;
+}
+
+.custom-dropdown .filterItems {
+  padding: 0px;
+}
+
+::ng-deep .form-check {
+  margin-bottom: 0px !important;
+  padding-left: 0px;
+}
+
+:host ::ng-deep .form-check-label {
+  padding-left: 0px !important;
+}
+
+::ng-deep .d-inline-block label {
+  margin-top: 0px !important;
+}
+
+.input-search-icon {
+  position: relative;
+  float: right;
+  margin-top: -34px;
+  margin-right: 21px;
+}
+
+:host ::ng-deep .tooltip-inner {
+  max-width: 300px !important;
+}
+
+:host ::ng-deep .tooltip {
+  pointer-events: none !important;
+}
+
+/**::-ms-backdrop, :host ::ng-deep input[type=checkbox]:not(old)  {
+	  left:0px !important;
+}*/

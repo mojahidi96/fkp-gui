@@ -1,0 +1,74 @@
+<ng-container class="alertDiv">
+    <sncr-notification [handler]="alertNotify" [dismissible]="false"></sncr-notification>
+</ng-container>
+
+<p class="margin-bottom-30 margin-top-30 padLR20">Bitte wählen Sie die Art der Verbindungsübersicht aus.</p>
+
+<div *ngIf="loading">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+
+<ng-container *ngIf="!loading">
+    <sncr-card-selection [showText]="showText" titleText="Art der Verbindungsübersicht"
+                         [hideText]="hideText" #itemizedCard="sncrCardSelection" [ngClass]="{disableFields:processing}">
+
+        <sncr-radio-options [(value)]="itemized"
+                            [options]="itemizedOptions"
+                            [totalLength]="totalLength"
+                            [properties]="properties"
+                            [showDescription]="itemizedCard.showDescriptions"
+                            [showValidation]="showValidation"
+                            [infomsg]="infomsg">
+        </sncr-radio-options>
+
+        <div class="option2" [hidden]="itemized == 'N'">
+            <h4 class="cardsubTitle">Verkürzte Zielrufnummer</h4>
+            <sncr-radio-options [(value)]="targetNumber"
+                                [options]="targetNumberOptions"
+                                [properties]="properties"
+                                [totalLength]="totalLength"
+                                [showDescription]="itemizedCard.showDescriptions"
+                                [excluded]="itemized ? 0 : itemizedOptions[0].length"
+                                [showValidation]="showValidation"
+                                [infomsg]="infomsg">
+            </sncr-radio-options>
+        </div>
+    </sncr-card-selection>
+
+
+    <p class="pull-left small mt-4 padLR20">
+        {{superScript}}
+    </p>
+
+    <div class="next-button padLR20">
+        <sncr-button type="strong"
+                     (click)="reviewOrder()"
+                     [disabled]="processing"
+                     [ngClass]="{disableFields:processing}">
+            Bestellung überprüfen
+        </sncr-button>
+    </div>
+</ng-container>
+
+
+<ng-template #miniDesc>
+    Monatlicher Einzelverbindungsnachweis mit den folgenden Informationen für alle Verbindungen:
+    <ul>
+        <li>Datum</li>
+        <li>Verbindungsbeginn (Uhrzeit)</li>
+        <li>Sekundengenaue Verbindungsdauer</li>
+        <li>Zielrufnummer</li>
+        <li>Verbindungspreis</li>
+    </ul>
+</ng-template>
+
+<ng-template #superDesc>
+    <div class="docContent">Wie Einfacher Einzelverbindungsnachweis, jedoch zusätzlich mit den folgenden Informationen für alle Verbindungen:</div>
+    <ul>
+        <li>Zielbeschreibung und Zielrufnummer bei Verbindungen aus dem deutschen Vodafone-Netz</li>
+        <li>Netzbetreiber/Aufenthaltsland und Zielrufnummer bei abgehenden Verbindungen im Ausland</li>
+        <li>Aufenthaltsland bei ankommenden Verbindungen im Ausland</li>
+        <li>Kennzeichnung von Hauptzeit (H) und Nebenzeit (N)</li>
+        <li>Gruppierung nach Verbindungsart mit Zwischensumme, z. B. Gespräche von Vodafone zu Vodafone, Gespräche ins nationale Festnetz, usw.</li>
+    </ul>
+</ng-template>

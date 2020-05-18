@@ -1,0 +1,296 @@
+import * as fc from 'fast-check';
+
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+
+import {TranslationModule} from 'angular-l10n';
+import {configureTestSuite} from 'ng-bullet';
+
+import {AppService} from '../../../app/app.service';
+import {SncrDatatableModule} from '../sncr-datatable.module';
+import {SncrDatatableComponent} from '../sncr-datatable.component';
+import {SncrTranslateService} from '../../sncr-translate/sncr-translate.service';
+
+import {SncrDatatableService} from '../sncr-datatable.service';
+import {InMemorySncrDatatableService} from './in-memory-sncr-datatable.service';
+
+import {Column, Context, DatatableModel} from './features/base';
+
+import {getTypeHelper} from './features/helpers/type';
+
+import {CounterFeature} from './features/counter';
+import {PaginationFeature} from './features/pagination';
+import {SortingFeature} from './features/sorting';
+import {FilteringFeature} from './features/filtering';
+import {SelectionFeature} from './features/selection';
+import {VisibilityFeature} from './features/visibility';
+
+const FEATURES = [
+  PaginationFeature,
+  SortingFeature,
+  FilteringFeature,
+  SelectionFeature,
+  VisibilityFeature,
+  CounterFeature
+];
+
+const DEBUG = false;
+const NUM_RUNS = 50;
+const MAX_COMMANDS = 12;
+
+class ContextImpl implements Context {
+  log = DEBUG ? console.log : () => {};
+
+  [fc.cloneMethod]() {
+    return new ContextImpl();
+  }
+}
+
+const customContext = () =>
+  fc.clonedConstant(new ContextImpl()) as fc.Arbitrary<Context>;
+
+const createHostComponent = async (
+  props
+): Promise<ComponentFixture<SncrDatatableComponent>> => {
+  const fixture = TestBed.createComponent(SncrDatatableComponent);
+  Object.assign(fixture.componentInstance, props);
+
+  fixture.autoDetectChanges();
+
+  return fixture as ComponentFixture<SncrDatatableComponent>;
+};
+
+describe('Data Table', () => {
+  configureTestSuite(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        TranslationModule.forRoot(SncrTranslateService.L10N_CONFIG),
+        SncrDatatableModule
+      ],
+      providers: [
+        AppService,
+        {provide: SncrDatatableService, useClass: InMemorySncrDatatableService}
+      ]
+    });
+  });
+
+  it('basic async fastcheck', async () => {
+    jest.setTimeout(NUM_RUNS * 4000); // ms
+
+    const columnsProp = fc.set(
+      fc.record({
+        // when using field: fc.asciiString(1, 20)
+        // it does fail sorting when e.g. "#.ATELSBrQz-\b\n\u0001\u000e_+\u0001", or "."
+        field: fc.hexaString(1, 8),
+        title: fc.hexaString(1, 20),
+        isVisible: fc.boolean(),
+        isFilterable: fc.boolean(),
+        filter: fc.constant(undefined),
+        isSortable: fc.boolean(),
+        sorting: fc.constant(undefined),
+        type: fc.constantFrom('boolean', 'date', 'number', 'text')
+      }),
+      // min number of columns
+      1,
+      // max number of columns
+      8,
+      // require field and title to be unique
+      (a, b) => a.field === b.field || a.title === b.title
+    );
+
+    const maxTotalNumberOfRowsProp = fc.nat(100);
+    const numberOfRowsPerPageProp = fc.constantFrom(5, 10, 20, 40, 80);
+    const selectionModeProp = fc.constantFrom('SINGLE', 'MULTI', undefined);
+    const isColumnSelectionSupportedProp = fc.boolean();
+    const isLazyLoadModeProp = fc.boolean();
+    const seedProp = fc
+      .integer()
+      .noBias()
+      .noShrink();
+    const ctxProp = customContext();
+
+    await fc.assert(
+      fc.asyncProperty(
+        columnsProp,
+        maxTotalNumberOfRowsProp,
+        numberOfRowsPerPageProp,
+        selectionModeProp,
+        isColumnSelectionSupportedProp,
+        isLazyLoadModeProp,
+        seedProp,
+        ctxProp,
+        async (
+          columns,
+          maxTotalNumberOfRows,
+          numberOfRowsPerPage,
+          selectionMode,
+          isColumnSelectionSupported,
+          isLazyLoadMode,
+          seed,
+          ctx
+        ) => {
+          const datatableService = TestBed.get(
+            SncrDatatableService
+          ) as InMemorySncrDatatableService;
+          datatableService.reset();
+
+          // filtering is not supported on boolean columns, so turn it off
+          columns
+            .filter(c => c.type === 'boolean')
+            .forEach(c => (c.isFilterable = false));
+
+          // derive props
+          const seedStream = fc.sample(
+            fc.infiniteStream(fc.integer().noBias()).noShrink(),
+            {seed, numRuns: 1}
+          )[0];
+
+          const featureCtx = {
+            columns: columns as Column[],
+            selectionMode: selectionMode as any,
+            isColumnSelectionSupported
+          };
+          const supportedCommands = FEATURES.reduce((acc, feature) => {
+            return [...acc, ...feature.getSupportedCommands(featureCtx)];
+          }, []);
+          const supportedAssertions = FEATURES.reduce((acc, feature) => {
+            return [...acc, ...feature.getSupportedAssertions(featureCtx)];
+          }, []);
+
+          const commandsProp = fc.commands(supportedCommands, {
+            maxCommands: MAX_COMMANDS
+          });
+          const commands = fc.sample(commandsProp, {
+            seed: seedStream.next().value,
+            numRuns: 1
+          })[0];
+
+          // prerequisites
+          // at least one command
+          fc.pre((commands as any).commands.length > 0);
+
+          const rowModel = {};
+          columns.forEach(column => {
+            rowModel[column.field] = getTypeHelper(column.type).arbitrary();
+          });
+          const uniqueField = columns.length > 0 ? columns[0].field : undefined;
+          const rows = fc.sample(
+            fc.set(
+              fc.record(rowModel),
+              maxTotalNumberOfRows,
+              // ensure first column (independent of type) is unique
+              (a, b) => {
+                return uniqueField !== undefined
+                  ? a[uniqueField] === b[uniqueField]
+                  : a === b;
+              }
+            ),
+            {seed: seedStream.next().value, numRuns: 1}
+          )[0];
+          const totalNumberOfRows = rows.length;
+
+          const selection = selectionMode === 'MULTI' ? [] : undefined;
+
+          // log quick setup overview
+          ctx.log(
+            `>>>>> setup (${isLazyLoadMode ? '' : 'non-'}lazy-loading, ${
+              columns.length
+            } column${columns.length === 1 ? '' : 's'}, ${rows.length} row${
+              rows.length === 1 ? '' : 's'
+            }, ${numberOfRowsPerPage} rows per page, ${
+              selectionMode === 'MULTI'
+                ? 'multi'
+                : selectionMode === 'SINGLE'
+                ? 'single'
+                : 'no'
+            } selection) with type, [V]isible, [F]ilterable, [S]ortable, field, title:\n` +
+              columns
+                .map(
+                  c =>
+                    `  ${c.type} [${c.isVisible ? 'V' : ''}${
+                      c.isFilterable ? 'F' : ''
+                    }${c.isSortable ? 'S' : ''}] "${c.field}" ("${c.title}")`
+                )
+                .join('\n')
+          );
+
+          if (selectionMode !== undefined) {
+            columns.unshift({
+              field: '_sncrChecked',
+              title: 'DATATABLE-SELECTION_TITLE',
+              isFilterable: false,
+              filter: undefined,
+              isSortable: selectionMode === 'MULTI',
+              sorting: selectionMode === 'MULTI' ? 'ASC' : undefined,
+              isVisible: true,
+              type: 'selection'
+            });
+          }
+
+          if (isLazyLoadMode) {
+            datatableService.setColumns(columns as Column[]);
+            datatableService.setRows(rows);
+          }
+
+          // actual run
+          const s = async () => {
+            const cols = columns
+              .filter(c => c.type !== 'selection')
+              .map(column => ({
+                field: column.field,
+                title: column.title,
+                type: column.type,
+                show: column.isVisible,
+                sortable: column.isSortable,
+                filter: column.isFilterable
+              }));
+
+            return {
+              model: Object.assign(new DatatableModel(), {
+                seedStream,
+                ctx,
+                isColumnSelectionSupported,
+                isLazyLoadMode,
+                columns,
+                rows,
+                numberOfRows: totalNumberOfRows,
+                totalNumberOfRows,
+
+                // pagination
+                currentPage: 1,
+                numberOfRowsPerPage,
+
+                // selection
+                selectionMode,
+                selectedRows: [],
+
+                // assertions
+                supportedAssertions
+              }),
+              real: await createHostComponent({
+                lazy: isLazyLoadMode,
+                lazyLoadUrl: isLazyLoadMode ? '/some/url' : undefined,
+                cols,
+                value: isLazyLoadMode ? undefined : rows,
+                rows: numberOfRowsPerPage,
+                selection,
+                selectionMode: selectionMode === 'SINGLE' ? 'radio' : undefined,
+                multiSelection: selectionMode === 'MULTI' ? true : undefined,
+                columnSelection: isColumnSelectionSupported
+              })
+            };
+          };
+
+          await fc.asyncModelRun(s, commands);
+        }
+      ),
+      {
+        numRuns: NUM_RUNS,
+        endOnFailure: true
+      }
+    );
+  });
+});

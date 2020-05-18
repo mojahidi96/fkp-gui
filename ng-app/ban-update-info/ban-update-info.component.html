@@ -1,0 +1,103 @@
+<div class="banUpdateInfo">
+    <sncr-notification [handler]="alertNotify"></sncr-notification>
+    <h2 class="pageTitle">
+        <span l10nTranslate>PAGE_TITLE</span>
+    </h2>
+    <div *ngIf="orderDetails.mutlipleOrders && orderDetails.mutlipleOrders.length > 0">
+        <order-confirmation [orderDetails]="orderDetails"></order-confirmation>
+    </div>
+    <div [hidden]="orderDetails.mutlipleOrders">
+        <sncr-flow #flow="sncrFlow" [ngClass]="{disableFields:orderProcessing}">
+            <sncr-flow-section [titleText]="'SELECTION-TITLE' | translate:lang" modelSortKey="selected" modelSortVal="1"
+                               [eventType]="eventType" #banSelectionFlow="sncrFlowSection">
+                <div *sncrSummaryTemplate>
+                    <div *ngIf="banSelectionFlow.model?.selectCount > 0">
+                        <span *ngIf="banSelectionFlow.model.selectCount === 1" l10nTranslate>SELECTION-ONE_BAN_SELECTED</span>
+                        <span *ngIf="banSelectionFlow.model.selectCount !== 1" [l10nTranslate]="{selectCount: banSelectionFlow.model.selectCount}">SELECTION-BANS_WERE_SELECTED</span>
+                    </div>
+                </div>
+                <div *sncrSectionTemplate class="dataTableMSoc">
+                    <ban-selection [lazy]="true" [lazyLoadUrl]="lazyLoadUrlBanSelection" [cols]="columns" (onDataChange)="eventType = $event"
+                                   [banSelectionFlow]="banSelectionFlow"></ban-selection>
+                </div>
+            </sncr-flow-section>
+
+            <sncr-flow-section [titleText]="'MANAGE_DETAILS-TITLE' | translate:lang" #banManagementFlow="sncrFlowSection">
+                <div *sncrSummaryTemplate>
+                    <ng-container *ngIf="banManagementFlow.model?.selectCount > 0">
+                        <ng-container *ngIf="!banSelectionFlow.model?.bulkEdit">
+                            <span *ngIf="banManagementFlow.model.selectCount === 1" l10nTranslate>MANAGE_DETAILS-ONE_BAN_CHANGED</span>
+                            <span *ngIf="banManagementFlow.model.selectCount > 1" [l10nTranslate]="{selectCount: banManagementFlow.model.selectCount}">MANAGE_DETAILS-BANS_WERE_CHANGED</span>
+                        </ng-container>
+
+                        <ng-container *ngIf="banSelectionFlow.model?.bulkEdit">
+                            <span *ngIf="banSelectionFlow.model.selectCount === 1" l10nTranslate>MANAGE_DETAILS-ONE_BAN_CHANGED</span>
+                            <span *ngIf="banSelectionFlow.model.selectCount > 1" [l10nTranslate]="{selectCount: banSelectionFlow.model.selectCount}">MANAGE_DETAILS-BANS_WERE_CHANGED</span>
+                        </ng-container>
+                    </ng-container>
+                </div>
+
+                <div *sncrSectionTemplate class="dataTableMSoc">
+                    <ng-container *ngIf="banSelectionFlow && banSelectionFlow.model?.selectCount > 0">
+                        <ng-container *ngIf="!banSelectionFlow.model?.bulkEdit">
+                            <ban-management [selectedBans]="banSelectionFlow.model.isChanged"
+                                            [lazy]="true"
+                                            [lazyLoadUrl]="lazyLoadUrlBanManagement" [banManagementFlow]="banManagementFlow"
+                                            [totalRecords]="banSelectionFlow.model.selectCount"
+                                            [countries]="countries"
+                                            [pattern]="pattern"
+                                            [columns]="columns">
+                            </ban-management>
+                        </ng-container>
+                        <ng-container *ngIf="banSelectionFlow.model?.bulkEdit">
+                            <bulk-edit [flowType]="flowType" [managementFlow]="banManagementFlow"
+                                       [selectCount]="banSelectionFlow.model?.selectCount"
+                                       [isChanged]="banSelectionFlow.model.isChanged"
+                                       [countries]="countries"
+                                       [pattern]="pattern"
+                                       [cols]="columns">
+                            </bulk-edit>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </sncr-flow-section>
+
+            <sncr-flow-section [titleText]="'REVIEW-TITLE' | translate:lang" #reviewBanFlow="sncrFlowSection">
+                <div *sncrSectionTemplate class="dataTableMSoc">
+                    <ng-container *ngIf="banManagementFlow && banManagementFlow.model?.selectCount>0">
+
+                        <p [innerHtml]="'REVIEW-SUB_TITLE_MSG' | translate:lang"></p>
+                        <sncr-notification *ngIf="banSelectionFlow.model?.bulkEdit && banSelectionFlow.model?.selectCount>1" [message]="banSelectionFlow.model?.reviewMsg" type="warning"></sncr-notification>
+
+                        <client-order-details #clientOrderDetails="clientOrderDetails"
+                                              [ngClass]="{bulkEditShift:banSelectionFlow.model?.bulkEdit}"></client-order-details>
+
+
+                        <ng-container *ngIf="!banSelectionFlow.model?.bulkEdit">
+                            <ban-management-review [reviewUpdatedBan]="banManagementFlow.model.isChanged"
+                                                   [lazy]="true"
+                                                   [lazyLoadUrl]="lazyLoadUrlBanReview">
+                            </ban-management-review>
+                        </ng-container>
+
+                        <ng-container *ngIf="banSelectionFlow.model?.bulkEdit">
+                            <ban-management-review [reviewUpdatedBan]="banManagementFlow.model.isChanged"
+                                                   [editedData]="banManagementFlow.model.editedData"
+                                                   [selectCount]="banSelectionFlow.model?.selectCount"
+                                                   [ngClass]="{bulkEditShift:banSelectionFlow.model?.bulkEdit}">
+                            </ban-management-review>
+                        </ng-container>
+
+
+                        <div class="next-button">
+                            <sncr-button type="submit" [disabled]="orderProcessing || isReadOnlyUser" l10nTranslate [ngClass]="{disableFields:orderProcessing || isReadOnlyUser}"
+                                         (click)="processUpdateSubsOrder()">REVIEW-SUBMIT_YOUR_REQUEST
+                            </sncr-button>
+                        </div>
+                    </ng-container>
+                </div>
+
+            </sncr-flow-section>
+        </sncr-flow>
+    </div>
+</div>

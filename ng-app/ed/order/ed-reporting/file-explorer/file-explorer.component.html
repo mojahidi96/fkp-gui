@@ -1,0 +1,214 @@
+<div *ngIf="showShopSelection()">
+  <h2 class="pageTitle">
+    <span l10nTranslate>REPORTING_SELECT_SHOP_TITLE</span>
+  </h2>
+  <div class="card">
+    <div class="card-block">
+      <sncr-loader
+        class="custom-inline"
+        [isLoading]="shopLoading"
+      ></sncr-loader>
+      <div class="row">
+        <div class="col-md-12" *ngIf="!shopLoading">
+          <sncr-datatable
+            [value]="shopList"
+            [rowHover]="true"
+            [resultCount]="'false'"
+            [cols]="shopListCols"
+            (onRowClick)="selectedShop($event)"
+            sortField="fnRootCustomerNumber"
+          >
+          </sncr-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h2
+  class="pageTitle"
+  *ngIf="
+    !isLoading && !showShopSelection() &&
+    (writeAccess || vodafoneAccountManager || isReadOnlyVodafoneUser || (this.vfUser && this.isReadOnlyUser))
+  "
+>
+  {{ shopDto.shopName }}
+</h2>
+<div class="card bg-light mb-3" *ngIf="!showShopSelection()">
+  <div class="vf-label-bar">
+    <button
+      style="width: 100px;"
+      class="float-left btn"
+      (click)="navigateUp()"
+      [disabled]="!canNavigateUp"
+    >
+      <img class="resize-med" src="public/icons/svg/vodafone/arrow-left.svg" />
+    </button>
+    <h2 class="float-left p-2 mb-0" l10nTranslate>
+      {{ path || 'ED_DRIVE_TITLE' }}
+    </h2>
+    <span class="spacer"></span>
+    <button
+      class="float-right btn"
+      *ngIf="!isLoading"
+      [disabled]="!writeAccess"
+      [title]="'ED_DRIVE_NEW_FOLDER' | translate: lang"
+      l10nTranslate
+      (click)="openNewFolderDialog()"
+    >
+      <img class="resize-med" src="public/icons/svg/filesystem/action/new-folder.svg" />
+    </button>
+    <sncr-button
+      class="float-right btn"
+      type="secondary"
+      *ngIf="
+        !isLoading &&
+        (writeAccess || vodafoneAccountManager || isReadOnlyVodafoneUser || (this.vfUser && this.isReadOnlyUser))
+      "
+      (click)="navigateShopSelection()"
+      l10nTranslate
+      >ED_DRIVE_NAVIGATE_SHOP_SELECTION
+    </sncr-button>
+  </div>
+  <div class="card-body bg-white">
+    <sncr-notification *ngIf="fileUploaded" type="success">
+      <span l10nTranslate>ED_DRIVE_SUCCESS_UPLOAD</span>
+    </sncr-notification>
+    <sncr-notification [handler]="notifyError"></sncr-notification>
+    <div class="container uploadChanges">
+      <div *ngIf="loading; else elsePart">
+        <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+      </div>
+      <ng-template #elsePart>
+        <div class="row" *ngIf="writeAccess">
+          <ngx-file-drop
+                  dropZoneClassName="file-drop" contentClassName="file-drop"
+                  (onFileDrop)="onFileDrop($event, false)"
+          >
+            <ng-template ngx-file-drop-content-tmp>
+              <div class="content">
+                <div class="file-drop--illustration">
+                  <img src="public/illustrations/svg/multiple-filetype-support.svg" />
+                </div>
+                <div class="file-drop--txt">
+                  <div class="file-drop--line-1" l10nTranslate>
+                    ED_DRIVE_UPLOAD_DESC-1
+                  </div>
+                  <div class="file-drop--line-2">
+                    <span l10nTranslate>ED_DRIVE_UPLOAD_DESC-2</span>
+                    <label class="link" for="changesFiles" l10nTranslate
+                    >ED_DRIVE_UPLOAD_DESC-3</label
+                    >
+                    <span l10nTranslate>ED_DRIVE_UPLOAD_DESC-4</span>
+                    <input
+                            id="changesFiles"
+                            type="file"
+                            #fileupload
+                            (change)="onFileSelect($event, false)"
+                            name="myChangesFile"
+                    />
+                  </div>
+                </div>
+                <div class="file-drop--supportedformat">
+                  <div l10nTranslate>ED_DRIVE_UPLOAD_FORMAT_DESC_1</div>
+                  <div l10nTranslate>ED_DRIVE_UPLOAD_FORMAT_DESC_2</div>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-file-drop>
+        </div>
+      </ng-template>
+    </div>
+    <sncr-notification *ngIf="noFolders" type="error">
+      <span l10nTranslate>ED_DRIVE_EMPTY_FOLDER</span>
+    </sncr-notification>
+    <div class="container">
+      <sncr-loader
+        *ngIf="isLoading"
+        class="custom-inline"
+        [isLoading]="true"
+      ></sncr-loader>
+    </div>
+    <table class="table table-hover" *ngIf="fileElements && !noFolders">
+      <thead *ngIf="fileElements.length > 0 && !isLoading">
+        <tr>
+          <th scope="col" l10nTranslate>ED_DRIVE_NAME</th>
+          <th scope="col" l10nTranslate>ED_DRIVE_CREATED_AT</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="!isLoading">
+        <tr *ngFor="let element of fileElements">
+          <td scope="row" (click)="navigate(element)">
+            <label id="btnGroupAddon2" class="px-2">
+              <span *ngIf="element.folder" (click)="navigate(element)">
+                <img class="resize-med" src="public/icons/svg/filesystem/folder.svg" />
+              </span>
+              <span *ngIf="!element.folder">
+                <img
+                  class="resize-med"
+                  src="public/icons/svg/filesystem/filetype/{{ element.fileType }}.svg"
+                />
+              </span>
+            </label>
+            <label>{{ element.fileName }}</label>
+          </td>
+          <td>
+            <label class="pt-1">{{ element.createdTs | date: 'medium' }}</label>
+          </td>
+          <td>
+            <div
+              class="btn-group float-right"
+              role="group"
+              aria-label="First group"
+            >
+              <button
+                type="button"
+                *ngIf="!element.folder"
+                class="btn btn-outline-secondary"
+                l10nTranslate
+                [title]="'ED_DRIVE_DOWNLOAD_FILE' | translate: lang"
+                (click)="downloadFile(element)"
+              >
+                <img class="resize-sml" src="public/icons/svg/vodafone/download.svg" />
+              </button>
+              <button
+                type="button"
+                *ngIf="element.folder"
+                [disabled]="!writeAccess"
+                class="btn btn-outline-secondary"
+                l10nTranslate
+                [title]="'ED_DRIVE_RENAME' | translate: lang"
+                (click)="openRenameDialog(element)"
+              >
+                <img class="resize-sml" src="public/icons/svg/vodafone/edit.svg" />
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                [disabled]="!writeAccess"
+                l10nTranslate
+                [title]="'ED_DRIVE_MOVE' | translate: lang"
+                (click)="openMoveDialog(element)"
+              >
+                <img
+                  class="resize-sml"
+                  src="public/icons/svg/filesystem/action/move-folder.svg"
+                />
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                [disabled]="!writeAccess"
+                l10nTranslate
+                [title]="'ED_DRIVE_DELETE' | translate: lang"
+                (click)="openDeleteConfirmationDialog(element)"
+              >
+                <img class="resize-sml" src="public/icons/svg/vodafone/delete.svg" />
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

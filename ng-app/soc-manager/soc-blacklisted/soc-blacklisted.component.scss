@@ -1,0 +1,28 @@
+@import '../../styles/_custom-variables';
+
+.datatableHeader {
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  p {
+    margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep .dropdown-menu {
+  margin-left: -56px !important;
+}
+
+.margin-bottom-30 {
+  margin-bottom: 30px !important;
+}
+
+:host ::ng-deep .ui-datatable {
+  .ui-datatable-data > tr td {
+    height: auto !important;
+  }
+
+  .ui-datatable-data .form-check {
+    margin-bottom: 0px !important;
+  }
+}

@@ -1,0 +1,47 @@
+@import 'custom-variables';
+@import 'mixins';
+
+.card {
+  border-radius: 4px !important;
+  box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.6);
+  border-bottom: none;
+}
+
+.card-header {
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 1px solid $input-text-border-color;
+  font-size: 20px;
+  color: $cardH-txt-color;
+  padding: 0 20px;
+  height: 43px;
+  border-top: 1px solid $input-text-border-color;
+
+  .text {
+    top: 6px;
+    position: relative;
+    display: inline-block;
+    color: #1d1e1f;
+  }
+
+  &:last-child {
+    border-bottom: 0 solid $input-text-border-color;
+  }
+
+  &.card-primary {
+    box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.3);
+    border-top: 1px solid $input-text-border-color;
+    border-bottom: 0 solid $input-text-border-color;
+  }
+
+  &.done {
+    box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.3);
+    border-top: 1px solid $input-text-border-color;
+    border-bottom: 0 solid $input-text-border-color;
+  }
+
+  &.text-muted {
+    color: $muted !important;
+    cursor: default !important;
+  }
+}

@@ -1,0 +1,181 @@
+<h2 class="pageTitle">
+    <span>Shop anpassen</span>
+</h2>
+
+<sncr-notification [handler]="notify" [dismissible]="false"></sncr-notification>
+<div class="contentPanelBody edit-shop-comp">
+    <div class="card">
+        <div class="card-block">
+            <div class="area" id="TitleHeader">
+                <div class="row" *ngIf="fnShop">
+                    <div class="col-3 break-word"><strong>Kundennummer</strong><br>{{fnShopCopy.fnCustomerNumber ? fnShopCopy.fnCustomerNumber: fnShopCopy.fnRootCustomerNumber}}</div>
+                    <div class="col-4 break-word"><strong>Name des Kunden</strong><br>{{fnShopCopy.customerName ? fnShopCopy.customerName:fnShopCopy.rootCustomerName}}</div>
+                    <div class="col-4 break-word"><strong>Name des Shops</strong><br>{{fnShopCopy.shopName}}</div>
+                </div>
+            </div>
+            <div class="card-block padding-0">
+                <div *ngIf="loading" class="editShop">
+                    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+                </div>
+                <ngb-accordion [closeOthers]="true" (panelChange)="panelChange($event)" #accordion [hidden]="loading">
+                    <ng-container *ngFor="let panel of panels">
+                        <ngb-panel id="{{panel.id}}" title="{{panel.title}}">
+                            <ng-template ngbPanelContent>
+                                <ng-container *ngIf="panel.id==='setup-1'">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <sncr-input [(ngModel)]="fnShop.shopName" [autocomplete]="'off'" [disabled]="loading" [pattern]="pattern"
+                                                        [showValidation]="showValidation">Name des Shops
+                                            </sncr-input>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <sncr-input [(ngModel)]="fnShop.fnRootCustomerNumber"
+                                                        [autocomplete]="'off'" [disabled]="loading" [readonly]="true">Top-Level Kunde
+                                            </sncr-input>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 pb-2">
+                                            <sncr-checkbox label="Genehmigung für Neuaufträge erforderlich?" [(ngModel)]="fnShop.orderApproval"></sncr-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 pb-2">
+                                            <sncr-checkbox label="2-Faktor Authentifizierung" [(ngModel)]="fnShop.tfa"></sncr-checkbox>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="panel.id!=='setup-1'">
+                                    <ng-container>
+                                        <ngb-tabset *ngIf="panel.tab" (tabChange)="tabChange($event);" #tab>
+                                            <ngb-tab title="{{newtab.title}}" id="{{newtab.id}}" *ngFor="let newtab of panel.tabs">
+                                                <ng-template ngbTabContent>
+                                                    <div class="row" *ngIf="newtab.id === '1' && newtab.rows.length === 0">
+                                                        <span>Die Service-Schein Auswahl entspricht keinem Verkaufsprodukt.</span>
+                                                    </div>
+                                                    <div *ngIf="newtab.id === '0' || (newtab.id === '1' && newtab.rows.length !== 0)">
+                                                        <sncr-datatable [value]="newtab.rows" [cols]="newtab.columns" [(selection)]="newtab.selected" [multiSelection]="true" sortField="{{newtab.sortField}}"
+                                                                        [selectionTitle]="newtab.selected && newtab.selected.length>1 ? 'Ergebnisse gefunden' : 'Ergebnis gefunden'"
+                                                                        [selectMessage]="newtab.selected && newtab.selected.length>1?'Ergebnisse':'Ergebnis'">
+                                                        </sncr-datatable>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12 nopadding">
+                                                            <sncr-button type="primary" [disabled]="loading || fnUser?.isReadOnlyUser" [ngClass]="{disableFields:loading || fnUser?.isReadOnlyUser}" (click)="saveTabEditShop(newtab.id)">{{newtab.buttonTitle}}</sncr-button>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-tab>
+                                        </ngb-tabset>
+
+                                        <ng-container *ngIf="!panel.tab">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <sncr-checkbox [label]="panel.autoAssignLabel" [(ngModel)]="panel.autoAssign"></sncr-checkbox>
+                                                </div>
+                                            </div>
+
+                                            <sncr-datatable [value]="panel.rows" (onRowSelect)="onSelection($event,panel)" (onHeaderCheckboxToggle)="onAllCheck($event, panel)"
+                                                            [cols]="panel.columns" [(selection)]="panel.selected" [multiSelection]="true" [selectCount]="panel.selected.length"
+                                                            sortField="{{panel.sortField}}" (onRowUnselect)="unSelected($event, panel)">
+                                            </sncr-datatable>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                                <div class="row" *ngIf="!panel.tab">
+                                    <div class="col-md-12 nopadding">
+                                        <sncr-button type="primary" [disabled]="disableSaveButton() || loading" [ngClass]="{disableFields:disableSaveButton() || loading}" (click)="savePanelEditShop(panel.id)">{{panel.buttonTitle}}</sncr-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-panel>
+                    </ng-container>
+                </ngb-accordion>
+            </div>
+
+            <div class="divider"></div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #customerAlert let-c="close" let-d="dismiss" ngbModalContainer>
+    <div class="modal-header" *ngIf="!loading">
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="modalError=false;d('Cross click');"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <p><strong>{{popupMessage}}</strong></p>
+            </div>
+        </div>
+        <div class="row" *ngIf="type==='billing'">
+            <div class="col-md-12" style="word-wrap: break-word;">
+                <span *ngFor="let customer of noBillingCustomers;let last = last;let index = index;">{{customer}}<ng-container *ngIf="!last">&#44;</ng-container></span>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="Pbox"></div>
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="modalError=false;c('Close click');">Abbrechen</sncr-button>
+        <sncr-button type="primary" class="btnPrimary float-md-right" (click)="saveCustBillingData(true,type)">Weiter</sncr-button>
+    </div>
+</ng-template>
+
+
+<ng-template #billError let-context>
+    <i *ngIf="!context.row.billExists" class="fa fa-exclamation-triangle" placement="top" [ngbTooltip]="noBillingForCustMsg" style="color:red;">
+    </i>
+</ng-template>
+
+<ng-template #selectionAlert let-c="close" let-d="dismiss" ngbModalContainer>
+    <div class="modal-header">
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="modalError=false;d('Cross click');"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <p>{{'EDIT_SHOP_SELECT_ALERT' | translate:lang}} {{selectedShop}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="modalError=false;c('Close click');" l10nTranslate>OK</sncr-button>
+    </div>
+</ng-template>
+
+<ng-template #customerNo let-context>
+    <div class="margin-bottom-30">
+        <div (click)="context.row.ellipse = !context.row.ellipse">
+            <div *ngIf="getCustomerNo(context.row.customerNo).length > 0">
+                <i class="fa fa-chevron-down" *ngIf="!context.row.ellipse" aria-hidden="true"></i>
+                <i class="fa fa-chevron-up" *ngIf="context.row.ellipse" aria-hidden="true"></i>
+                {{getCustomerNo(context.row.customerNo).length}} Kundennummer
+            </div>
+        </div>
+    </div>
+    <div *ngIf="context.row.ellipse" class="margin-bottom-30 scroll-customerNo">
+        <li *ngFor="let customerNo of getCustomerNo(context.row.customerNo)">
+            {{customerNo}}
+        </li>
+    </div>
+</ng-template>
+
+<ng-template #multipleSelectionAlert let-c="close" let-d="dismiss" ngbModalContainer>
+    <div class="modal-header">
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="modalError=false;d('Cross click');"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <span *ngIf="zeroShops.length <= 3"> {{zeroShops.length}} {{'EDIT_SHOP_SELECT_ALERT' | translate:lang}} {{zeroShops.toString()}}</span>
+                <span *ngIf="zeroShops.length > 3"> {{zeroShops.length}} {{'EDIT_SHOP_SELECT_ALERT_MULTIPLE' | translate:lang}} {{zeroShops.slice(0, 3)+'...'}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="modalError=false;c('Close click');" l10nTranslate>OK</sncr-button>
+    </div>
+</ng-template>

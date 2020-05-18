@@ -1,0 +1,317 @@
+<div class="card">
+  <div class="card-block">
+    <sncr-notification [handler]="alertNotify"></sncr-notification>
+    <div class="card py-2">
+      <div class="row">
+        <div class="col">
+          <div class="row pl-4">
+            <h4 l10nTranslate>ED-OD-DETAILS-ORDER-TITLE</h4>
+          </div>
+          <div class="row">
+            <div class="col-3 pl-4" l10nTranslate><strong>ED-ORDER_NUMBER_LABEL</strong><br>{{orderValueDetails?.orderNumber}}</div>
+            <div class="col-3" l10nTranslate><strong>ED-USER_NAME_LABEL</strong><br>{{orderValueDetails?.userName}}</div>
+            <div class="col-3" l10nTranslate><strong>ED-STATUS_LABEL</strong><br>{{orderValueDetails?.status}}</div>
+            <div class="col-3" l10nTranslate><strong>ED-CREATED_TIME_LABEL</strong><br>{{orderValueDetails?.createdTs | customDate}}</div>
+          </div>
+          <div class="row pt-4">
+            <div class="col-3 pl-4" l10nTranslate><strong>ED-ACCESS_IDENTIFIER1</strong><br>{{orderValueDetails?.accessIdentifier}}</div>
+            <div class="col-3" l10nTranslate><strong>ED-ACCESS_IDENTIFIER2</strong><br>{{orderValueDetails?.accessIdentifier2}}</div>
+            <div class="col-3" l10nTranslate><strong>ED-ORDER_BINDING_DATE</strong><br>{{orderValueDetails?.bindingDeliveryDate}}</div>
+            <div class="col-3" l10nTranslate><strong>ED-ORDER_CURRENT_DATE</strong><br>{{orderValueDetails?.currentDeliveryDate}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="loading">
+      <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+    </ng-container>
+    <ng-container *ngIf="!loading">
+      <br />
+      <ngb-accordion #accordion (panelChange)="panelChange($event)" [closeOthers]="false" activeIds="orderStatus_Id">
+        <ngb-panel id="systemhistory">
+          <ng-template ngbPanelTitle>
+            <span class="history" l10nTranslate><i [ngClass]="accordion.activeIds.includes('systemhistory') ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>&nbsp;ED-OD-HISTORY-TITLE</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <ng-container *ngIf="loadsystemHistory">
+              <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+            </ng-container>
+            <div [hidden]="loadsystemHistory">
+              <sncr-datatable [cols]="systemcolumns" [value]="systemhistory" [sortField]="'lastRefreshEpoch'"
+                [sortOrder]="-1"></sncr-datatable>
+            </div>
+          </ng-template>
+        </ngb-panel>
+        <ngb-panel id="changeHistory">
+          <ng-template ngbPanelTitle>
+            <span class="history" l10nTranslate><i [ngClass]="accordion.activeIds.includes('changeHistory') ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>&nbsp;ED-OD-COMMENTS-TITLE</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <ng-container *ngIf="loadComments">
+              <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+            </ng-container>
+            <div [hidden]="loadComments">
+              <sncr-datatable [cols]="columns" [value]="comments" [sortField]="'lastRefreshedEpoch'" [sortOrder]="-1"></sncr-datatable>
+            </div>
+          </ng-template>
+        </ngb-panel>
+        <ngb-panel id="orderStatus_Id" #accState>
+          <ng-template ngbPanelTitle>
+            <span class="history" l10nTranslate><i [ngClass]="accordion.activeIds.includes('orderStatus_Id') ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>&nbsp;{{accState.panelId}}ED-ORDER_STATUS</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <form [formGroup]="orderStatusForm">
+              <div class="row">
+                <div class="col-4" *ngIf="manageOrders.length > 0">
+                  <sncr-select [label]="'ED-ORDER_STATUS' | translate:lang" formControlName="status" [showValidation]="showValidation"
+                    l10nTranslate>
+                    <option value="" selected l10nTranslate>ED-DROPDOWN-CHOOSE</option>
+                    <option *ngFor="let status of manageOrders" value="{{status.value}}" l10nTranslate>{{status.text}}</option>
+                  </sncr-select>
+                </div>
+                <div class="col-4" *ngIf="userDetails.vfUser">
+                  <sncr-datepicker [label]="'ED-ORDER_BINDING_DATE' | translate:lang" formControlName="bindingDate"
+                                   [showValidation]="true" [minDate]="getMinDate()" [showReset]="true" (onReset)="onDatepickerReset($event)"></sncr-datepicker>
+                </div>
+                <div class="col-4" *ngIf="userDetails.vfUser">
+                  <sncr-datepicker [label]="'ED-ORDER_CURRENT_DATE' | translate:lang" formControlName="currentDate"
+                                   [showValidation]="true" [minDate]="getMinDate()" [showReset]="true" (onReset)="onDatepickerReset($event)"></sncr-datepicker>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4" *ngIf="showSAP">
+                  <sncr-textarea [rows]="1" [cols]="10" [label]="'ED-OD-SAP_NUMBER' | translate:lang" l10nTranslate
+                    formControlName="sapValue" [showValidation]="true" autocomplete="off" [readonly]="isReadOnly">
+                  </sncr-textarea>
+                </div>
+                <div class="col-4" *ngIf = "!userDetails.vfUser">
+                  <sncr-textarea [rows]="1" [cols]="10" [label]="'ED-ADDITIONAL_CONTACT_1' | translate:lang" formControlName="additionalContact1" [showValidation]="true" autocomplete="off" ></sncr-textarea>
+                </div>
+
+                <div class="col-4" *ngIf = "!userDetails.vfUser">
+                  <sncr-textarea [rows]="1" [cols]="10" [label]="'ED-ADDITIONAL_CONTACT_2' | translate:lang" formControlName="additionalContact2" [showValidation]="true" autocomplete="off"></sncr-textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <sncr-textarea [rows]="5" [cols]="10" [label]="'ED-CUSTOMER_MESSAGE' | translate:lang" l10nTranslate
+                    formControlName="message" [showValidation]="true" autocomplete="off">
+                  </sncr-textarea>
+                </div>
+                <div class="col-4" *ngIf="userDetails.vfUser">
+                  <sncr-textarea [rows]="1" [cols]="10" [label]="'ED-ACCESS_IDENTIFIER1' | translate:lang" formControlName="accessIdentifier1" [showValidation]="true" autocomplete="off"></sncr-textarea>
+                </div>
+                <div class="col-4" *ngIf="userDetails.vfUser">
+                  <sncr-textarea [rows]="1" [cols]="10" [label]="'ED-ACCESS_IDENTIFIER2' | translate:lang" formControlName="accessIdentifier2" [showValidation]="true" autocomplete="off"></sncr-textarea>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-4">
+                  <sncr-button type="secondary" (click)="cancelOrder()" l10nTranslate>ED-OD_CANCEL</sncr-button>
+                  <sncr-button type="submit" *ngIf="!isVodafoneAccountManager" class="ml-2 align" [ngClass]="{disableFields:isReadOnlyUser || (!orderStatusForm.dirty || orderStatusForm.pristine)}"
+                    [disabled]="isReadOnlyUser || (!orderStatusForm.dirty || orderStatusForm.pristine)" (click)="submitOrder()"
+                    l10nTranslate>ED-OD_SAVE
+                  </sncr-button>
+                </div>
+              </div>
+            </form>
+          </ng-template>
+        </ngb-panel>
+        <ngb-panel id="documentMgt">
+          <ng-template ngbPanelTitle>
+            <span class="history" l10nTranslate><i [ngClass]="accordion.activeIds.includes('documentMgt') ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>&nbsp;ED-DOCUMENT-MGT</span>
+            <span class="attachment-icon" *ngIf="docList.length > 0"><img class="resize-sml" src="public/icons/svg/vodafone/attachment.svg" />
+            </span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <sncr-datatable [cols]="docColumns" [value]="docList " prefix="ED-ORDER-DETAILS"></sncr-datatable>
+            <sncr-notification type="error" *ngIf="errorMsg" l10nTranslate><strong>{{errorMsg}}</strong></sncr-notification>
+            <form [formGroup]="docMgtForm" (ngSubmit)="uploadDocuments()" enctype="multipart/form-data" *ngIf="!isReadOnlyUser">
+              <ngx-file-drop dropZoneClassName="file-drop" contentClassName="file-drop" (onFileDrop)="onFileDrop($event)">
+                <ng-template ngx-file-drop-content-tmp>
+                  <div class="content">
+                    <div class="file-drop--illustration">
+                      <img src="public/illustrations/svg/multiple-filetype-support.svg" />
+                    </div>
+                    <div class="file-drop--txt">
+                      <div class="file-drop--line-1" l10nTranslate>ED-ORDER-DETAILS-DRAG_DROP_DESC_1</div>
+                      <div class="file-drop--line-2">
+                        <span l10nTranslate>ED-ORDER-DETAILS-DRAG_DROP_DESC_2</span>
+                        <label class="link" for="uploadfile" l10nTranslate>ED-ORDER-DETAILS-DRAG_DROP_DESC_3</label>
+                        <span l10nTranslate>ED-ORDER-DETAILS-DRAG_DROP_DESC_4</span>
+                        <input id="uploadfile" formControlName="uploadfile" multiple type="file" #selectfile class="d-none"
+                          (change)="handleFileInput($event.target.files)" name="myChangesFile" />
+                      </div>
+                    </div>
+                    <div class="file-drop--supportedformat">
+                      <div l10nTranslate>ED-ORDER-DETAILS-SUPPORTED-FORMAT-1</div>
+                      <div l10nTranslate>ED-ORDER-DETAILS-SUPPORTED-FORMAT-2</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-file-drop>
+              <div class="uploadList mt-3 row" *ngFor="let item of queue | async; let i = index" style="display: block;">
+                <div class="col-md-5">
+                  <img src="public/icons/legacy/filetype/{{fileExtImage[item.file.name.substring(item.file.name.lastIndexOf('.')+1)]
+                                        ? fileExtImage[item.file.name.substring(item.file.name.lastIndexOf('.')+1)]
+                                        : fileExtImage['default']}}" />
+                  <span class="ml-2">{{item.file.name}}</span>
+                  <img src="public/icons/legacy/filetype/delete.png" class="deletefile" *ngIf="!uploadInProgress" (click)="removeFile(item, i)" />
+                </div>
+                <div class="col-md-4" *ngIf="files.length > 0" >
+                  <p>
+                    <ngb-progressbar type="success" [showValue]="item?.progress" [value]="item?.progress ? item?.progress : 0"
+                      [max]="100"></ngb-progressbar>
+                  </p>
+                </div>
+              </div>
+              <div class="row ml-1 mt-5">
+                <sncr-button type="submit" [disabled]="uploadInProgress" *ngIf="!isVodafoneAccountManager" [ngClass]="{disableFields:processing}" l10nTranslate>ED-OD-UPLOAD-BUTTON</sncr-button>
+              </div>
+            </form>
+          </ng-template>
+        </ngb-panel>
+        <ngb-panel id="milestone">
+          <ng-template ngbPanelTitle>
+            <span class="history" l10nTranslate><i [ngClass]="accordion.activeIds.includes('milestone') ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>&nbsp;ED-OD_MILESTONE_TITLE</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <div>
+              <table class="table size">
+                <tbody>
+                  <tr class="borderem" *ngFor="let milestone of mileValues">
+                    <th class="txt-align">{{milestone.name}}</th>
+                    <td>{{milestone.value}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+        </ngb-panel>
+        <ngb-panel id="archivedocs" *ngIf="vfUser">
+          <ng-template ngbPanelTitle>
+            <span class="history" l10nTranslate><i [ngClass]="accordion.activeIds.includes('archivedocs') ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>&nbsp;ED-ARCHIVE_TITLE</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <ng-container *ngIf="loadDocs">
+              <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+            </ng-container>
+            <div [hidden]="loadDocs">
+              <sncr-datatable [cols]="archColumns" [value]="archFiles" [sortField]="'lastRefreshEpoch'" [sortOrder]="-1"></sncr-datatable>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+      <br />
+      <h3 class="my-3" l10nTranslate>ED-OD-ORDER_DETAILS_TITLE</h3>
+      <div class="card" *ngIf="panels">
+        <dynamic-panels [panels]="panels" [readonly]="true"></dynamic-panels>
+      </div>
+    </ng-container>
+    <div class="row mt-2 text-right">
+      <div class="col-8">
+        <sncr-button type="secondary" class="float-left" (click)="backbuttonClicked()" l10nTranslate>ED-OD-BACK</sncr-button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #createdDateTime let-context>
+  {{ context.row.createdTs | customDate}}
+</ng-template>
+
+<ng-template #msgContentModal let-c="close" let-d="dismiss" ngbModalContainer>
+  <div class="row">
+    <div class="col-10 m-auto">
+      <sncr-notification [type]="typeOfmessage">
+        <span l10nTranslate>{{messageKey}}</span>
+      </sncr-notification>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="md-4">
+        <sncr-button class="submit" (click)="c('OK')" l10nTranslate>ED-MODAL_BTN_OK</sncr-button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteConfirmModal let-c="close" let-d="dismiss" ngbModalContainer>
+  <div class="modal-header">
+    <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <p><strong>{{'ED-DOC-DELETE-CONFIRM' | translate:lang}}</strong></p>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <div class="modal-footer">
+    <sncr-button type="secondary" (click)="d('Close click')">
+      <span l10nTranslate>ED_DRIVE_CANCEL</span>
+    </sncr-button>
+    <sncr-button type="primary" (click)="c('OK')">
+      <span l10nTranslate>ED_DRIVE_DELETE</span>
+    </sncr-button>
+  </div>
+</ng-template>
+
+<ng-template #customerInfo let-context>
+  <div class="description" (click)="context.row.ellipsis = !context.row.ellipsis">
+    {{(context.row.userComment?.length > 30 && !context.row.ellipsis) ? (context.row.userComment | slice:0:30) +
+    '...'
+    : (context.row.userComment) }}
+  </div>
+</ng-template>
+
+<ng-template #emptyTd>
+  <td></td>
+</ng-template>
+
+<ng-template #docSize let-context>
+  <div>
+    {{(context?.row?.docSize / 1024 / 1024 | number:'.1').replace(',', '.')}} MB
+  </div>
+</ng-template>
+
+<ng-template #downloadUrl let-context>
+  <div class="download-file" (click)="downloadFile(context.row.docId, context.row.docName)">
+    {{context.row.docName}}
+  </div>
+</ng-template>
+
+<ng-template #deleteFileTemplate let-context>
+  <div class="delete-doc" *ngIf="!isReadOnlyUser && !isVodafoneAccountManager">
+    <img src="public/icons/svg/vodafone/delete.svg" (click)="confirmDeleteDoc(context.row)" height="30px" width="30px" />
+  </div>
+</ng-template>
+
+<ng-template #docOrderNumber let-context>
+  <div>
+    {{orderValueDetails?.orderNumber}}
+  </div>
+</ng-template>
+
+<ng-template #milestoneStatus let-context>
+  <div class="description" (click)="context.row.ellipsis = !context.row.ellipsis">
+    {{(context.row.milestoneStatus?.length > 30 && !context.row.ellipsis) ? (context.row.milestoneStatus |
+    slice:0:30)
+    + '...' : (context.row.milestoneStatus) }}
+  </div>
+</ng-template>
+
+<ng-template #epochTime let-context>
+  {{ context.row.createdTs | customDate}}
+</ng-template>
+
+<ng-template #downloadOrderFile let-context>
+  <div class="download-file" (click)="downloadOrderArchFile(context.row.id, context.row.fileName)">
+    {{context.row.fileName}}
+  </div>
+</ng-template>

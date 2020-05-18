@@ -1,0 +1,23 @@
+@import 'custom-variables';
+@import 'mixins';
+
+//Page Title
+
+.pageTitle {
+  border: 1px solid $txt-white;
+  background: $txt-white;
+  padding: 8px 15px;
+  box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+  font-size: 30px;
+  color: $txt-black;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  border-radius: 3px;
+  .fa.fa-print {
+    color: $iconNumberColor;
+    font-size: 18px;
+  }
+  word-break: break-word; // IE & < Edge 18
+  word-wrap: break-word; // IE 11
+  overflow-wrap: break-word;
+}

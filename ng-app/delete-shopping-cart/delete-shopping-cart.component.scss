@@ -1,0 +1,10 @@
+@import '../styles/_custom-variables';
+@import '../styles/page-title';
+@import '../styles/mixins';
+@import '../styles/modal';
+
+.description {
+  width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}

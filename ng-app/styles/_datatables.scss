@@ -1,0 +1,77 @@
+.dataTableMSoc {
+  .alert-danger {
+    margin: 0px 0px 30px !important;
+  }
+
+  padding: 0 20px;
+  margin-top: 30px;
+  .flexRow {
+    display: inline-flex;
+    flex-direction: row;
+    sncr-input {
+      align-self: flex-end;
+      flex: 1;
+    }
+    .labelText {
+      align-self: start;
+      flex: 1 1 0;
+    }
+    .infoGreyIcon {
+      align-self: end;
+    }
+  }
+
+  .flexRow1 {
+    display: inline-flex;
+    flex-direction: row;
+    sncr-input {
+      align-self: flex-end;
+      flex: 1 1 2;
+      width: 100%;
+    }
+    .buttonG {
+      align-self: flex-end;
+      margin-left: 10px;
+      .btn-secondary {
+        width: 24px;
+        height: 24px;
+        padding: 0px 2px;
+        margin-bottom: 20px;
+        .fa-plus {
+          background-image: url(~/public/icons/svg/vodafone/add-or-plus.svg);
+          @include icon-sizes20;
+          &:before {
+            content: none;
+          }
+        }
+
+        .fa-remove {
+          background-image: url(~/public/icons/svg/vodafone/delete.svg);
+          @include icon-sizes20;
+          &:before {
+            content: none;
+          }
+        }
+      }
+    }
+    .labelText {
+      align-self: start;
+      flex: 1 1 0;
+    }
+    .requiredField {
+      display: inline;
+      flex: 2 1 0;
+    }
+    .infoGreyIcon {
+      align-self: end;
+    }
+  }
+  .noDataMes {
+    p {
+      color: $cardH-txt-color;
+    }
+  }
+  p {
+    color: $cardH-txt-color;
+  }
+}

@@ -1,0 +1,57 @@
+@import '../../styles/_custom-variables';
+
+.modal-header {
+  border-bottom: 0px;
+  padding: 10px 15px 0px;
+  h2.modal-title {
+    font-size: 30px;
+    color: #333333;
+    line-height: normal;
+  }
+}
+
+.margin-bottom-30 {
+  margin-bottom: 30px !important;
+}
+
+:host ::ng-deep .btn.btn-sm.btnDefault {
+  padding: 0px;
+}
+
+.datatableHeader {
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  p {
+    margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep .form-group {
+  margin-bottom: 20px;
+
+  .btn-secondary {
+    margin-left: 0px !important;
+  }
+}
+
+:host ::ng-deep .clickableDataRows {
+  .ui-datatable-data > tr:not(.editRow):hover td {
+    cursor: pointer;
+  }
+
+  .ui-datatable-data > tr.ui-state-highlight {
+    background-color: #d8d8d8;
+  }
+
+  .ui-datatable-data .col-editable sncr-button:first-of-type button {
+    margin-left: 0px !important;
+  }
+}
+
+:host ::ng-deep .ui-datatable {
+  .ui-datatable-data > tr.editRow td,
+  .ui-datatable-data > tr td {
+    height: auto !important;
+  }
+}

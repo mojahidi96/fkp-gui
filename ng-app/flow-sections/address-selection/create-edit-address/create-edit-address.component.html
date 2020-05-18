@@ -1,0 +1,173 @@
+<div class="row" *ngIf="showSubtitle">
+    <div class="col-sm-12 subTitle">
+        <div l10nTranslate>
+            {{getKey((selectedAction === actions.EDIT) ? '_SELECTION-EDIT_ADDRESS' : '_SELECTION-ADD_NEW')}}
+        </div>
+        <hr>
+    </div>
+</div>
+<ng-container *ngIf="addressSelectionType === 'DEBITOR' && (selectedAction === actions.EDIT)">
+    <div class="mb-2">
+        <div class="row">
+            <div class="col-sm-4">
+                <strong>{{getKey('_SELECTION-DEBITOR_NUMBER_LABEL') | translate:lang}}</strong>
+            </div>
+            <div class="col-sm-4">
+                <strong>{{getKey('_SELECTION-DEBITOR_ADDRESS') | translate:lang}}</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                {{address.debitorNumber}}
+            </div>
+            <div class="col-sm-4">
+                {{address.fullAddress}}
+            </div>
+        </div>
+    </div>
+</ng-container>
+<div *ngIf="!validDetbitorNumber">
+    <sncr-notification [message]="'DEBITOR_SELECTION-DEBITOR_NUMBER_EXIST' | translate:lang" type="error">
+    </sncr-notification>
+</div>
+<div *ngIf="defaultDebitorNumber">
+    <sncr-notification type="error" [message]="'DEBITOR_SELECTION-DEFAULT_DEBITOR_NUMBER'"></sncr-notification>
+</div>
+<form [formGroup]="saveForm" (ngSubmit)="saveAddressForm()">
+    <ng-container *ngIf="addressSelectionType === 'DEBITOR' && !(selectedAction === actions.EDIT)">
+        <ng-container *ngIf="isTechfundEnabled && !hasSammel">
+            <div class="row">
+                <div class="col-sm-6">
+                    <sncr-checkbox label="{{getKey('_SELECTION-TECHFUND')| translate:lang}}" formControlName="techFund"
+                                   [disableControl]="forceTechfund"></sncr-checkbox>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <sncr-input [showValidation]="showValidation" formControlName="debitorNumber"></sncr-input>
+                </div>
+            </div>
+        </ng-container>
+        <div *ngIf="editDebitorNumber && !isTechfundEnabled" class="row">
+            <div class="col-sm-4">
+                <sncr-input label="Debitorenummer" required [showValidation]="showValidation" formControlName="debitorNumber"></sncr-input>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row">
+        <div class="col-sm-4" *ngIf="addressSelectionType === 'DEBITOR' && selectedAction === actions.EDIT; else showTextBox">
+            <strong>{{'ADDRESS-NAME_1' | translate:lang}}</strong><br>
+            <p class="mt-2">{{address.street1}}</p>
+        </div>
+        <ng-template #showTextBox>
+            <div class="col-sm-4">
+                <sncr-input label="{{'ADDRESS-NAME_1' | translate:lang}}" formControlName="street1"
+                            [showValidation]="showValidation" required>
+                </sncr-input>
+            </div>
+        </ng-template>
+
+        <div class="col-sm-4">
+            <sncr-input label="{{'ADDRESS-NAME_2' | translate:lang}}" formControlName="street2"
+                        [showValidation]="showValidation" [disableControl]="isEmptyOrDisabled(saveForm.controls['street1'], !(selectedAction === actions.EDIT))">
+            </sncr-input>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <sncr-input label="{{'ADDRESS-NAME_3' | translate:lang}}" formControlName="street3"
+                        [showValidation]="showValidation" [disableControl]="isEmptyOrDisabled(saveForm.controls['street2'])">
+            </sncr-input>
+        </div>
+        <div class="col-sm-4" *ngIf="addressSelectionType === 'DEBITOR'">
+            <sncr-input label="{{'ADDRESS-NAME_4' | translate:lang}}" formControlName="street4"
+                        [showValidation]="showValidation" [disableControl]="isEmptyOrDisabled(saveForm.controls['street3'])">
+            </sncr-input>
+        </div>
+    </div>
+
+    <ng-container *ngIf="!(selectedAction === actions.EDIT) || addressSelectionType === 'SHIPMENT'">
+        <ng-container *ngIf="addressSelectionType === 'DEBITOR'">
+            <div class="row">
+                <div class="col-sm-8">
+                    <sncr-check-group [label]="''" formControlName="streetType"
+                                      [showValidation]="showValidation">
+                        <div class="row">
+                            <div class="col-sm-6" *ngFor="let o of commonConstants.addressFormatOptions">
+                                <sncr-radio [value]="o.value" l10nTranslate>{{o.text}}</sncr-radio>
+                            </div>
+                        </div>
+                    </sncr-check-group>
+                </div>
+            </div>
+        </ng-container>
+
+        <div class="row" *ngIf="addressSelectionType === 'SHIPMENT' || saveForm.get('streetType').value === commonConstants.addressFormatOptions[0].value">
+            <div class="col-sm-5">
+                <sncr-input label="{{'ADDRESS-STREET_NAME' | translate:lang}}" formControlName="streetName"
+                            [showValidation]="showValidation" required>
+                </sncr-input>
+            </div>
+
+            <div class="col-sm-3">
+                <sncr-input label="{{'ADDRESS-HOUSE_NUMBER' | translate:lang}}" formControlName="houseNumber"
+                            [showValidation]="showValidation" required>
+                </sncr-input>
+            </div>
+        </div>
+        <ng-container *ngIf="addressSelectionType === 'DEBITOR' && saveForm.get('streetType').value === commonConstants.addressFormatOptions[1].value">
+            <div class="row">
+                <div class="col-sm-8">
+                    <sncr-input label="{{'ADDRESS-POST_BOX' | translate:lang}}" formControlName="poBox"
+                                [showValidation]="showValidation" required>
+                    </sncr-input>
+                </div>
+            </div>
+        </ng-container>
+
+
+        <div class="row">
+            <div class="col-sm-3">
+                <sncr-input maxLength="5" label="{{'ADDRESS-POSTAL_CODE' | translate:lang}}" formControlName="postalCode"
+                            [showValidation]="showValidation" required>
+                </sncr-input>
+            </div>
+
+            <div class="col-sm-5">
+                <sncr-input label="{{'ADDRESS-CITY' | translate:lang}}" formControlName="city"
+                            [showValidation]="showValidation" required>
+                </sncr-input>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-8">
+                <sncr-select label="{{'ADDRESS-COUNTRY' | translate:lang}}" formControlName="countryCode"
+                             [showValidation]="showValidation" required>
+                    <option value="" l10nTranslate>DROP_DOWN-SELECT</option>
+                    <option *ngFor="let o of countries" [value]="o.value">{{o.text}}</option>
+                </sncr-select>
+            </div>
+        </div>
+    </ng-container>
+
+    <div class="row buttons pb-4 pt-4">
+        <div class="col-4 text-left">
+            <sncr-button type="secondary"
+                         class="pull-left"
+                         (click)="output.emit({action: actions.CANCEL})"
+                         l10nTranslate>
+                {{getKey('_SELECTION-CANCEL')}}
+            </sncr-button>
+        </div>
+        <div class="col-8 next-button">
+            <sncr-button type="submit" [btnStyle]="btnStyle"
+                         class="pull-right"
+                         [disabled]="disableOnceClicked" [ngClass]="{disableFields:disableOnceClicked}"
+                         l10nTranslate>
+                {{getKey('_SELECTION-ACCEPT_NEW')}}
+            </sncr-button>
+        </div>
+    </div>
+</form>

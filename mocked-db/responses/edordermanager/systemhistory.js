@@ -1,0 +1,16 @@
+module.exports = [{
+      "transactionId":"cc056269-0a10-ea96-2d23-44854136dd2b",
+      "userId":"c902fc36-c0a8-6cb7-50e6-74b920ef9bfa",
+      "userName":"jane_test1@yahoo.com",
+      "status":null,
+      "createdTs":1546509404000,
+      "documentName":null,
+      "shoppingCartId":null,
+      "orderNumber":"ARC3200001783",
+      "endWith":0,
+      "startWith":0,
+      "sapOrderNumber":null,
+      "currentMilestone":null,
+      "lastRefreshEpoch":1546473600000,
+      "documentAction":null,
+      "userComment":"TEST HISTORY COMMENTS"}];

@@ -1,0 +1,55 @@
+:host {
+  width: auto;
+  line-height: 0;
+}
+
+.svg-icon {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+}
+
+// ng-deep is necessary to style inner third-party component
+// provided by angular-svg-icon
+.svg-icon svg {
+  overflow: visible;
+  vertical-align: text-bottom;
+}
+
+// fix IE11 issue with container height
+// see https://greensock.com/forums/topic/17782-svg-container-height-issues-ie11/?tab=comments#comment-80788
+// ng-deep is necessary to style inner third-party component
+// provided by angular-svg-icon
+.svg-icon.-auto {
+  width: 100%;
+  height: 0;
+  padding-top: 100%;
+  position: relative;
+}
+.svg-icon.-auto svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+// ng-deep is necessary to style inner third-party component
+// provided by angular-svg-icon
+.svg-icon.-small svg {
+  width: 16px;
+  height: 16px;
+}
+
+// ng-deep is necessary to style inner third-party component
+// provided by angular-svg-icon
+.svg-icon.-medium svg {
+  width: 32px;
+  height: 32px;
+}
+
+// ng-deep is necessary to style inner third-party component
+// provided by angular-svg-icon
+.svg-icon.-large svg {
+  width: 48px;
+  height: 48px;
+}

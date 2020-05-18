@@ -1,0 +1,70 @@
+@import '../../../../styles/mixins';
+@import '../../../../styles/page-title';
+@import '../../../../styles/components/ngx-file-drop';
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.table {
+  .btn-outline-secondary {
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}
+
+.vf-label-bar {
+  background-color: #f4f4f4;
+
+  .btn {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+img.resize-sml {
+  width: 20px; /* you can use % */
+  height: 20px; /* IE 11 issue when using auto */
+}
+
+img.resize-med {
+  width: 35px; /* you can use % */
+  height: 35px; /* IE 11 issue when using auto */
+}
+
+.modal-dialog {
+  width: 633px;
+}
+
+.link {
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  box-shadow: 0;
+  text-decoration: underline;
+}
+
+.title {
+  font-style: italic;
+  padding: 9px;
+  font-size: 15px;
+  @extend .pageTitle;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-data > tr {
+  cursor: pointer;
+}
+
+.file-drop--illustration {
+  width: 191px;
+  height: 89px;
+}

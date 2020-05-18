@@ -1,0 +1,138 @@
+@import '../styles/modal';
+
+.fa-info-circle {
+  font-size: 23px;
+  color: #007c92;
+}
+
+.contentPanelShoppingCart {
+  background-color: #f0f7f9;
+  padding: 40px;
+  border: 1px solid #007c92;
+  border-radius: 3px;
+
+  .chevron-up {
+    background: url(~/public/icons/svg/vodafone/chevron-up.svg) no-repeat;
+    width: 20px;
+    height: 20px;
+  }
+
+  .chevron-down {
+    background: url(~/public/icons/svg/vodafone/chevron-down.svg) no-repeat;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.fa.fa-trash-o {
+  background-image: url(~/public/icons/svg/vodafone/delete.svg);
+}
+
+.contentPanelShoppingCart {
+  margin-top: 10px;
+  border-style: groove;
+  margin-bottom: 10px;
+}
+
+.trash-container {
+  display: none;
+  .fa-trash {
+    font-size: 18px;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.datatable-wrapper {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+:host ::ng-deep .contentPanelShoppingCart .ui-datatable {
+  table {
+    thead {
+      th {
+        background-color: #f4f4f4;
+        border-bottom: 3px solid #666666;
+        cursor: auto;
+        white-space: normal;
+        word-break: break-word;
+        &:hover {
+          background-color: #f4f4f4 !important;
+        }
+        &:nth-child(3) {
+          white-space: normal;
+        }
+
+        &:nth-child(6) {
+          min-width: 140px;
+        }
+
+        &:last-child {
+          min-width: 40px;
+        }
+      }
+    }
+    tbody {
+      tr {
+        border-top: none;
+        border-bottom: 1px solid #979797;
+
+        td {
+          padding: 9px;
+          &:last-child {
+            min-width: 40px;
+          }
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          .trash-container {
+            display: block;
+
+            .fa-trash-o {
+              background-image: none;
+              font-size: 18px;
+            }
+          }
+          .name-template:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .ui-datatable-tablewrapper {
+  overflow: visible !important;
+}
+
+:host ::ng-deep .description {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.ml30 {
+  margin-left: -30px;
+}
+
+.ellipiss:hover {
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-thead > tr > th {
+  word-break: normal !important;
+}
+
+.ellipiss {
+  white-space: normal;
+  width: 127px;
+}

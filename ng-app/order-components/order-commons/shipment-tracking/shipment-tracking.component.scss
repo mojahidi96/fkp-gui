@@ -1,0 +1,24 @@
+@import '../../../styles/custom-variables';
+.description {
+  a {
+    text-decoration: underline;
+    color: $blue-link;
+  }
+}
+
+:host ::ng-deep .ui-column-title {
+  i {
+    margin-left: 8px;
+  }
+  .popover {
+    min-width: 300px !important;
+    max-width: 350px !important;
+    min-height: 61px !important;
+    margin: -11px 0px 0 !important;
+    background: $txt-white;
+    display: inline-block;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: normal;
+  }
+}

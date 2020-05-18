@@ -1,0 +1,67 @@
+<div class="row">
+    <sncr-notification type="error" *ngIf="maxSelectionErrMsg" [dismissible]="false" [l10nTranslate]="{maxCount: maxSelectCount}">
+        DATATABLE-MAX-SELECT-COUNT-MSG
+    </sncr-notification>
+    <ng-container *ngIf="isNew; else old">
+        <div class="col-sm-6 text-left">
+            <span *ngIf="multiSelection && currentCols.length > 0"
+                  [sncrTranslate]="{selectCount: selectCount, totalRecords: totalRecords}">
+                {{selectCount | i18nPlural:getSelectionMessages()}}
+            </span>
+        </div>
+
+        <div *ngIf="resultCount" class="col-sm-6 text-right" [sncrTranslate]="{resultCount: totalRecords}">
+            {{totalRecords | i18nPlural:resultMessages}}
+        </div>
+    </ng-container>
+
+    <ng-template #old>
+        <div class="col-sm-6 text-left">
+            <ng-container *ngIf="currentCols.length > 0">
+                <ng-container *ngIf="multiSelection">
+                    <ng-container *ngIf="!lazy">
+                        <ng-container *ngIf="selection && selection.length">
+                            {{value.length === selection.length || allFilteredValuesSelected() ? 'Alle'
+                            :
+                            selection.length === 1 ? singleSelectionMsg : selection.length}}
+                            {{selectionMessage[2] ? ' von ' + value.length + '&nbsp;' + selectionMessage[2] :
+                            selectMessage
+                            +
+                            ' ausgewählt'}}
+                        </ng-container>
+                        <ng-container *ngIf="(!selection || !selection.length) && selectionMessage[0]">
+                            {{selectionMessage[0]}}
+                        </ng-container>
+                        <ng-container *ngIf="!selection || !selection.length && !selectionTitle">
+                            Kein {{selectMessage}} ausgewählt
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="lazy">
+                        <ng-container>
+                            {{totalRecords > 0 && selectCount > 0 && totalRecordsWithoutFilter === selectCount ?
+                            'Alle' :
+                            selectCount === 1 ? 'Ein' : selectCount === 0 ? 'Kein': selectCount}}
+                            {{selectionMessage[2] && !selectionMessage[3] ? ' von ' + totalRecords +'&nbsp;'+
+                            selectionMessage[2] :
+                            selectionMessage[3] ? selectionMessage[2] : selectionMessage[4] ? 'Ergebnisse ausgewählt' :
+                            selectMessage+' ausgewählt'}}
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </div>
+
+        <div *ngIf="resultCount" class="col-sm-6 text-right">
+            <div *ngIf="!resultMessage.length">
+                {{totalRecords === 0 ? 'Kein Ergebnis gefunden' : totalRecords === 1 ?
+                                                                  'Ein Ergebnis gefunden' : totalRecords}}
+                {{totalRecords > 1 ? 'Ergebnisse gefunden' : ''}}
+            </div>
+            <div *ngIf="resultMessage.length">
+                {{totalRecords === 0 ? resultMessage[0] : totalRecords === 1 ?
+                resultMessage[1] : totalRecords}}
+                {{totalRecords > 1 ? resultMessage[2] : ''}}
+            </div>
+        </div>
+    </ng-template>
+</div>

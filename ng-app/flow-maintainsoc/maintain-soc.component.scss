@@ -1,0 +1,118 @@
+@import '../styles/_custom-variables';
+@import '../styles/page-title';
+@import '../styles/mixins';
+@import '../styles/datatables';
+
+:host ::ng-deep .ui-datatable-scrollable-view {
+  margin-left: 0px !important;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+:host ::ng-deep .custom-dropdown {
+  min-width: 350px !important;
+}
+
+::ng-deep .modal,
+::ng-deep .modal-backdrop {
+  z-index: 1069 !important;
+}
+
+.selectedItem {
+  .soc {
+    padding-left: 8px;
+  }
+  .name {
+    white-space: nowrap;
+    color: $cardH-txt-color;
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0px;
+    li {
+      display: table;
+      div {
+        display: table-cell;
+      }
+    }
+  }
+}
+
+::ng-deep .errorAlert {
+  margin: 30px 20px;
+  .alert-danger {
+    margin-bottom: 0px;
+  }
+}
+
+.selectedItem.selectedItemList {
+  margin-top: 9px;
+  margin-bottom: 10px;
+
+  li {
+    width: 100%;
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+    ul {
+      li:last-child {
+        margin-bottom: 0px;
+      }
+    }
+    .reset {
+      .fa-times {
+        background-image: url(~/public/icons/svg/vodafone/close.svg);
+        @include icon-sizes12;
+        &:before {
+          content: none;
+        }
+      }
+    }
+  }
+  .addedIcon {
+    background-image: url(~/public/icons/svg/vodafone/add-or-plus.svg);
+    @include icon(20px);
+    float: left;
+  }
+  .minusIcon1 {
+    background-image: url(~/public/icons/svg/vodafone/minus-or-less.svg);
+    @include icon(20px);
+    float: left;
+  }
+}
+
+.description {
+  width: 100%;
+  word-break: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+:host ::ng-deep .message span + p + p {
+  margin-top: 35px;
+}
+
+.order-number {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.buttons {
+  display: flex;
+  margin-bottom: 30px;
+
+  & > *:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+
+.buttons_with_flexend {
+  justify-content: flex-end;
+}

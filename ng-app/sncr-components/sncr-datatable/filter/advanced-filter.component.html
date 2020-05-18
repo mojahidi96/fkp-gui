@@ -1,0 +1,155 @@
+<div #container>
+    <div class="ui-clickable-wrapper">
+        <div class="ui-clickable-input">
+            <ng-container [ngSwitch]="type.toLowerCase()">
+                <ng-container *ngSwitchDefault>
+                    <sncr-input *ngIf="!quickSearchOptions" #inputFilter="ngModel" [(ngModel)]="quickSearch"
+                                [placeholder]="placeholder | translate:lang" (onReset)="filterReset()" [showReset]="true" (input)="filterChanged()"></sncr-input>
+                    <sncr-select *ngIf="quickSearchOptions" #inputFilter="ngModel" [(ngModel)]="quickSearch"
+                                 (ngModelChange)="filterChanged()">
+                        <option value="">{{placeholder}}</option>
+                        <option *ngFor="let option of quickSearchOptions" [value]="option.value" sncrTranslate>
+                            {{option.text}}
+                        </option>
+                    </sncr-select>
+                </ng-container>
+
+                <sncr-datepicker *ngSwitchCase="'date'" #inputFilter="ngModel"
+                                 [ngModel]="quickSearch" [placeholder]="placeholder | translate:lang" [showReset]="true"></sncr-datepicker>
+            </ng-container>
+        </div>
+
+        <div class="ui-clickable-icon">
+            <span [ngbPopover]="popoverTpl" autoClose="outside" [popoverTitle]="getTitle('DATATABLE-FILTER-TITLE', {title: col.header})"
+                  placement="bottom" [ngSwitch]="filtering && filters.length > 0" container="body" (hidden)="onClose()"
+                  (shown)="onOpen()" popoverClass="advanced-filter-popover">
+                <i *ngSwitchCase="false" class="fa fa-search" aria-hidden="true"></i>
+                <i *ngSwitchCase="true" class="fa fa-filter" aria-hidden="true"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+<ng-template #popoverTpl>
+    <form #form="ngForm" class="datatable-advanced-filter" (ngSubmit)="filter(form, true)"
+          (click)="$event.stopPropagation();">
+        <sncr-select [ngSwitch]="type.toLowerCase()" name="comparator1"
+                     [(ngModel)]="filterModel.comparator1" required>
+            <ng-container *ngSwitchCase="'text'">
+                <option *ngFor="let textFilter of textFilters" [value]="textFilter.value" sncrTranslate>
+                    {{textFilter.text}}
+                </option>
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+                <option *ngFor="let numberFilter of numberFilters" [value]="numberFilter.value" sncrTranslate>
+                    {{numberFilter.text}}
+                </option>
+            </ng-container>
+        </sncr-select>
+
+        <ng-container [ngSwitch]="type.toLowerCase()"
+                      *ngIf="![undefined, 'E', 'NE'].includes(filterModel.comparator1)">
+            <ng-container *ngSwitchCase="'text'">
+                <sncr-input *ngIf="!quickSearchOptions" name="filter1" required
+                            [placeholder]="getPlaceholderKeyword('DATATABLE-FILTER-PLACEHOLDER-KEYWORD')"
+                            [(ngModel)]="filterModel.filter1"></sncr-input>
+
+                <sncr-select *ngIf="quickSearchOptions" name="filter1" required
+                             [(ngModel)]="filterModel.filter1">
+                    <option value="">{{getPlaceholderKeyword('DATATABLE-FILTER-PLACEHOLDER-KEYWORD')}}</option>
+                    <option *ngFor="let option of quickSearchOptions" [value]="option.value" sncrTranslate>
+                        {{option.text}}
+                    </option>
+                </sncr-select>
+            </ng-container>
+
+            <sncr-input name="filter1" required *ngSwitchCase="'number'" type="number"
+                        [placeholder]="getPlaceholderKeyword('DATATABLE-FILTER-PLACEHOLDER-KEYWORD')"
+                        [(ngModel)]="filterModel.filter1"></sncr-input>
+
+            <sncr-input name="filter1" required *ngSwitchCase="'price'" type="price"
+                        [placeholder]="getPlaceholderKeyword('DATATABLE-FILTER-PLACEHOLDER-KEYWORD')"
+                        [(ngModel)]="filterModel.filter1"></sncr-input>
+
+            <sncr-datepicker name="filter1" required *ngSwitchCase="'date'"
+                             [placeholder]="getPlaceholderDate('DATATABLE-FILTER-PLACEHOLDER-DATE')"
+                             [(ngModel)]="dateFilter1"></sncr-datepicker>
+        </ng-container>
+
+        <div class="text-center">
+            <div name="logicalOperation" class="btn-group btn-group-toggle" [(ngModel)]="filterModel.logicalOperation"
+                 (click)="logicalClick() " ngbRadioGroup>
+                <label ngbButtonLabel class="btn btn-secondary">
+                    <input ngbButton type="radio" value="AND">
+                    <span *ngIf="isNew" sncrTranslate>DATATABLE-FILTER-COMPARATOR-AND</span>
+                    <span *ngIf="!isNew">und</span>
+                </label>
+                <label ngbButtonLabel class="btn btn-secondary">
+                    <input ngbButton  type="radio" value="OR">
+                    <span *ngIf="isNew" sncrTranslate>DATATABLE-FILTER-COMPARATOR-OR</span>
+                    <span *ngIf="!isNew">oder</span>
+                </label>
+            </div>
+        </div>
+
+        <ng-container *ngIf="filterModel.logicalOperation">
+            <sncr-select [ngSwitch]="type.toLowerCase()" name="comparator2" [(ngModel)]="filterModel.comparator2"
+                         required>
+                <ng-container *ngSwitchCase="'text'">
+                    <option *ngFor="let textFilter of textFilters" [value]="textFilter.value" sncrTranslate>
+                        {{textFilter.text}}
+                    </option>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                    <option *ngFor="let numberFilter of numberFilters" [value]="numberFilter.value" sncrTranslate>
+                        {{numberFilter.text}}
+                    </option>
+                </ng-container>
+            </sncr-select>
+
+            <ng-container [ngSwitch]="type.toLowerCase()"
+                          *ngIf="![undefined, 'E', 'NE'].includes(filterModel.comparator2)">
+                <ng-container *ngSwitchCase="'text'">
+                    <sncr-input *ngIf="!quickSearchOptions" name="filter2" required
+                                [placeholder]="getPlaceholderKeyword('DATATABLE-FILTER-PLACEHOLDER-KEYWORD')"
+                                [(ngModel)]="filterModel.filter2"></sncr-input>
+
+                    <sncr-select *ngIf="quickSearchOptions" name="filter2" required
+                                 [(ngModel)]="filterModel.filter2">
+                        <option value="">{{getPlaceholderKeyword('DATATABLE-FILTER-PLACEHOLDER-KEYWORD')}}</option>
+                        <option *ngFor="let option of quickSearchOptions" [value]="option.value" sncrTranslate>
+                            {{option.text}}
+                        </option>
+                    </sncr-select>
+                </ng-container>
+
+                <sncr-input name="filter2" required *ngSwitchCase="'number'" type="number"
+                            [placeholder]="getPlaceholderKeyword('DATATABLE-FILTER-PLACEHOLDER-KEYWORD')"
+                            [(ngModel)]="filterModel.filter2"></sncr-input>
+
+                <sncr-input name="filter2" required *ngSwitchCase="'price'" type="price"
+                            [placeholder]="getPlaceholderKeyword('DATATABLE-FILTER-PLACEHOLDER-KEYWORD')"
+                            [(ngModel)]="filterModel.filter2"></sncr-input>
+
+                <sncr-datepicker name="filter2" required *ngSwitchCase="'date'"
+                                 [placeholder]="getPlaceholderDate('DATATABLE-FILTER-PLACEHOLDER-DATE')"
+                                 [(ngModel)]="dateFilter2"></sncr-datepicker>
+            </ng-container>
+        </ng-container>
+
+        <div class="row">
+            <div class="col-md-12">
+                <sncr-button type="secondary" class="float-md-left btnSecondary" (click)="reset()">
+                    <span *ngIf="isNew" sncrTranslate>DATATABLE-FILTER-BUTTON-RESET</span>
+                    <span *ngIf="!isNew">Zurücksetzen</span>
+                </sncr-button>
+                <sncr-button class="float-md-right btnPrimary" type="submit">
+                    <span *ngIf="isNew" sncrTranslate>DATATABLE-FILTER-BUTTON-FILTER</span>
+                    <span *ngIf="!isNew">Filter setzen</span>
+                </sncr-button>
+            </div>
+        </div>
+    </form>
+</ng-template>

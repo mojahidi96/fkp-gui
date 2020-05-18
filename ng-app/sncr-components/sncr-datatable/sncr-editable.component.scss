@@ -1,0 +1,16 @@
+:host ::ng-deep {
+  .ng-invalid .popover.bs-popover-top {
+    min-width: 250px;
+    margin-top: 0px !important;
+  }
+
+  sncr-select {
+    .form-group {
+      .fm-select {
+        .sncr-control {
+          min-width: 250px;
+        }
+      }
+    }
+  }
+}

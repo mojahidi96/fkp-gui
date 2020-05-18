@@ -1,0 +1,22 @@
+<div class="form-group selectMainDiv" [sncrValidationStyles]="hasErrors()">
+    <sncr-validation-messages *ngIf="hasErrors()" [messages]="getErrors()"></sncr-validation-messages>
+
+    <label [for]="name" *ngIf="label && !lazy">
+        {{label}}<span *ngIf="showAsterisk()" class="requiredField">*</span>
+    </label>
+
+    <div class="fm-select">
+        <select [id]="name"
+                [name]="name"
+                [(ngModel)]="model"
+                [disabled]="disabled || readonly"
+                [attr.multiple]="multiple"
+                [size]="size"
+                (blur)="onBlur()"
+                class="sncr-control">
+            <ng-content></ng-content>
+        </select>
+        <span><i class="fa fa-chevron-down"></i></span>
+    </div>
+    <input *ngIf="readonly" type="hidden" [(ngModel)]="model"/>
+</div>

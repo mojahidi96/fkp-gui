@@ -1,0 +1,15 @@
+@import '~font-awesome/scss/variables';
+@import '~font-awesome/scss/mixins';
+@import '../../styles/_custom-variables';
+@import '../../styles/mixins';
+
+.export-button ::ng-deep button::before {
+  @include fa-icon();
+  content: $fa-var-download;
+  left: -5px;
+  position: relative;
+}
+
+.download-section {
+  margin-top: 0px !important;
+}

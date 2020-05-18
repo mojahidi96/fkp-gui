@@ -1,0 +1,143 @@
+@import '../styles/custom-variables';
+
+:host ::ng-deep html {
+  height: 100%;
+}
+
+:host ::ng-deep body {
+  height: 100%;
+}
+
+:host ::ng-deep .divPageMain {
+  height: 100%;
+}
+
+:host ::ng-deep .wrapper {
+  height: 100%;
+}
+
+.loaderHeight {
+  height: 100%;
+}
+
+.landing-panels-80 {
+  width: 80%;
+}
+
+.landing-panels-100 {
+  width: 100%;
+}
+
+.contact-section {
+  width: 20%;
+}
+
+.btn-primary {
+  background: none repeat scroll center bottom $primary;
+  color: $txt-white !important;
+}
+
+.nopadding {
+  padding: 0px;
+}
+
+.landNavPanel:nth-child(even) {
+  margin-right: 0px;
+  margin-left: 5px;
+}
+
+.banner {
+  color: $txt-white;
+  height: 166px;
+  background: url(~/public/illustrations/legacy/fl_img01.jpg) no-repeat right
+    top;
+  margin: 5px 0px;
+  background-color: $banner-background;
+}
+
+.banner div {
+  width: 400px;
+  padding: 15px;
+}
+
+.banner h2 {
+  font-size: 26px;
+  margin: 0px;
+}
+
+.banner p {
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+.landNavPanel {
+  width: 49%;
+  margin-right: 5px;
+  float: left;
+  height: 240px;
+  /*border-right:2px solid #ddd;*/
+  border-bottom: 1px solid #ddd;
+  padding: 2px;
+  margin-bottom: 10px;
+  background-color: $txt-white;
+  padding-bottom: 10px;
+}
+
+.landNavPanel h2 {
+  background-color: #eee;
+  color: $cardH-txt-color;
+  font-weight: normal;
+  margin: 0px;
+  padding-left: 5px;
+  font-size: 18px;
+  line-height: 35px;
+  vertical-align: middle;
+}
+
+.landNavPanel li {
+  list-style: none;
+  padding: 4px 0;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  left: -35px;
+  border-bottom: 1px dotted $select-disabled;
+  font-size: 12px;
+}
+
+.landNavPanel li a {
+  padding-left: 10px;
+  background: url(~/public/icons/svg/vodafone/chevron-right.svg) -2px 50% / 10px
+    auto no-repeat;
+  display: block;
+  color: #555;
+}
+
+.info-message {
+  background: #ffffeb;
+  border: 1px solid #f6b040;
+  padding: 21px 16px 7px;
+  width: 97%;
+  color: #525252;
+  font-size: 11px;
+  line-height: 14px;
+  cursor: default;
+  text-indent: 0;
+  font-weight: normal;
+  position: relative;
+  margin-left: 5px;
+  margin-bottom: 10px;
+  .info-icon {
+    left: 6px;
+    position: absolute;
+    top: -14px;
+    background: url(~/public/icons/svg/notification/info.svg);
+    width: 22px;
+    height: 22px;
+  }
+  .messageTxt {
+    position: relative;
+    top: -6px;
+  }
+}

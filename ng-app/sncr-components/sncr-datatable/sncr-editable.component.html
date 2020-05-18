@@ -1,0 +1,91 @@
+<form [formGroup]="form">
+    <ng-container [ngSwitch]="type">
+        <ng-container *ngSwitchCase="'checkbox'">
+            <sncr-check-group [formControlName]="column.field" [label]="column.title" [required]="isRequired()"
+                              [showValidation]="showValidation" [name]="column.field">
+                <label *ngFor="let o of column.editInfo.options">
+                    {{o.text}}
+                    <sncr-checkbox [(ngModel)]="o.value"></sncr-checkbox>
+                </label>
+            </sncr-check-group>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'date'">
+            <sncr-datepicker [formControlName]="column.field" [label]="column.title" [required]="isRequired()"
+                             [showValidation]="showValidation" [name]="column.field"></sncr-datepicker>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'radio'">
+            <sncr-check-group [formControlName]="column.field" [label]="column.title" [required]="isRequired()"
+                              [showValidation]="showValidation" [name]="column.field">
+                <label *ngFor="let o of column.editInfo.options">
+                    {{o.text}}
+                    <sncr-radio [(ngModel)]="o.value"></sncr-radio>
+                </label>
+            </sncr-check-group>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'select'">
+            <sncr-select [label]="column.title | translate:lang" [formControlName]="column.field" [required]="isRequired()" [lazy]="lazy"
+                         [showValidation]="showValidation" [name]="column.field">
+                <option value="" selected l10nTranslate *ngIf="!column.editInfo.hideSelectionTitle">{{column.defaultSelectLabel || 'DATATABLE-SELECTION_TITLE'}}</option>
+                <option *ngFor="let o of column.editInfo.options" value="{{o.value}}" l10nTranslate>{{o.text}}</option>
+            </sncr-select>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'dropdown'">
+            <label>{{column.title}}<span *ngIf="isRequired()" style="color:red">*</span></label>
+            <sncr-select [label]="column.title" [formControlName]="column.field" [hidden]="true" [required]="isRequired()"
+                         [showValidation]="showValidation" [name]="column.field">
+                <option value="" selected l10nTranslate>DATATABLE-SELECTION_TITLE</option>
+            </sncr-select>
+            <div class="" ngbDropdown #myDrop="ngbDropdown" autoClose="outside">
+                <sncr-button class="custom-button" id="dropdownMenu1" ngbDropdownToggle>
+                    <span *ngIf="!selectedName;then content else selContent"></span>
+                    <ng-template #content>{{form.controls[column.field].value}}</ng-template>
+                    <ng-template #selContent>{{selectedName}}</ng-template>
+                </sncr-button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <div class="dropdown-item" (click)="$event.stopPropagation();myDrop.open();">
+                        <sncr-input [(ngModel)]="search" [ngModelOptions]="{standalone: true}"
+                                    placeholder="suchen" autocomplete="off"></sncr-input>
+                    </div>
+                    <i class="fa fa-search" (click)="$event.stopPropagation();"></i>
+                    <div class="dropdown-scroll">
+                        <div class="dropdown-item" *ngFor="let o of getFilterList(column.editInfo.options)">
+                            <div class="dropdown-itemTxt" (click)="updateSel(o,column.field)">
+                                <label>{{o.text}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'textarea'">
+            <sncr-textarea [formControlName]="column.field" [required]="isRequired()"
+                           [showValidation]="showValidation" [name]="column.field">
+                {{column.title}}
+            </sncr-textarea>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'boolean'">
+            <label>
+                <span *ngIf="!lazy">{{column.title}}</span>
+                <sncr-checkbox [formControlName]="column.field" [required]="isRequired()"
+                               [showValidation]="showValidation" [name]="column.field"></sncr-checkbox>
+            </label>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+            <sncr-input [type]="type" [formControlName]="column.field" [showValidation]="showValidation"
+                        [maxLength]="column.maxLength?column.maxLength:null" [required]="isRequired()" [lazy]="lazy"
+                        [name]="column.field" (focusout)="onBlur(column.field)" (focusin)="onFocus(column.field)"
+                        [asyncValidationInPorgress]="payFieldsValidationInProgress"
+                        l10nTranslate>
+                {{column.title}}
+            </sncr-input>
+
+        </ng-container>
+    </ng-container>
+</form>

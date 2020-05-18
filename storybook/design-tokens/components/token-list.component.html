@@ -1,0 +1,31 @@
+<table class="c-token-list">
+  <thead>
+    <tr>
+      <th>Token Name</th>
+      <th>Value</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let token of tokens"
+      [ngClass]="['c-token', 'c-token--' + token.category]"
+    >
+      <td class="c-token__name">{{ token.name }}</td>
+      <td class="c-token__value">
+        <div
+          *ngIf="token.category.startsWith('color')"
+          class="c-token__value-preview c-token__value-color-preview"
+          [ngStyle]="{background: token.value}"
+        ></div>
+        <div
+          *ngIf="token.category === 'border-radius'"
+          class="c-token__value-preview c-token__value-border-radius-preview"
+          [ngStyle]="{'border-radius': token.value}"
+        ></div>
+        <code class="c-token__value-code">{{ token.value }}</code>
+      </td>
+      <td class="c-token__category">{{ token.category }}</td>
+    </tr>
+  </tbody>
+</table>

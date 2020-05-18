@@ -1,0 +1,103 @@
+@import '../../styles/custom-tabs';
+@import '../../styles/mixins';
+
+:host ::ng-deep .order-comp .breadCrumbs {
+  ul.nav.nav-tabs.justify-content-start {
+    background: $txt-white;
+    li.nav-item {
+      &:first-child a {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+      }
+      &:last-child a {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+      }
+    }
+    li.nav-item a {
+      padding: 11px 17px;
+      border: solid 1px #dddddd;
+      border-radius: 0px;
+      color: #999999;
+      font-size: 14px;
+    }
+    li.nav-item a.active {
+      background: $primary;
+      border: solid 1px $primary;
+      color: #fff;
+      font-size: 14px;
+    }
+  }
+}
+.margin-top-20 {
+  margin-top: 20px;
+}
+.margin-bottom-20 {
+  margin-bottom: 20px !important;
+}
+
+:host ::ng-deep .order-comp .card {
+  border: 0px;
+  padding: 0px;
+
+  .card-header {
+    border: 0px;
+    padding: 0px;
+
+    .card-title {
+      border: 1px solid $txt-white;
+      background: $txt-white;
+      padding: 10px 10px;
+      box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+      font-size: 30px;
+      color: $txt-black;
+      margin-bottom: 0px;
+      border-radius: 3px;
+    }
+  }
+
+  .card-block {
+    background-color: $txt-white;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+    padding: 20px;
+    .card {
+      border: 1px solid rgba(0, 0, 0, 0.125);
+      border-radius: 4px;
+
+      .card-header {
+        border: 0px;
+        background-color: #f7f7f9;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        margin-bottom: 0;
+        padding: 0.75rem 1.25rem;
+      }
+      .card-block {
+        background-color: $txt-white;
+        border: 0;
+        border-radius: 0px;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+  width: 958px;
+  min-height: 225px;
+
+  .loader {
+    top: 40px;
+    position: relative;
+    margin: 3% auto !important;
+  }
+}
+
+:host ::ng-deep .order-comp {
+  .ui-datatable .ui-datatable-tablewrapper {
+    min-height: auto !important;
+  }
+}

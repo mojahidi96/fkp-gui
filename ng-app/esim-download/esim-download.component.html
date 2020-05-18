@@ -1,0 +1,27 @@
+<div *ngIf="loading" class="loaderHeight">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<div *ngIf="!loading">
+    <h2 class="pageTitle">
+        <span l10nTranslate>PAGE_TITLE</span><br>
+    </h2>
+    <esim-shop-list *ngIf="vfUser" (selectedShop)="selectedShop($event)"></esim-shop-list>
+    <div class="card" *ngIf="!vfUser || selectedVfShop">
+        <div class="card-block p-4">
+            <p l10nTranslate>
+                DOWNLOAD_ESIM_DESCRIPTION
+            </p>
+            <div class="py-2">
+                <sncr-datatable [lazy]="true" [lazyLoadUrl]="custLazyLoadUrl" [columnSelection]="true" [cols]="columns"
+                                [sortField]="2" [sortOrder]="-1" [customCol]="buttonColumn" [lastCustomCol]="true">
+                </sncr-datatable>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #buttonColumn let-context>
+    <div class="d-flex flex-column align-items-center">
+        <sncr-button type="primary" [disabled]="readonlyUser" (click)="downloadPDF(context.row)" l10nTranslate>
+            DOWNLOAD_ESIM_PDF_BUTTON_LABEL</sncr-button>
+    </div>
+</ng-template>

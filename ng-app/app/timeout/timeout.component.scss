@@ -1,0 +1,10 @@
+@import '../../styles/custom-variables';
+@import '../../styles/modal';
+
+::ng-deep .zindex-custom {
+  z-index: 1070 !important;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0px;
+}

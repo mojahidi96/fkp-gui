@@ -1,0 +1,45 @@
+<div class="order-comp">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title margin-top-20 margin-bottom-20">Produktauftrag erfassen</h2>
+        </div>
+        <div class="card-block">
+            <div class="row">
+                <div class="col-md-12">
+                    <ngb-tabset #tab="ngbTabset" class="breadCrumbs">
+                        <ngb-tab title="1) Kundennummer" id="tab1" [ngClass]="{disableFields:!enabledTabs[1]}"
+                                 [disabled]="!enabledTabs[1]">
+                            <ng-template ngbTabContent>
+                                <customer-selection [tab]="tab"></customer-selection>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab title="2) Produkte wählen" id="tab2" [ngClass]="{disableFields:!enabledTabs[2]}"
+                                 [disabled]="!enabledTabs[2]">
+                            <ng-template ngbTabContent>
+                                <product-location [tab]="tab"></product-location>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab title="3) Daten eingeben" id="tab3" [ngClass]="{disableFields:!enabledTabs[3]}"
+                                 [disabled]="!enabledTabs[3]">
+                            <ng-template ngbTabContent>
+                                <data-entry [tab]="tab"></data-entry>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab title="4) Bestellübersicht" id="tab4" [ngClass]="{disableFields:!enabledTabs[4]}"
+                                 [disabled]="!enabledTabs[4]">
+                            <ng-template ngbTabContent>
+                                <data-entry [tab]="tab" [readonly]="true"></data-entry>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab title="5) Bestellbestätigung" id="tab5" [ngClass]="{disableFields:!enabledTabs[5]}"
+                                 [disabled]="!enabledTabs[5]">
+                            <ng-template ngbTabContent>
+                                <confirmation-tab></confirmation-tab>
+                            </ng-template>
+                        </ngb-tab>
+                    </ngb-tabset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

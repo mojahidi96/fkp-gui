@@ -1,0 +1,15 @@
+module.exports = {
+  socmanager_activesocs: require('../../responses/socmanager/activesocs'),
+  socmanager_updatesoc: {},
+  socmanager_blacklistedsocs: require('../../responses/socmanager/blacklistedsocs'),
+  socmanager_socgroups: require('../../responses/socmanager/socgroups'),
+  socmanager_socgroupIcons: require('../../responses/socmanager/socgroupIcons'),
+  socmanager_socfamilies: require('../../responses/socmanager/socfamilies'),
+  socmanager_socfamily: require('../../responses/socmanager/socfamilies'),
+  socmanager_activetriggersocs: require('../../responses/socmanager/activetriggersocs'),
+  socmanager_soccategories: require('../../responses/socmanager/soccategories'),
+  socmanager1001_activesocgroup: require('../../responses/socmanager/1001/activesocgroup'),
+  socmanager1001_activesocs: require('../../responses/socmanager/1001/activesocs'),
+  socmanager1001_soccategorygroups: require('../../responses/socmanager/1001/soccategorygroups'),
+  socmanager1001_socgroups: require('../../responses/socmanager/1001/socgroups'),
+};

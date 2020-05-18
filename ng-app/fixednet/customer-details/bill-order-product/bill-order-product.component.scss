@@ -1,0 +1,21 @@
+@import '../../../styles/table-radio-icons';
+
+.next-button {
+  text-align: right;
+  margin-bottom: 30px;
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+
+  .loader {
+    margin: 3% auto !important;
+  }
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}

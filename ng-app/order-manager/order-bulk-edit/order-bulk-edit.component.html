@@ -1,0 +1,18 @@
+<ngb-tabset justify="justified" (tabChange)="loadKIASTabDetails($event)">
+    <ngb-tab *ngFor="let tab of tabdetails" id = "{{tab.category}}">
+        <ng-template ngbTabTitle>
+            <div l10nTranslate class="d-flex align-items-base">
+                <div *ngIf="tab.errorStatus === 'Y'" class="icon-warning"><svg-icon name="vodafone/warning" size="auto"></svg-icon></div>
+                ORDER_BULK-{{tab.categoryName}}
+            </div>
+        </ng-template>
+
+        <div *ngbTabContent class="contents">
+            <sncr-loader *ngIf="isDetailsLoading" class="relative"></sncr-loader>
+            <bulk-edit-content type="tariffChange" *ngIf="!isDetailsLoading"
+                               [cols]="tab.category !== '1300' ? cols : colsTariffOptions" [category] = "tab.category"
+                               [warnings]="errorCount" [kiasDetails] = "kiasDetails" (outputForCategoryAndState)="setErrorState($event)"
+                               (output)="bulkEditOutput($event)"></bulk-edit-content>
+        </div>
+    </ngb-tab>
+</ngb-tabset>

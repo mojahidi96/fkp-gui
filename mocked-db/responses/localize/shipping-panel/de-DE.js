@@ -1,0 +1,25 @@
+module.exports = {
+      'PROLONG_SHIPMENT-CONTINUE_TO_ORDER_REVIEW': 'Weiter zur Bestellübersicht',
+      'SHIPMENT_SELECTION-ACCEPT_NEW': 'Übernehmen',
+      'SHIPMENT_SELECTION-ADD_NEW': 'Neuen Addresse anlegen',
+      'SHIPMENT_SELECTION-BAN_BILLING_ADDRESS': 'Rechnungsanschrift',
+      'SHIPMENT_SELECTION-BAN_LEGAL_ADDRESS': 'Kundenanschrift',
+      'SHIPMENT_SELECTION-CANCEL': 'Abbrechen',
+      'SHIPMENT_SELECTION-DEBITOR_ADDRESS': 'Debitorenadresse',
+      'SHIPMENT_SELECTION-DELETE_DESCRIPTION': 'Sind Sie sicher, dass Sie folgende Adresse löschen wollen?',
+      'SHIPMENT_SELECTION-DELETE_MSG_TOP': 'Adresse Loschen',
+      'SHIPMENT_SELECTION-EDIT_ADDRESS': 'Adresse bearbeiten',
+      'SHIPMENT_SELECTION-INFO_OPTION_DESC_B': 'Versand an die Rechnungsanschrift',
+      'SHIPMENT_SELECTION-INFO_OPTION_DESC_D': 'Versand an die Debitorenadresse',
+      'SHIPMENT_SELECTION-INFO_OPTION_DESC_L': 'Versand an die Kundenanschrift',
+      'SHIPMENT_SELECTION-LABEL': 'Adresse',
+      'SHIPMENT_SELECTION-POPUP_CANCEL': 'Abbrechen',
+      'SHIPMENT_SELECTION-POPUP_DELETE': 'Löschen',
+      'SHIPMENT_SELECTION-RESET': 'Ändern',
+      'SHIPMENT_SELECTION-SAVED_SHIPMENT': 'Gespeicherte Lieferadresse',
+      'SHIPMENT_SELECTION-SELECT_WARNING': 'Bitte wählen Sie eine Adresse aus',
+      'SHIPMENT_SELECTION-SHIPPING-TO': 'Versand an:',
+      'SHIPMENT_SELECTION-SUB_TITLE_MSG': 'Bitte wählen Sie eine Sendung aus',
+      'SHIPMENT_SELECTION-TITLE': 'Lieferadresse auswählen'
+
+};

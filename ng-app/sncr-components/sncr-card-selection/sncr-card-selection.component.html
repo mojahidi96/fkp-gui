@@ -1,0 +1,23 @@
+<div [hidden]="!visible">
+    <div class="card-header">
+        <div class="row"><div class="billType col-sm-8">
+            <!--<div *ngIf="icon" class="col-sm-1 padL0">
+                <i ngClass="fa {{icon}}"></i>
+            </div>[ngClass]="{'col-sm-6': !icon, 'col-sm-6': icon}"-->            
+            		<div *ngIf="icon" class="padL0 padR10 iconMax">
+                        <i class="fa {{properties.get(icon)}}"></i>
+                    </div><h4 class="cardsubTitle">{{titleText}}</h4>
+            </div>
+            <div class="col-sm-4 text-right moreOffer">
+                <span class="editLink" *ngIf="hasDescriptions"
+                   (click)="showDescriptions = !showDescriptions">
+                    {{getDescriptionText()}}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-block innerCard-block"><ng-content></ng-content>
+    
+    </div>
+</div>

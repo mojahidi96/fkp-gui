@@ -1,0 +1,152 @@
+import {storiesOf, moduleMetadata} from '@storybook/angular';
+
+import {ColorSwatchGroupComponent} from './components/color-swatch-group.component';
+import {ColorSwatchComponent} from './components/color-swatch.component';
+
+import * as rawTokens from 'scss-to-json!../../ng-app/styles/_vodafone.scss';
+import {TokenListComponent} from './components/token-list.component';
+
+storiesOf('Design Tokens|Pages', module)
+  .addDecorator(
+    moduleMetadata({
+      declarations: [
+        ColorSwatchGroupComponent,
+        ColorSwatchComponent,
+        TokenListComponent
+      ]
+    })
+  )
+  .add('Color Palette', () => ({
+    template: `
+    <div class="storybook-docs">
+      <h1>Color Palette</h1>
+
+      <color-swatch-group name="primary">
+        <color-swatch variableName="color-black" colorCode="rgb(0, 0, 0)"></color-swatch>
+        <color-swatch variableName="color-mine-shaft" colorCode="rgb(51, 51, 51)"></color-swatch>
+        <color-swatch variableName="color-vodafone-red" colorCode="rgb(230, 0, 0)"></color-swatch>
+        <color-swatch variableName="color-white" colorCode="rgb(255, 255, 255)"></color-swatch>
+      </color-swatch-group>
+
+      <color-swatch-group name="secondary">
+        <color-swatch variableName="color-blue-lagoon" colorCode="rgb(0, 126, 148)"></color-swatch>
+        <color-swatch variableName="color-finn" colorCode="rgb(93, 39, 80)"></color-swatch>
+        <color-swatch variableName="color-international-orange" colorCode="rgb(255, 85, 0)"></color-swatch>
+        <color-swatch variableName="color-red-berry" colorCode="rgb(153, 0, 0)"></color-swatch>
+        <color-swatch variableName="color-seance" colorCode="rgb(157, 43, 161)"></color-swatch>
+        <color-swatch variableName="color-supernova" colorCode="rgb(255, 204, 0)"></color-swatch>
+        <color-swatch variableName="color-verdun-green" colorCode="rgb(68, 128, 0)"></color-swatch>
+      </color-swatch-group>
+
+      <color-swatch-group name="infrastructure">
+        <color-swatch variableName="color-barley-white" colorCode="rgb(254, 245, 204)"></color-swatch>
+        <color-swatch variableName="color-gallery" colorCode="rgb(235, 235, 235)"></color-swatch>
+        <color-swatch variableName="color-silver" colorCode="rgb(204, 204, 204)"></color-swatch>
+        <color-swatch variableName="color-wild-sand" colorCode="rgb(244, 244, 244)"></color-swatch>
+        <color-swatch variableName="color-willow-brook" colorCode="rgb(244, 248, 240)"></color-swatch>
+      </color-swatch-group>
+
+      <color-swatch-group name="other">
+        <color-swatch variableName="color-bridesmaid" colorCode="rgb(254, 241, 241)"></color-swatch>
+        <color-swatch variableName="color-seashell-peach" colorCode="rgb(255, 245, 240)"></color-swatch>
+      </color-swatch-group>
+    </div>
+    `
+  }))
+  .add('All Tokens', () => {
+    const colorGroups = {
+      primary: [
+        '$color-black',
+        '$color-mine-shaft',
+        '$color-vodafone-red',
+        '$color-white'
+      ],
+      secondary: [
+        '$color-blue-lagoon',
+        '$color-finn',
+        '$color-international-orange',
+        '$color-red-berry',
+        '$color-seance',
+        '$color-supernova',
+        '$color-verdun-green'
+      ],
+      infrastructure: [
+        '$color-barley-white',
+        '$color-gallery',
+        '$color-silver',
+        '$color-wild-sand',
+        '$color-willow-brook'
+      ],
+      other: ['$color-bridesmaid', '$color-seashell-peach']
+    };
+
+    const categoryForName = (name: string) => {
+      const isColorToken = name.startsWith('$color-');
+      if (isColorToken) {
+        for (let colorGroup of Object.keys(colorGroups)) {
+          if (colorGroups[colorGroup].includes(name)) {
+            return 'color-' + colorGroup;
+          }
+        }
+      }
+
+      const isBorderRadius = name.startsWith('$radius-');
+      if (isBorderRadius) {
+        return 'border-radius';
+      }
+
+      const isTime = name.startsWith('$duration-');
+      if (isTime) {
+        return 'time';
+      }
+
+      return name.replace('$', '').split('-')[0];
+    };
+
+    const tokens = Object.keys(rawTokens).map(name => ({
+      name,
+      value: rawTokens[name],
+      category: categoryForName(name)
+    }));
+
+    const categoryOrder = [
+      'color-primary',
+      'color-secondary',
+      'color-infrastructure',
+      'color-other'
+    ];
+
+    // sort alphanumerically
+    tokens.sort();
+
+    // sort by category
+    tokens.sort((a, b) => {
+      if (
+        categoryOrder.includes(a.category) &&
+        categoryOrder.includes(b.category)
+      ) {
+        return (
+          categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category)
+        );
+      }
+
+      return a.category.localeCompare(b.category);
+    });
+
+    return {
+      template: `
+      <div class="storybook-docs">
+        <h1>All Tokens</h1>
+        <p>
+          The token list is autogenerated based on the SCSS variables that have been defined in
+          <code style="background: #f0f3f5; color: #666d74; padding: 4px; border-radius: 3px;">ng-app/styles/_vodafone.scss</code>.<br />
+          Design tokens are the atoms of the system. In a Design System they are
+          used instead of hard coded values to ensure a better consistency across
+          any platform.
+        </p>
+        <token-list [tokens]="tokens"></token-list>
+      </div>
+      `,
+      props: {tokens}
+    };
+  });

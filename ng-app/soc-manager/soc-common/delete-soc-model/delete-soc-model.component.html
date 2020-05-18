@@ -1,0 +1,22 @@
+<sncr-button type="secondary btn-sm" (click)="openModel(del)">
+    <i class="fa fa-trash-o" aria-hidden="true"></i>
+</sncr-button>
+<ng-template #del let-c="close" let-d="dismiss" ngbModalContainer>
+    <div class="modal-header">
+        <h4 class="modal-title">{{title}}</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')">
+        </button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="name2">
+            <p>{{bodyTitle}} <strong>{{name}}</strong> {{bodyTitle2}} <strong>{{name2}}</strong><span *ngIf="bodyTitle3"> {{bodyTitle3}} </span></p>
+        </div>
+        <div *ngIf="!name2">
+            <p>{{bodyTitle}} <strong>{{name}}</strong> {{bodyTitle2}} </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')">Abbrechen</sncr-button>
+        <sncr-button type="primary" (click)="deleteRow();c('Close click')">Löschen</sncr-button>
+    </div>
+</ng-template>

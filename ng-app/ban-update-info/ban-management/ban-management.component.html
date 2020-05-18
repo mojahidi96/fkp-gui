@@ -1,0 +1,32 @@
+<div>
+    <sncr-notification [handler]="alertNotify"></sncr-notification>
+    <p class="infoText" [innerHtml]="'MANAGE_DETAILS-EDIT_INFO_MESSAGE' | translate:lang"></p>
+
+    <sncr-datatable [cols]="manageCols"
+                    [lazy]="lazy"
+                    [lazyLoadUrl]="lazyLoadUrl" [sortField]="'1'"
+                    [sortOrder]="1"
+                    [countAlreadySet]="true"
+                    [allEditable]="true"
+                    [(allEditForm)]="form"
+                    [loading]="lazyColsLoad"
+                    [selectMessage]="banManageTranslations?.banManageColMsg"
+                    [resultMessage]="banManageTranslations?.banManageTotalCountMsg"
+                    [ngClass]="{disableFields:processing}"
+                    [columnSelection]="true"
+                    [hideColSelect]="true"
+                    #manageTable>
+    </sncr-datatable>
+
+    <div class="review" *ngIf="!lazyColsLoad">
+        <sncr-button type="strong" (click)="reviewUpdate()" [disabled]="processing || payFieldFocussed"><span l10nTranslate>MANAGE_DETAILS-CONTINUE_TO_ORDER_OVERVIEW</span></sncr-button>
+    </div>
+</div>
+
+<ng-template #address let-context>
+    <div class="">
+        <span>
+            {{context.row.legalAddress1}} <br /> {{context.row.legalAddress2}}
+        </span>
+    </div>
+</ng-template>

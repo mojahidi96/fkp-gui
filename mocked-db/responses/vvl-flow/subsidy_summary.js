@@ -1,0 +1,1 @@
+module.exports = {"shopId":null,"shoppingCartId":null,"eligible":null,"subsidyType":"CREDIT_VOUCHER","subsidizedHandset":null,"isNewTariff":null,"articleId":null};

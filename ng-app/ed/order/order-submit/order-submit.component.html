@@ -1,0 +1,32 @@
+<h2 class="pageTitle">
+    <span l10nTranslate>OM-SUBMIT-HEADER_LABEL</span>
+</h2>
+<div class="card">
+    <div [hidden]="!orderDetails.orderNumber">
+        <order-confirmation [orderDetails]="orderDetails"></order-confirmation>
+    </div>
+    <ng-container *ngIf="loading">
+        <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+    </ng-container>
+    <ng-container *ngIf="!loading">
+        <div class="card-body" *ngIf="!orderDetails.orderNumber">
+            <sncr-notification [handler]="alert"></sncr-notification>
+                <form novalidate (ngSubmit)="submitForm()">
+                    <ng-container *ngIf="panels && panels.length">
+                        <dynamic-panels [panels]="panels"
+                                [readonly]="false"
+                                [(mainForm)]="mainForm"
+                                [showValidation]="hasErrors">
+                         </dynamic-panels>
+                    </ng-container>
+                    <div class="text-right mt-4">
+                        <sncr-button type="submit" l10nTranslate [disabled]="isReadOnlyUser">OM-SUBMIT-SUBMIT_SAVE</sncr-button>
+                    </div>
+                </form>
+        </div>
+    </ng-container>
+</div>
+
+
+
+

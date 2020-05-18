@@ -1,0 +1,82 @@
+<div class="top-bar" *ngIf="topBar">
+    <div class="row">
+        <div class="col-md-6 px-0">
+            <ul class="tabset" *ngIf="flowType==='mobile'">
+                <li *ngFor="let tab of topBar.tabs" [class.active]="tab.active">
+                    <a [href]="tab.url">{{tab.name}}</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tools col-md-6 text-right">
+            <span class="d-inline-block mr-1">
+                <sncr-button type="toolbar"
+                             href="{{topBar.vfUser && !topBar.isReadOnlyVodafoneUser ?'/buyflow/client/default_page':'/buyflow/client/en_US/'}}">
+                    Kundenwechsel
+                </sncr-button>
+            </span>
+            <div class="fm-select" *ngIf="topBar && topBar.shop && (topBar.shop.number).length >= 1">
+                <select disabled>
+                    <option>{{topBar.shop.name}} - {{topBar.shop.number}}</option>
+                </select>
+            </div>
+            <span class="d-inline-block ml-1">
+                <sncr-button type="toolbar" href="{{topBar.ssoUser?'/buyflow/sso-logout.jsp':'/portal/client/logout'}}">Abmelden</sncr-button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- menu -->
+<nav class="navbar navbar-expand-md bg-primary" id="primaryNav">
+    <div class="collapse navbar-collapse">
+        <div class="rhombus"></div>
+        <div class="VFlogo">
+            <a href="{{topBar.vfUser && !topBar.isReadOnlyVodafoneUser ?'/buyflow/client/default_page':'/buyflow/client/en_US/'}}"></a>
+        </div>
+        <ul class="navbar-nav" *ngIf="topBar">
+            <li class="nav-item dropdown" *ngFor="let item of topBar.menus"
+                routerLinkActive="active" #rla="routerLinkActive" [class.active]="item.active">
+                <a class="nav-link" *ngIf="!item.routerLink" [href]="item.url" [target]="item.target" (click)="menuSelected(item)">
+                    {{item.name}}</a>
+                <a class="nav-link" *ngIf="item.routerLink" [routerLink]="item.url" (click)="menuSelected(item)">
+                    {{item.name}}</a>
+
+                <div class="dropdown-menu" *ngIf="item.submenus && item.submenus.length">
+                    <div class="menuList" [class.adminMenu]="item.name=='Administration'"
+                         [class.megaMenu]="item.submenus.length > 4">
+                        <ul *ngFor="let column of item.submenus" class="list-inline" [ngClass]="column.links.length?'d-table-cell':'hidden'">
+                            <div *ngIf="column.links.length">
+                                <li class="dropdown-item"><strong>{{column.title}}</strong></li>
+
+                                <li class="dropdown-item"
+                                    *ngFor="let link of column.links; let i = index"
+                                    (click)="onLinkClick(column.links)"
+                                    routerLinkActive="" #rla="routerLinkActive">
+                                    <a *ngIf="!link.routerLink" [href]="link.url" [target]="link.target">
+                                        {{link.name}}</a>
+                                    <a *ngIf="link.routerLink" [routerLink]="link.url" [queryParams]="link.queryParam">
+                                        {{link.name}}</a>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="sub-nav" *ngIf="currentSubmenu && currentSubmenu.length">
+    <ul>
+        <li *ngFor="let link of currentSubmenu" routerLinkActive="active" #rla="routerLinkActive">
+            <a *ngIf="!link.routerLink" [href]="link.url" class="disable-escape">{{link.name}}</a>
+            <a *ngIf="link.routerLink" [routerLink]="link.url" [queryParams]="link.queryParam" class="disable-escape">{{link.name}}</a>
+        </li>
+    </ul>
+</div>
+
+<div #readOnlyUser class="isReadOnlyUser" *ngIf="isReadOnlyUser">
+    <img id="readonlyimg" src="../../images/read-only-tabs.gif" class="readOnlyRight" />
+</div>

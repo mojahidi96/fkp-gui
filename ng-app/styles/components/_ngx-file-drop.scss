@@ -1,0 +1,50 @@
+@import '../custom-variables';
+
+:host ::ng-deep ngx-file-drop {
+  width: 100%;
+  margin-bottom: 2rem;
+  margin-top: 0.75rem;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    color: #333;
+    padding: 2rem;
+    border: 2px dashed #ccc;
+    text-align: center;
+
+    & > * {
+      &:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .file-drop--line-1 {
+    font-weight: bold;
+  }
+
+  .file-drop--line-2 {
+    input {
+      display: none;
+    }
+
+    label {
+      text-decoration: underline;
+    }
+  }
+
+  .file-drop--supportedformat {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: $text-muted;
+  }
+
+  .over .content {
+    background-color: #eee;
+    border-color: #666;
+    opacity: 0.5;
+  }
+}

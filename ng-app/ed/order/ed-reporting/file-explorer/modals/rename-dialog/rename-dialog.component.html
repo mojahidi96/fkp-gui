@@ -1,0 +1,19 @@
+<button type="button" class="close-popup" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+
+<div class="modal-header">
+    <h4 class="modal-title" l10nTranslate>ED_DRIVE_RENAME</h4>
+</div>
+
+<div class="modal-body">
+    <sncr-notification *ngIf="elementNameError" type="error">
+        <span l10nTranslate>{{elementNameErrorMessage}}</span>
+    </sncr-notification>
+    <sncr-input label="{{'ED_DRIVE_NAME' | translate:lang}}" name="folderName" [maxLength]="'70'" [(ngModel)]="folderName"
+                [showValidation]="true" l10nTranslate>
+    </sncr-input>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('Cross click')" l10nTranslate>ED_DRIVE_CANCEL</button>
+    <sncr-button type=“strong” (click)="clickOk()" [btnStyle]="'btn btn-primary'" l10nTranslate>ED-LANDING_SAVE</sncr-button>
+</div>

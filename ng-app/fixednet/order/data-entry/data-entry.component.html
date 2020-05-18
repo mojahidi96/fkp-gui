@@ -1,0 +1,135 @@
+<sncr-notification [handler]="notificationHandlerService" [dismissible]="false"></sncr-notification>
+
+<div class="billsection">
+    <div class="card" *ngIf="readonly">
+        <div class="card-header">
+            Rechnungskonto
+        </div>
+        <div *ngIf="isBillDetailsLoading" class="text-center">
+            <load-data [loading]="true"></load-data>
+        </div>
+        <div *ngIf="!isBillDetailsLoading" class="billTable">
+            <sncr-datatable [value]="billingDetails" [cols]="billCols" [sortField]="'accountNo'" [sortOrder]="'-1'"
+                            (onRowSelect)="onRowSelect()" [selectionMode]="'radio'" [(selection)]="billSelected">
+            </sncr-datatable>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        Warenkorb
+    </div>
+
+    <div class="card-block">
+        <div class="text-right">
+              <span>
+                <i class="fa fa-shopping-cart fa-1x"></i>
+                  Positionen
+                <span class="badge badge-default">{{getTotalItems()}}</span>
+              </span>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Addresse</th>
+                <th>Name</th>
+                <th>Produkt</th>
+                <th>Bandbreite</th>
+                <th>Menge</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let item of order.items; let i = index" [class.highlighted]="selected===i"
+                (click)="readonly && loadPanels(item.productBundle.salesProductId, i)">
+                <td>{{item.location.street}}&nbsp;{{item.location.houseNumber}}<br />
+                    {{item.location.postCode}}&nbsp;{{item.location.city}}
+                </td>
+                <td>{{item.location.cName}}</td>
+                <td>{{item.productBundle.productName}}</td>
+                <td>{{item.productBundle.salesProdBandWidth}}</td>
+                <td class="addRemoveWidth">
+                    <span *ngIf="selected===i && !readonly">
+                        <i class="fa fa-plus greenColor" aria-hidden="true" (click)="addItem()"
+                           placement="bottom" ngbTooltip="Klicken Sie, um die Menge zu erhöhen"></i>
+                            <span class="amount">{{item.detail.length}}</span>
+                        <i class="fa fa-minus redColor" aria-hidden="true" (click)="removeItem(formIndex)"
+                           placement="bottom" ngbTooltip="Klicken Sie, um die Menge zu verringern"></i>
+                    </span>
+                    <span *ngIf="readonly">
+                        <span class="amount">{{item.detail.length}}</span>
+                    </span>
+                </td>
+                <td (click)="loadPanels(item.productBundle.salesProductId, i)" *ngIf="!readonly">
+                    <sncr-button type="secondary" *ngIf="!readonly">
+                        <!--<i class="fa fa-pencil-square-o"></i>-->
+                        <span>Konfigurieren</span>
+                    </sncr-button>
+                    <!-- <i  class="fa fa-info-circle"></i>-->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div *ngIf="loading">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+
+<form novalidate (ngSubmit)="next()">
+    <div class="card my-2" *ngIf="panels && !loading">
+        <div class="card-header">
+            Angaben zum Produkt
+        </div>
+
+        <div class="card-block">
+            <div class="row" *ngIf="!readonly">
+                <div class="col-md-12 col-sm-12">
+                    <p>Bitte vervollständigen Sie das unten aufgeführte Formular (mit einem
+                        <span style="color: red">*</span> gekennzeichnete Pflichtfelder bitte unbedingt ausfüllen).</p>
+                </div>
+            </div>
+            <div class="row my-4" *ngIf="!readonly || mainForms[currentItemIndex].length > 1">
+                <div class="col d-flex justify-content-center">
+                    <ngb-pagination [collectionSize]="mainForms[currentItemIndex].length" [pageSize]="1" [boundaryLinks]="true"
+                                    [maxSize]="6" [ellipses]="true" [(page)]="page" (pageChange)="formIndex = $event-1;" #productsPagination>
+                    </ngb-pagination>
+                </div>
+                <!--<div class="col-sm-4 text-right" *ngIf="!readonly">
+                    <sncr-button type="secondary" (click)="addItem()">+</sncr-button>
+                    <sncr-button type="secondary" (click)="removeItem(formIndex)">
+                        <i class="fa fa-trash-o"></i> Entfernen
+                    </sncr-button>
+                </div>-->
+            </div>
+
+            <div *ngFor="let mainForm of mainForms[currentItemIndex]; trackBy: trackForms; let j = index">
+                <div class="inner-panels">
+                    <dynamic-panels [hidden]="j !== formIndex" [(mainForm)]="mainForms[currentItemIndex][j]"
+                                    [panels]="panels" [readonly]="readonly" [showValidation]="hasErrors"
+                                    [location]="order.items[currentItemIndex]?.location">
+                    </dynamic-panels>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row my-4">
+        <div class="text-left col-sm-6">
+            <sncr-button type="secondary" (click)="back()">
+                Zurück
+            </sncr-button>
+        </div>
+        <div class="text-right col-sm-6">
+            <sncr-button type="submit" [btnStyle]="'strong'" [loading]="submitting" [disabled]="disableSubmit || (readonly && fnUser?.isReadOnlyUser)" [ngClass]="{disableFields:disableSubmit || (readonly && fnUser?.isReadOnlyUser)}">
+                <span *ngIf="!readonly">Weiter</span>
+                <span *ngIf="readonly">Bestellung abschicken</span>
+            </sncr-button>
+        </div>
+    </div>
+</form>

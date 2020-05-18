@@ -1,0 +1,21 @@
+<form #form="ngForm" [formGroup]="mainForm" novalidate>
+    <div formArrayName="panels">
+        <ngb-accordion class="validationAccordion" activeIds="{{activeIds}}">
+            <ng-container *ngFor="let panel of panels; let i = index">
+                <ngb-panel *ngIf="!panel.hidden || !isHidden(panel, i)" id="{{panel.id}}">
+                    <ng-template ngbPanelTitle>
+                        <i class="fa" [ngClass]="validPanelsClass[i]"></i> {{panel.label}}
+                    </ng-template>
+
+                    <ng-template ngbPanelContent>
+                        <div [formGroupName]="i" [ngClass]="panel.label.split(' ').join('-')">
+                            <dynamic-fields [rows]="panel.contents" [readonly]="readonly"
+                                            [panelForm]="mainForm.controls['panels']['controls'][i]"
+                                            [showValidation]="showValidation"></dynamic-fields>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+            </ng-container>
+        </ngb-accordion>
+    </div>
+</form>

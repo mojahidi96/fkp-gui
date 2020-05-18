@@ -1,0 +1,58 @@
+@import '../../../styles/_custom-variables';
+@import '../../../styles/page-title';
+@import '../../../styles/mixins';
+
+:host ::ng-deep .dropdown-menu {
+  z-index: 1050 !important;
+}
+
+:host ::ng-deep .ui-datatable {
+  .ui-datatable-thead {
+    .ui-clickable.ui-clickable-wrapper {
+      min-width: 175px;
+    }
+  }
+}
+
+.ellipiss {
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
+:host ::ng-deep .description {
+  white-space: normal;
+  width: 19em;
+  word-break: normal;
+}
+
+:host ::ng-deep .radio-width-100 {
+  .radioContent {
+    width: 100%;
+  }
+}
+
+.right25 {
+  right: 25px;
+}
+
+.right65 {
+  right: 65px;
+}
+
+.closeIconFont {
+  font-size: 1.5em;
+}
+
+.marLeft2px {
+  margin-left: 2px;
+}
+
+:host ::ng-deep .custom-col {
+  min-width: 20px !important;
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}

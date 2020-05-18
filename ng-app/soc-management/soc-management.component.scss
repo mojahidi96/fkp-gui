@@ -1,0 +1,13 @@
+:host ::ng-deep .fixed-hieght-block {
+  height: 613px;
+  overflow-y: visible;
+  overflow-x: hidden;
+}
+
+:host ::ng-deep .card {
+  border: none !important;
+}
+
+hr.bg-inverse {
+  border-top: solid 1px #000000;
+}

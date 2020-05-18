@@ -1,0 +1,48 @@
+<div class="col-sm-12">
+    <div *ngIf="loading" class="my-3">
+        <sncr-loader class="relative" [isLoading]="loading"></sncr-loader>
+    </div>
+    <sncr-notification type="success" *ngIf="!disableMessage && uploadResp?.eligibleSubs && uploadResp?.eligibleSubs?.length" [l10nTranslate]="{count: uploadResp.eligibleSubs.length}">
+        <strong>{{localePrefix}}VALID_RECORDS</strong>
+    </sncr-notification>
+
+    <sncr-notification type="error" *ngIf="!disableMessage && uploadResp?.ineligibleSubs && uploadResp?.ineligibleSubs?.length" [l10nTranslate]="{count: uploadResp.ineligibleSubs.length}">
+        <strong>{{localePrefix}}INVALID_RECORDS</strong> &nbsp;
+        <sncr-button (click)="downloadError()" type="secondary" [l10nTranslate]="{fileType: fileType}">
+            <img class="resize-height" src="public/icons/svg/vodafone/download.svg" alt="Download">&nbsp;
+            {{localePrefix}}INVALID_RECORDS-DOWNLOAD
+        </sncr-button>
+    </sncr-notification>
+
+    <sncr-notification type="error" *ngIf="!disableMessage && fileError" l10nTranslate><strong>{{fileError}}</strong></sncr-notification>
+
+    <div class="file-drop mt-0" *ngIf="uploading">
+        <ngx-file-drop dropZoneClassName="file-drop" contentClassName="file-drop" (onFileDrop)="processDrop($event)">
+            <ng-template ngx-file-drop-content-tmp>
+                <div class="content">
+                    <div class="xslIcon marB25 marT80">
+                        <svg-icon name="misc/file-format-{{fileType | lowercase}}" size="large"></svg-icon>
+                    </div>
+                    <div class="dAndDropTxt marB80">
+                        <div l10nTranslate><strong>{{localePrefix}}UPLOAD_AREA-TITLE</strong></div>
+                        <div>
+                            <span l10nTranslate>{{localePrefix}}UPLOAD_AREA-UPLOAD_1</span>
+                            <label class="href" for="upload-file" l10nTranslate>{{localePrefix}}UPLOAD_AREA-UPLOAD_2</label>
+                            <input id="upload-file" type="file" style="visibility:hidden;"
+                                   (change)="processFileUpload($event, $event.target.files)" />
+                            <span l10nTranslate>{{localePrefix}}UPLOAD_AREA-UPLOAD_3</span>
+                        </div>
+                        <div class="text-muted" l10nTranslate>{{localePrefix}}UPLOAD_AREA-SUPPORTED_FORMAT</div>
+                        <div class="text-muted" [l10nTranslate]="{fileType: fileType}">{{localePrefix}}UPLOAD_AREA</div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-file-drop>
+    </div>
+</div>
+<div class="col-sm-6" [ngClass]="uploading ? 'cancel-btn' : 'upload-btn'">
+    <sncr-button type="strong" (click)="hideFildrop()">
+        <span *ngIf="!uploading" [l10nTranslate]="{fileType: fileType}">{{localePrefix}}UPLOAD_BUTTON</span>
+        <span *ngIf="uploading" l10nTranslate>{{localePrefix}}UPLOAD_BUTTON-CANCEL</span>
+    </sncr-button>
+</div>

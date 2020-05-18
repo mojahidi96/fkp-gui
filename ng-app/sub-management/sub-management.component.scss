@@ -1,0 +1,31 @@
+@import '../styles/mixins';
+
+.review {
+  text-align: right;
+  margin-bottom: 30px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+:host ::ng-deep sncr-select {
+  display: inline-block;
+  width: 100%;
+}
+
+.infoText {
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-tablewrapper {
+  & > table {
+    tbody {
+      tr {
+        vertical-align: bottom;
+        td {
+          vertical-align: inherit !important;
+        }
+      }
+    }
+  }
+}

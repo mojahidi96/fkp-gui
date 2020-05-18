@@ -1,0 +1,87 @@
+@import '../../../styles/_custom-variables';
+@import '../../../styles/_custom-variables';
+@import '../../../styles/mixins';
+
+.form-check-input {
+  margin-left: 0;
+}
+
+.form-check {
+  padding-left: 0px;
+}
+
+.radioBox input[type='radio'] + div + span {
+  margin-left: 32px;
+}
+
+.radioBox input[type='radio']:checked + div + span {
+  font-weight: bold;
+}
+
+.radioBoxDiv {
+  height: 100%;
+  margin-bottom: 20px !important;
+  .form-check-label {
+    width: auto;
+    position: relative;
+    padding-left: 0px;
+    cursor: pointer;
+  }
+  .radioBox {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transform: none;
+    display: flex;
+    vertical-align: middle;
+    min-width: 20px;
+
+    span {
+      margin-left: 8px;
+    }
+    > .radioContent {
+      position: static;
+      display: block;
+    }
+
+    &-visible {
+      background-image: url(~/public/icons/svg/radio/normal.svg);
+      @include icon-sizes20;
+      border-radius: 3px;
+      left: 0;
+      position: absolute;
+    }
+
+    > input {
+      z-index: 1001;
+      opacity: 0;
+      display: inline-block;
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      left: 0;
+      position: absolute;
+    }
+
+    > input:checked + .radioBox-visible {
+      background-image: url(~/public/icons/svg/radio/checked.svg);
+    }
+    > input:hover + .radioBox-visible {
+      border-color: inherit;
+    }
+    > input:hover:checked + .radioBox-visible {
+      border-color: inherit;
+    }
+    > input:focus + .radioBox-visible {
+      border-color: inherit;
+    }
+    > input:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+
+:host-context(sncr-radio-options) label {
+  font-weight: bold;
+}

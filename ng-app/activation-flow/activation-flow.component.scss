@@ -1,0 +1,112 @@
+@import '../styles/_custom-variables';
+@import '../styles/page-title';
+@import '../styles/mixins';
+@import '../styles/datatables';
+@import '../styles/info-icon';
+
+.next-button-right {
+  text-align: right;
+  margin-bottom: 30px;
+}
+
+:host ::ng-deep sncr-flow-section .flow-section-summary {
+  .descInner {
+    margin-left: 0px;
+
+    .desc-icon {
+      margin-left: 0px;
+      position: relative;
+      top: -2px;
+    }
+
+    .info-text {
+      font-weight: normal !important;
+      font-size: 12px !important;
+    }
+  }
+}
+
+:host ::ng-deep .ui-datatable {
+  .ui-datatable-thead {
+    .ui-clickable.ui-clickable-wrapper {
+      min-width: 175px;
+    }
+  }
+}
+
+.orderNumber {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.textBoxwidth {
+  width: 80%;
+  margin-top: -10px;
+  margin-bottom: -5px;
+  margin-left: 0px;
+}
+
+:host ::ng-deep td div.radioBox-visible {
+  margin-left: 28px;
+  margin-right: -20px;
+}
+
+.margintextbox {
+  display: flex;
+}
+
+.marginTop {
+  margin-top: 10px !important;
+}
+
+:host ::ng-deep bulk-edit {
+  .card-block {
+    .internCustId {
+      .labelText1 {
+        position: absolute;
+        right: 20px;
+      }
+    }
+  }
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+
+:host ::ng-deep .subManagementMain {
+  .ui-datatable-loading-content {
+    min-height: 120px;
+    height: calc(100% - (180px));
+    top: 115px;
+  }
+}
+
+:host ::ng-deep .subManagementMain {
+  padding: 0px;
+  .review {
+    padding: 0px;
+    margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep .upload-btn {
+  margin-left: 160px;
+  position: absolute;
+  top: -34px;
+}
+
+.up-dwn-btn {
+  sncr-file-drop {
+    width: 100%;
+    padding-top: 20px;
+    position: relative;
+  }
+}
+
+.boxWidth {
+  width: 50px !important;
+}
+
+.marB30 {
+  margin-bottom: 30px;
+}

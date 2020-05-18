@@ -1,0 +1,75 @@
+<div *ngIf="count>0" class="contentPanelShoppingCart">
+    <h2 class="divTitle">
+        <span l10nTranslate>SHOPPING_CART_HEADER</span>
+    </h2>
+    <div class="divContentz mb-2">
+        <span class="cursor-pointer">
+            <span (click)="toggleCart()">
+                <i class="fa fa-info-circle pull-left mr-0"></i>
+                <span class="pull-left mt-1 ml-1 d-inline-block">
+                    <strong l10nTranslate *ngIf="count===1">SHOPPING_CART_COUNT_ONE</strong>
+                    <strong [l10nTranslate]="{count:count}" *ngIf="count>1">SHOPPING_CART_COUNT_MULTIPLE</strong>
+                </span>
+                <span class="pull-left mt-1 ml-1 d-inline-block">
+                    <i [ngClass]="toggle ? 'fa chevron-up' : 'fa chevron-down'" aria-hidden="true"></i>
+                </span>
+            </span>
+        </span>
+        <div class="clearfix"></div>
+    </div>
+    <ng-container *ngIf="toggle">
+        <sncr-notification [handler]="alertNotify"></sncr-notification>
+        <div  *ngIf="lockingPeriod" [l10nTranslate]="{lockingPeriod:lockingPeriod}"><br> SHOPPING_CART_DESCRIPTION</div>
+        <div *ngIf="isLoading">
+            <sncr-loader class="custom-inline" [isLoading]="isLoading"></sncr-loader>
+        </div>
+        <div [hidden]="isLoading" class="row p-0 m-0" >
+            <div class="w-100">
+                <sncr-datatable
+                        #dataTable
+                        [value]="shoppingCart"
+                        [cols]="shoppingCartCols"
+                        [paginator]="false"
+                        [sortField]="'dateTimeStamp'"
+                        [sortOrder]="-1"
+                        [(selection)]="selected">
+                </sncr-datatable>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #cartNameTemplate let-context>
+    <div class="row ml-1">
+        <span class ="ellipiss description"  (mouseover)="context.row.ellipsis3 = !context.row.ellipsis3" (click)="navigateToOrderFlow(context.row)" >
+            {{(context.row.shoppingCartName?.length > 30 && !context.row.ellipsis3) ? (context.row.shoppingCartName | slice:0:30) + '...' : (context.row.shoppingCartName) }}
+        </span>
+    </div>
+</ng-template>
+
+<ng-template #deleteIcon let-context>
+    <div *ngIf="deleteCartAccess" class="trash-container name-template">
+        <delete-shopping-cart [landingPage] = "true" [rowData] = "context.row"
+                              (deletedResponse)="deleteResponse($event , context.row)">
+        </delete-shopping-cart>
+    </div>
+</ng-template>
+
+<ng-template #createdDateFormat let-context>
+    <div class="row ml-1">
+        {{context.row.dateTimeStamp | customDate}}
+    </div>
+</ng-template>
+
+<ng-template #customerOrderNumber let-context>
+    <div class="description" (click)="context.row.ellipsis = !context.row.ellipsis">
+        {{(context.row.customerOrderNumber?.length > 30 && !context.row.ellipsis) ? (context.row.customerOrderNumber | slice:0:30) + '...' : (context.row.customerOrderNumber) }}
+    </div>
+</ng-template>
+
+<ng-template #clientOrderId let-context>
+    <div class="description" (click)="context.row.ellipsis2 = !context.row.ellipsis2">
+        {{(context.row.clientOrderId?.length > 30 && !context.row.ellipsis2) ? (context.row.clientOrderId | slice:0:30) + '...' : (context.row.clientOrderId) }}
+    </div>
+</ng-template>
+

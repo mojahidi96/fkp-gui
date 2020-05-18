@@ -1,0 +1,90 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/page-title';
+@import '../../styles/mixins';
+@import '../../styles/modal';
+
+.description {
+  width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.deleteAddressIcon {
+  margin-left: 7px;
+}
+
+.requiredField {
+  color: #e60000;
+}
+
+.fa-plus {
+  padding-bottom: 30px;
+  padding-left: 30px;
+  background-image: url(~/public/icons/svg/vodafone/add-or-plus.svg);
+  @include icon-sizes28;
+  &:before {
+    content: none;
+  }
+}
+
+:host ::ng-deep .subTitle {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.disabled {
+  cursor: not-allowed !important;
+}
+
+:host ::ng-deep .address-section-btns {
+  .btn {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: auto;
+  }
+  .btn-primary,
+  .btn-primary:hover,
+  .btn-primary:active,
+  .btn-primary:focus {
+    box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.75) !important;
+    background-color: #666666 !important;
+  }
+}
+
+.debType {
+  border-radius: 5px;
+  color: #ffffff;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  min-width: 10px;
+  padding: 5px 10px !important;
+  text-align: center;
+  vertical-align: baseline;
+  white-space: nowrap;
+  background-color: #a3a3a3;
+}
+
+:host ::ng-deep ngb-tooltip-window {
+  top: -39px !important;
+  left: -14px !important;
+  white-space: nowrap !important;
+}
+
+:host ::ng-deep .tooltip-inner {
+  max-width: 300px !important;
+}
+
+:host ::ng-deep .tooltip {
+  pointer-events: none !important;
+}
+
+.tooltipmar {
+  margin-left: 50px !important;
+}
+
+.blacklistderow {
+  color: #767676;
+}

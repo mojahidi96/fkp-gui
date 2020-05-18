@@ -1,0 +1,64 @@
+<sncr-notification [handler]="alertMessage"></sncr-notification>
+<div *ngIf="loader; else elsePart">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<ng-template #elsePart>
+
+    <div class="clearfix"></div>
+    <div class="clickableDataRows">
+        <sncr-datatable #sncrData [value]="groupsData" [cols]="socCols" [editable]="true"  [selectionMode]="'single'"
+                        (onRowClick)="rowClick($event)" (onOpenEdit)="editOpen($event)" (onEditSave)="saveChanges($event)"
+                        [removableContent]="removableContent" (onDelete)="deleteRow($event)"
+                        [resultMessage]="resultMessage">
+            <sncr-header>
+
+                <div class="margin-bottom-30">
+                    <sncr-button type="secondary" (click)="toggle = !toggle;creatForm(); ">
+                        Neue Gruppe erstellen
+                        <i class="fa fa-chevron-down" *ngIf="!toggle" aria-hidden="true"></i>
+                        <i class="fa fa-chevron-up" *ngIf="toggle" aria-hidden="true"></i>
+                    </sncr-button>
+                </div>
+
+                <div *ngIf="toggle" class="margin-bottom-30">
+                    <form [formGroup]="saveForm" (ngSubmit)="saveGroup(saveForm)" class="new-group-form">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <sncr-select label="Symbol" [formControlName]="'icon'" required>
+                                    <option *ngFor="let o of groupIcon" value="{{o.value}}">{{o.text}}</option>
+                                </sncr-select>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <sncr-input label="Name" [type]="text" [formControlName]="'groupName'"
+                                            autocomplete="off" required></sncr-input>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center">
+                            <div class="col-4">
+                                <sncr-button type="submit" [disabled]="formSubmit">
+                                    <span>Neue Gruppe erstellen</span>
+                                </sncr-button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </sncr-header>
+        </sncr-datatable>
+    </div>
+    <div *ngIf="!selectedGroup">
+        <active-soc-group [(socGroup)]="selected"></active-soc-group>
+    </div>
+
+
+</ng-template>
+
+<ng-template #delete let-context>
+    <div *ngIf="!context.row.editing">
+        <delete-model [row]="context.row" [name]="context.row.groupName" [title]="'Gruppe löschen'"
+                      [bodyTitle]="'Möchten sie Gruppe'" [bodyTitle2]="' vom gesammten Portal und aus allen Kategorien und Shops unwideruflich löschen?'"
+                      (onDelete)="deleteRow($event)"></delete-model>
+    </div>
+</ng-template>

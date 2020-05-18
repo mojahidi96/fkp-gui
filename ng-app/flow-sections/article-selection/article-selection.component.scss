@@ -1,0 +1,385 @@
+@import '../../styles/mixins';
+@import '../../styles/info-icon';
+@import '../../styles/modal';
+
+.plr-10 {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.hardware-row {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+
+  & > div {
+    flex: 1;
+  }
+}
+
+:host ::ng-deep .carousal-box {
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  overflow: hidden;
+
+  .carousal-header {
+    padding: 12px 20px;
+    background-color: rgba(204, 204, 204, 0.55);
+    color: #e60000;
+
+    p {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    h3 {
+      font-size: 30px;
+      margin-bottom: 0;
+    }
+  }
+
+  .carousal-footer {
+    padding: 0;
+
+    .carousal-footer-content {
+      padding: 0 20px 12px 20px;
+
+      hr {
+        margin-top: 0;
+      }
+
+      a {
+        color: #424242;
+        text-decoration: underline;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+    }
+
+    .optionsCheck {
+      padding: 20px;
+      background-color: rgba(204, 204, 204, 0.55);
+      color: #e60000;
+      font-size: 14px;
+
+      .radioBoxDiv {
+        margin-bottom: 0px !important;
+      }
+
+      .radioBox-visible {
+        border: solid 2px #e60000;
+        width: 18px !important;
+        height: 18px !important;
+        border-radius: 50%;
+        background: transparent;
+        box-shadow: none;
+
+        & + .radioContent {
+          font-weight: normal;
+        }
+        &:after {
+          top: -2px !important;
+          left: -2.7px !important;
+        }
+      }
+    }
+  }
+
+  .carousal-body {
+    padding: 20px;
+    color: #262626;
+    h2 {
+      font-size: 22px;
+      text-align: center;
+    }
+  }
+
+  ul {
+    padding-left: 0;
+    margin-left: 10px;
+    margin-bottom: 0;
+
+    color: #e60000;
+
+    li {
+      color: #e60000;
+
+      .font-dark {
+        color: #262626;
+      }
+    }
+  }
+
+  &.active {
+    .carousal-header,
+    .carousal-footer .optionsCheck {
+      background-color: #e60000;
+      color: #fff;
+
+      .radioBox-visible {
+        background-color: #e60000;
+        background-image: none !important;
+        border: 2px solid #fff;
+        width: 20px !important;
+        height: 20px !important;
+        &:after {
+          content: '';
+          background-color: #fff;
+          position: absolute;
+          border-radius: 50%;
+          width: 12px;
+          height: 12px;
+          top: 2px !important;
+          left: 2px !important;
+        }
+      }
+    }
+  }
+}
+
+.padLR20 {
+  padding: 0 20px;
+}
+
+.padLR15 {
+  padding: 0 15px;
+}
+
+.marT30 {
+  margin-top: 30px;
+}
+
+.padT20 {
+  padding-top: 20px;
+}
+
+table.font10 {
+  font-size: 10px;
+  th,
+  td {
+    padding: 4px;
+    margin: 4px;
+  }
+}
+
+.labelBold {
+  padding: 0 20px;
+  label {
+    font-weight: bold;
+  }
+}
+
+:host ::ng-deep .inline-loader .wrapper {
+  position: inherit !important;
+  top: 0 !important;
+}
+
+:host ::ng-deep .inline-loader .loader {
+  margin-top: 0 !important;
+}
+
+:host ::ng-deep .inline-loader {
+  width: 100% !important;
+}
+
+:host ::ng-deep .next-button-right {
+  text-align: right;
+  margin-bottom: 30px;
+
+  .btn-grid {
+    .btn {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+  }
+
+  .btn-tiles {
+    .btn {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+
+  .btn-primary {
+    background: #666 !important;
+    color: #ffffff;
+    box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+
+    .listIcon svg * {
+      stroke: #fff;
+    }
+
+    .gridIcon svg * {
+      stroke: #fff;
+    }
+  }
+}
+
+.article-width {
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.listIcon {
+  display: inline-block;
+  @include icon-sizes28;
+}
+
+.gridIcon {
+  display: inline-block;
+  @include icon-sizes28;
+}
+
+:host ::ng-deep .row.filter {
+  align-items: center;
+  margin-bottom: 20px !important;
+  .dropdowns {
+    display: inline-flex;
+    justify-content: space-between;
+    sncr-select {
+      flex-grow: 1;
+      flex-basis: 130px;
+      margin-right: 20px;
+      .selectMainDiv {
+        margin-bottom: 0px;
+        .fm-select {
+          margin-bottom: 0px;
+        }
+      }
+    }
+  }
+}
+:host ::ng-deep .radioBox input[type='radio'] + div + span {
+  margin-left: 32px !important;
+}
+
+.dot {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.red-background-color {
+  background-color: #e60000;
+}
+
+.green-background-color {
+  background-color: #427d00;
+}
+
+.yellow-background-color {
+  background-color: #fecb00;
+}
+.redfont {
+  color: red;
+}
+
+.customizedRow {
+  display: flex;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+:host ::ng-deep .radio-option {
+  margin-bottom: 20px;
+  .form-check {
+    margin-bottom: 5px !important;
+  }
+}
+
+.show-underline {
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
+.product-image {
+  margin-bottom: 5px;
+}
+
+#product-details-popup {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  .modal-body {
+    padding-top: 0px;
+    .row {
+      padding-bottom: 12px;
+    }
+  }
+}
+
+#product-details-popup .modal-body .row:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+:host ::ng-deep .carousal-footer-content {
+  .row {
+    position: relative;
+    ngb-tooltip-window {
+      top: -88px !important;
+      left: 13px !important;
+      .arrow {
+        margin-left: -8px;
+        &:before {
+          border-width: 14px 14px 0;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .tooltip.show {
+  opacity: 1;
+}
+
+:host ::ng-deep .arrow::before,
+.bs-tooltip-top .arrow::before {
+  top: 0;
+  border-width: 0.4rem 0.4rem 0;
+  border-top-color: #fff;
+}
+
+:host ::ng-deep .tooltip-inner {
+  max-width: 260px !important;
+  font-size: 14px;
+  line-height: normal;
+  padding: 15px;
+  color: #343a40;
+  text-align: left;
+  background-color: #fff;
+  border-radius: 0;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.4);
+  p {
+    margin-bottom: 0px;
+    width: 230px;
+  }
+  a {
+    color: #333 !important;
+    text-decoration: underline;
+  }
+}
+
+:host ::ng-deep .arrow,
+.bs-tooltip-top .arrow {
+  bottom: 1px;
+}
+.text-title {
+  top: -5px;
+}
+.textpadding {
+  padding: 19px 0px !important;
+  margin: 0px;
+}
+
+.article-eligibility {
+  position: relative;
+  height: 2.5rem;
+}
+
+.product-details-popup {
+  text-decoration: underline !important;
+  cursor: pointer;
+}

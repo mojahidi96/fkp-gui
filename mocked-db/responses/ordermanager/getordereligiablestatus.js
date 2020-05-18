@@ -1,0 +1,1 @@
+module.exports = [{"text":"Storniert","value":"11"},{"text":"Erneut senden","value":"1"}];

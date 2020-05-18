@@ -1,0 +1,78 @@
+@import '../styles/custom-variables';
+@import '../styles/mixins';
+@import '../styles/custom-tabs';
+@import '../styles/page-title';
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.contentPanel {
+  background: $txt-white;
+  margin: 20px 0px 0px 0px;
+  border-right: 2px solid $layout-border;
+  border-bottom: 2px solid $layout-border;
+  padding-top: 18px;
+
+  h1.primaryTitle {
+    color: $primary;
+    margin: 15px 0px 20px 20px;
+
+    font-family: 'vodafone_rgregular', Arial, Helvetica, sans-serif;
+    font-size: 45px;
+  }
+
+  :host ::ng-deep .fa-check-circle {
+    font-size: 26px;
+    color: #3c763d;
+  }
+
+  :host ::ng-deep .alert-success {
+    border-radius: 3px;
+    background-color: #dff0d8;
+    border: solid 1px #3c763d;
+    padding: 20px;
+    margin: 0px 0px 30px;
+    color: #3c763d;
+
+    .close {
+      color: #e60000;
+      opacity: 1;
+    }
+
+    .padding-left-20 {
+      padding-left: 20px;
+
+      span {
+        display: inline-block;
+        margin-top: 2px;
+      }
+
+      p:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .has-danger .form-control-danger {
+  background-image: none !important;
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+
+  .loader {
+    margin: 3% auto !important;
+  }
+}
+
+:host ::ng-deep .ui-datatable-disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}

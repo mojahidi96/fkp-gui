@@ -1,0 +1,48 @@
+@import '../../styles/planned-changes';
+
+.padLR20 {
+  padding: 0 20px;
+}
+
+.padLR15 {
+  padding: 0 15px;
+}
+
+.marT30 {
+  margin-top: 30px;
+}
+
+.labelBold {
+  padding: 0 20px;
+  label {
+    font-weight: bold;
+  }
+}
+
+:host ::ng-deep .inline-loader .wrapper {
+  position: inherit !important;
+  top: 0 !important;
+}
+
+:host ::ng-deep .inline-loader .loader {
+  margin-top: 0 !important;
+}
+
+:host ::ng-deep .inline-loader {
+  padding-left: 14px;
+}
+
+.marginr {
+  margin-right: -17px;
+}
+hr.bg-inverse {
+  border-top: solid 1px #000000;
+}
+.padding0 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.px-20 {
+  padding: 0 20px;
+}

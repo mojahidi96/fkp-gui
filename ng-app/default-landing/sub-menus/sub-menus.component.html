@@ -1,0 +1,37 @@
+<div class="container nopadding" *ngIf="flowType === 'fixednet' || flowType == 'ed'">
+    <div class="banner">
+        <div>
+            <h2 l10nTranslate>FIXEDNET_DESC_HEADER</h2>
+            <p l10nTranslate>FIXEDNET_DESC_FOOTER</p>
+        </div>
+    </div>
+</div>
+<div *ngIf="flowType == 'mobile'">
+    <shopping-cart></shopping-cart>
+
+    <!-- JoinMedia - Start -->
+    <link href="/public/assets/jm/css/styles.css" rel="stylesheet" />
+    <script src="/public/assets/jm/js/main.js"></script>
+    <div [innerHtml]="bannerTemplate"></div>
+    <!-- JoinMedia - End -->
+</div>
+<div *ngIf="loading">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+
+<ng-container *ngIf="!loading && menuSelected">
+    <div class="landNavPanel" *ngFor="let submenu of menuSelected.submenus">
+        <h2>{{submenu.title}}</h2>
+        <ul>
+            <li *ngFor="let link of submenu.links">
+                <a *ngIf="!link.routerLink" [href]="link.url">
+                    {{link.name}}
+                </a>
+                <a *ngIf="link.routerLink" [routerLink]="link.url" [queryParams]="link.queryParam">
+                    {{link.name}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</ng-container>
+

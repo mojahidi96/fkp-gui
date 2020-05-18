@@ -1,0 +1,57 @@
+<div [ngClass]="popover && popover.isOpen()? 'buttonSectionWidth' : 'buttonSection'">
+    <sncr-button type="secondary" (click)="OpenForm()">Tarifoption zur Gruppe hinzufügen
+        <i class="fa fa-chevron-down" *ngIf="!toggle" aria-hidden="true"></i>
+        <i class="fa fa-chevron-up" *ngIf="toggle" aria-hidden="true"></i>
+    </sncr-button>
+</div>
+
+
+<div *ngIf="toggle">
+    <div *ngIf="loader; else elsePart" class="row marginLeft50">
+        <sncr-loader class="inline-loader" [isLoading]="true"></sncr-loader>
+    </div>
+    <ng-template #elsePart>
+        <div class="row">
+            <div class="col-7">
+                <div class="validation-holder" [ngbPopover]="validationContent" [autoClose]="false"></div>
+                <label>Tarifoptionen <span class="requiredField">*</span></label>
+                <div class="custom-button" ngbDropdown #myDrop="ngbDropdown" autoClose="outside">
+                    <sncr-button class="" id="dropdownMenu1" ngbDropdownToggle>
+                        <span *ngIf="!activesoc.socName;then content else selContent"></span>
+                        <ng-template #content>Auswählen<span class="borderR"></span></ng-template>
+                        <ng-template #selContent><span class="truncateSocName">{{activesoc.socName}}</span></ng-template>
+                    </sncr-button>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                        <div class="dropdown-item" (click)="$event.stopPropagation();myDrop.open();">
+                            <sncr-input [type]="text" [(ngModel)]="socname" placeholder="suchen" autocomplete="off"></sncr-input>
+                        </div>
+                        <li class="fa fa-search" (click)="$event.stopPropagation();" style="position: relative;float: right;margin-top: -45px;margin-right: 35px;"></li>
+                        <div class="dropdown-scroll">
+                            <div class="dropdown-item" *ngFor="let s of acitvesocfilter">
+                                <div class="dropdown-itemTxt" (click)="updateSel(s)">
+                                    <label>{{s.socName}}</label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <sncr-input label="Sortierung" [type]="'text'" [(ngModel)]="activesoc.displayOrder" [pattern]="'^((?!(0))[0-9]{1,3})$'"
+                            [maxLength]="'3'" autocomplete="off" [name]="name" #name="ngModel"></sncr-input>
+                <sncr-button type="primary" (click)="saveRow(name);">Tarifoption hinzufügen</sncr-button>
+            </div>
+        </div>
+    </ng-template>
+</div>
+
+<ng-template #validationContent>
+    <div>
+        <div class="icon">
+            <i class="fa fa-2x fa-exclamation-circle" aria-hidden="true"></i>
+        </div>
+        <div class="message" l10nTranslate>
+            VALIDATION_MSG-REQUIRED
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</ng-template>

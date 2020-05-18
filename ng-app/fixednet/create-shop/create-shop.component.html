@@ -1,0 +1,60 @@
+<h2 class="pageTitle">
+    <span>Shop anlegen</span>
+</h2>
+
+<sncr-notification [handler]="notify" [dismissible]="false"></sncr-notification>
+
+<div class="contentPanelBody">
+    <div class="card">
+
+        <div *ngIf="loading">
+            <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+        </div>
+
+        <div *ngIf="!loading" class="card-block">
+            <div class="area margin-bottom-10" *ngIf="showCustomerNumber">
+                <dl class="customer-info">
+                    <dt>Kundennummer</dt>
+                    <dd>{{isCustomerNo ? customerNumber:customerHierarchy}}</dd>
+                </dl>
+                <dl class="customer-info">
+                    <dt>Kundenname</dt>
+                    <dd>{{isCustomerNo ? customerName:rootCustomerName}}</dd>
+                </dl>
+                <div class="clearfix"></div>
+            </div>
+
+            <h5 class="subTitle">Setup ->Allgemein</h5>
+
+            <form *ngIf="!loading" class="create-shop-form">
+                <div class="row">
+                    <div class="col-md-5 nopadding">
+                        <sncr-input name="shopName" label="Name des Shops" [autocomplete]="'off'" [(ngModel)]="shopName" [withDropDown]="shopNames"
+                                    type="text" [disabled]="loading" [pattern]="pattern" [showValidation]="showValidation"></sncr-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 nopadding">
+                        <sncr-input label="Top-Level Kunde" [(ngModel)]="customerHierarchy" name="customerHierarchy" [withDropDown]="rootCustomers"
+                                    (ngModelChange)="changeOnModel()" [autocomplete]="'off'" [disabled]="loading" [pattern]="pattern" [showValidation]="showValidation"></sncr-input>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="customerHierarchy && showCustomerNumber">
+                    <div class="col-md-5">
+                        <sncr-input label="Kundennummer" [(ngModel)]="customerNumber" name="customerNumber" [withDropDown]="customers" [disabled]="loading"
+                                    (ngModelChange)="changeOnModelCustomerNo()" [autocomplete]="'off'" [pattern]="pattern" [showValidation]="showValidation"></sncr-input>
+                    </div>
+
+                </div>
+                <div class="divider"></div>
+
+                <div class="row">
+                    <div class="col-md-2 nopadding">
+                        <sncr-button type="primary" [disabled]="disableCreateShop() || loading" [ngClass]="{disableFields:disableCreateShop()|| loading}" (click)="createShop($event);">Shop anlegen</sncr-button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

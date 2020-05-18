@@ -1,0 +1,43 @@
+<div class="position-relative">
+    <sncr-notification *ngIf="warnings" type="error" [l10nTranslate]="{number: warnings}">
+        ORDER_BULK-FAILED_POSITIONS
+    </sncr-notification>
+
+    <sncr-datatable #kiasDataTable [cols]="cols" [value]="kiasDetails" [multiSelection]="true"
+                    [(selection)]="selection" (selectionChange)="selectionChange($event)" [selectCount]="selection.length"></sncr-datatable>
+
+    <ng-container *ngIf="selection.length && !loading">
+        <sncr-results [multiSelection]="true" [currentCols]="cols" [selectCount]="selection.length"
+                      [isNew]="true"></sncr-results>
+        <form [formGroup]="saveForm" (ngSubmit)="saveStatus()">
+            <div class="row">
+                <div class="col">
+                    <sncr-textarea formControlName="statusComment"
+                                   [label]="'ORDER_BULK-COMMENT_STATUS' | translate:lang"
+                                   [placeholder]="'COMMENTS-TEXTAREA_PLACEHOLDER' | translate:lang"
+                                   [showValidation]="false" [required]=" saveForm.get('status').value === statusOptions[2].value">
+                    </sncr-textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 text-left">
+                    <sncr-select  formControlName="status"
+                                 [label]="'ORDER_BULK-CHANGE_STATUS' | translate:lang" required>
+                        <option value="" l10nTranslate>ORDER_BULK-SELECT_STATUS</option>
+                        <option *ngFor="let status of statusOptions" [value]="status.value" l10nTranslate>
+                            {{status.text}}
+                        </option>
+                    </sncr-select>
+                </div>
+                <div class="col-sm-6 next-button-right">
+                    <sncr-button type="submit" l10nTranslate>ORDER_BULK-SAVE_STATUS</sncr-button>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+
+    <div *ngIf="loading">
+        <sncr-loader></sncr-loader>
+    </div>
+</div>

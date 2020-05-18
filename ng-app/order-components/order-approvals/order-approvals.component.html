@@ -1,0 +1,41 @@
+<h2 class="pageTitle">
+    <span>Anzeige der ausstehenden Genehmigungen</span>
+</h2>
+
+
+<order-common [orderDetail]="orderDetail" [adminComments]="adminComments"></order-common>
+
+<div class="card card-lazy">
+    <div class="card-header">
+        <div class="text">Telinehmerdaten</div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 pr-0">
+                <sncr-datatable [cols]="columns"
+                                [lazy]="lazy" [sortField]="'id'" [sortOrder]="1"
+                                [lazyLoadUrl]="lazyLoadUrlOrderReview">
+                </sncr-datatable>
+                <div class="col-md-4 pl-0">
+                    <sncr-button type="secondary" class="pull-left pt-4" (click)="backbuttonClicked('/portal/client/en_US/approversearch?navigationValue=approver_search')">
+                        Zurück
+                    </sncr-button>
+                </div>
+                <div class="col-md-8 pull-right pr-0">
+                    <div class="col-md-4 pull-right pt-4">
+                        <sncr-button type="primary" [disabled]="isDisabledButton()" class="primary pull-right" (click)="saveApprover()">Änderungen speichern</sncr-button>
+                    </div>
+                    <div class="col-md-4 pull-right mar3">
+                        <label><span>Aktion auswählen</span><span class="redColor">*</span></label>
+                        <sncr-select [(ngModel)]="states">
+                            <option value="0" selected>Auswählen</option>
+                            <option *ngFor="let o of actoptions" value="{{o.value}}">{{o.text}}</option>
+                        </sncr-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

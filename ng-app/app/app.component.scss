@@ -1,0 +1,37 @@
+@import '../styles/custom-variables';
+
+h1,
+.modal-title {
+  font-family: 'vodafone_rgregular', Arial, Helvetica, sans-serif;
+}
+
+.wrapper {
+  margin: 0 0 0 130px;
+  width: 970px;
+}
+
+.divPageMain {
+  min-width: 1100px;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.divPageMain::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  z-index: -1;
+  background-color: #ebebeb;
+  border-bottom: 1px solid #d3d3d2;
+}
+
+.contentPanel {
+  background: transparent;
+  border-right: 0px solid $layout-border;
+  border-bottom: 0px solid $layout-border;
+  position: relative;
+  min-height: calc(100vh - 400px);
+}

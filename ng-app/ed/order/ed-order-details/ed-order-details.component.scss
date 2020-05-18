@@ -1,0 +1,131 @@
+@import '../../../styles/custom-variables';
+@import '../../../styles/mixins';
+@import '../../../styles/modal';
+@import '../../../styles/components/ngx-file-drop';
+
+:host ::ng-deep .content {
+  height: auto !important;
+}
+
+.d-none {
+  visibility: hidden;
+}
+
+.marB25 {
+  margin-bottom: 25px;
+}
+
+.marT80 {
+  margin-top: 80px;
+}
+
+.marB80 {
+  margin-bottom: 80px;
+}
+
+.well.order-details-table {
+  min-height: 20px;
+  padding: 19px;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+
+  .theader {
+    background-color: $area-background;
+    border-bottom: 3px solid #dddddd;
+  }
+}
+
+.mar3 {
+  margin-top: -3px;
+}
+
+.history {
+  font-size: 18px;
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+  max-height: 0px;
+
+  .loader {
+    margin: 3% auto !important;
+  }
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}
+
+.align {
+  position: absolute;
+}
+
+.laBold {
+  font-weight: bold;
+}
+
+.txt {
+  width: 274px;
+  height: 36px;
+}
+
+.txt-align {
+  width: 125px;
+}
+
+.size {
+  table-layout: fixed;
+  border: 0px;
+}
+
+.size .borderem:first-child {
+  th,
+  td {
+    border: none;
+  }
+}
+
+.deletefile {
+  float: right;
+  margin-top: 2px;
+}
+
+.download-file {
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.delete-doc {
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+div.progress-bar {
+  text-align: center;
+}
+
+.over {
+  border-color: #979797;
+  border-style: solid;
+}
+
+img.resize-sml {
+  width: 25px; /* you can use % */
+  height: 25px; /* IE 11 issue when using auto */
+}
+
+:host ::ng-deep .attachment-icon {
+  margin-left: 10px;
+}
+
+.file-drop--illustration {
+  height: 89px;
+  width: 191px;
+}

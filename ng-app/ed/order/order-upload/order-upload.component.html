@@ -1,0 +1,17 @@
+<h2 class="pageTitle">
+  <span l10nTranslate>OM-UPLOAD-HEADER_LABEL</span>
+</h2>
+<div class="card">
+  <div class="card-body">
+    <upload-changes
+      [initialLoad]="true"
+      [showErrorTable]="true"
+      uploadUrl="/ed/rest/fileimport/upload"
+      submitUploadUrl="/ed/rest/fileimport/submit"
+      showTable="true"
+      [columns]="cols"
+      [isReadOnlyUser]="isReadOnlyUser"
+    >
+    </upload-changes>
+  </div>
+</div>

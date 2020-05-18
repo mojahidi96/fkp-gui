@@ -1,0 +1,35 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/mixins';
+@import '../../styles/page-title';
+
+.form-inline .form-control {
+  width: 100% !important;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+h5.subTitle {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+}
+
+.area {
+  background: #ededed;
+  padding: 5px 10px;
+  margin-bottom: 20px;
+}
+
+.customer-info {
+  margin: 0 0 -10px;
+  width: 174px;
+  float: left;
+  padding: 6px 0 0;
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}

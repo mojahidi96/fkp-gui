@@ -1,0 +1,177 @@
+<div class="contentPanelBody">
+    <div class="card">
+        <div class="card-block">
+            <ngb-accordion activeIds="panel-1" (panelChange)="panelChange($event)" #accordion>
+                <ngb-panel id="panel-1" title="Auftragsstatus">
+                    <ng-template ngbPanelContent>
+                        <ng-container *ngIf="customer && (customer | json) != '{}';">
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 break-word"><strong>Kundennummer</strong><br>{{customer.fnCustomerNumber}}</div>
+                                <div class="col-sm-4 col-md-4 break-word"><strong>Kundenname</strong><br>{{customer.customerName}}</div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 break-word">
+                                    {{customer.address1}}<br>
+                                    {{customer.address2}}<br>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="!customer || (customer | json) == '{}';">
+                            <span>No customer details to display</span>
+                        </ng-container>
+                    </ng-template>
+                </ngb-panel>
+                <ngb-panel id="panel-2" title="Adresse des Vertragspartners">
+                    <ng-template ngbPanelContent>
+                        <ng-container *ngIf="isProductsLoading">
+                            <load-data [loading]="true"></load-data>
+                        </ng-container>
+                        <ng-container *ngIf="productDetails && (productDetails| json) != '{}';">
+                            <div><label class="label">Paketkonstellation:</label><span>{{productDetails.resultSet&&productDetails.resultSet.productBundleType?productDetails.resultSet.productBundleType:''}}</span></div>
+                            <div><label class="label">Paket-Tarif:</label><span>{{productDetails.resultSet&&productDetails.resultSet.salesPacketName?productDetails.resultSet.salesPacketName:''}}</span></div>
+                            <label class="label">Ihr Anschluss:</label><span class="id"></span>
+                            <div><label class="label">Standort:</label><span class="id" *ngIf="productAddress">{{productAddress.street +' ' + productAddress.streetNumber+ ' '+productAddress.streetNumberSuffix}}&#44;{{productAddress.city+' '+
+                                                                                                           productAddress.postalCode}}</span></div>
+                            <div><label class="label">Lage Netzabschluss (TAE):</label><span class="id"></span></div>
+
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <sncr-select label="Ihre Dienste:" [(ngModel)]="serviceSelected" (ngModelChange)="updateValueSelected($event)">
+                                        <option value="choose" disabled>Ausw&#228;hlen</option>
+                                        <option *ngFor="let service of serviceData" [ngValue]="service.key">{{service.value}}</option>
+                                    </sncr-select>
+                                </div>
+                            </div>
+
+                            <ng-container [ngSwitch]="serviceSelected">
+                                <ng-container *ngSwitchCase="'Accesses'">
+                                    <div *ngIf="serviceSelected === 'Accesses' && accesses && accesses?.length>0">
+                                        <h4>Kombiteilnehmer</h4>
+                                        <sncr-datatable [value]="accesses" [cols]="accessCols" [(selection)]="accessSelected" [sortField]="'id'">
+                                        </sncr-datatable>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="'Sprachdienst'">
+                                    <div id="voice" class="hidden" *ngIf="serviceSelected === 'Sprachdienst' && voice && (voice|json)!='{}'">
+                                        <h4>Kombiteilnehmer</h4>
+                                        <div><label class="label">Vertragsnummer: </label><span>{{voice.contractNumber}}</span></div>
+                                        <div><label class="label">Produkt: </label><span>{{voice.productName}}</span></div>
+                                        <div><label class="label">Vertragsbeginn: </label><span>{{voice.contractStartDate | date: 'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Dienstleistungsvertragsnummer: </label><span>{{voice.serviceDeliveryContractCcbId}}</span></div>
+                                        <div><label class="label">Rahmenvertragsnummer: </label><span>{{voice.skeletonContractCcbId}}</span></div>
+                                        <div><label class="label">Tarifname: </label><span>{{voice.tariffName}}</span></div>
+                                        <div><label class="label">Anschlusstyp: </label><span>{{voice.mainAccessService}}</span></div>
+                                        <div><label class="label">Unterschrift-Zeichner: </label><span>{{voice.boardSignName}}</span></div>
+                                        <div><label class="label">Unterschriftsdatum: </label><span>{{voice.boardSignDate | date: 'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Unterschrifts-Zeichner Kundenseite: </label><span>{{voice.primaryCustSignName}}</span></div>
+                                        <div><label class="label">Unterschriftsdatum Kunde: </label><span>{{voice.primaryCustSignDate}}</span></div>
+                                        <div><label class="label">Vertragslaufzeit: </label><span class="Vertragslaufzeit">{{voice.minimumDurationPeriod.value + ' ' + voice.minimumDurationPeriod.unit}}&nbsp;{{voice.minimumDurationPeriod.startDate| date: 'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Zusatzliche Dienste: </label>
+                                            <ng-container *ngIf="voice.featuresList?.length>0">
+                                                <span *ngFor="let feature of voice.featuresList;let first = first;let index = index;" [ngClass]="{'alignSpanLeft':!first,'firstSpan':first}">{{feature}}<br></span>
+                                            </ng-container>
+                                        </div>
+                                        <div><label class="label">Gesperrte Dienste: </label>
+                                            <ng-container *ngIf="voice.blockingList?.length>0">
+                                                <span *ngFor="let block of voice.blockingList;let first = first;let index = index;" [ngClass]="{'alignSpanLeft':!first,'firstSpan':first}">{{block}}<br></span>
+                                            </ng-container>
+                                        </div>
+                                        <div><label class="label">Zusatzliche Tarifoptionen: </label>
+                                            <ng-container *ngIf="voice.tariffOptionsList?.length>0">
+                                                <span *ngFor="let tariff of voice.tariffOptionsList;let first = first;let index = index;" [ngClass]="{'alignSpanLeft':!first,'firstSpan':first}">{{tariff}}<br></span>
+                                            </ng-container>
+                                        </div>
+                                        <div><label class="label">Rufnummern: </label>
+                                            <ng-container *ngIf="voice.phoneNumbersList?.length>0">
+                                                <span *ngFor="let phone of voice.phoneNumbersList;let first = first;let index = index;" [ngClass]="{'alignSpanLeft':!first,'firstSpan':first}">&#43; {{phone.countryCode +' '+ phone.localAreaCode + ' ' + phone.pilotNumber + ' ' + phone.startRange + ' ' + phone.endRange + ' ' + phone.centralExtention}}<br></span>
+                                            </ng-container>
+                                        </div>
+                                        <div><label class="label">Anschluss/Kennung: </label><span></span></div>
+                                        <div *ngIf="voice.type == 'voice.premium' || voice.type == 'service.voice.basis'"><label class="label">Wunschrufländer <br>&#40;sofern zutreffend; je nach Tarif kostenpflichtig&#41;: </label><span *ngFor="let country of desiredCountriesList;let first = first;let index = index;" [ngClass]="{'alignSpanLeft':!first,'firstSpan':first}">{{country}}</span></div>
+                                        <div *ngIf="voice.type=='service.voice.IPCentrexSite' || voice.type=='service.voice.SIPTrunkS2M'"><label class="label">Anschlussinhaber: </label><span>{{voice.lineOwner.lineOwnerOneFirstName?voice.lineOwner.lineOwnerOneFirstName:'' + '  ' + voice.lineOwner.lineOwnerOneName?voice.lineOwner.lineOwnerOneName:''}}</span></div>
+                                        <div *ngIf="voice.type=='service.voice.IPCentrexSite' || voice.type=='service.voice.SIPTrunkS2M'"><label class="label">Anschlussinhaber-Adresse: </label><span>{{voice.lineOwner.streetNumberSuffix?voice.lineOwner.streetNumberSuffix:''+' '+ voice.lineOwner.city?voice.lineOwner.city:''}}</span></div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="'Datendienst'">
+                                    <div id="internet" class="hidden" *ngIf="serviceSelected === 'Datendienst' && internet && (internet|json)!='{}'">
+                                        <h4>Datendienst</h4>
+                                        <div><label class="label">Vertragsnummer: </label><span>{{internet.contractNumber}}</span></div>
+                                        <div><label class="label">Produkt: </label><span>{{internet.productName}}</span></div>
+                                        <div><label class="label">Vertragsbeginn: </label><span>{{internet.contractStartDate|date:'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Dienstleistungsvertragsnummer: </label><span>{{internet.serviceDeliveryContractCcbId}}</span></div>
+                                        <div><label class="label">Rahmenvertragsnummer: </label><span>{{internet.skeletonContractCcbId}}</span></div>
+                                        <div><label class="label">Tarifname: </label><span>{{internet.tariffName}}</span></div>
+                                        <div><label class="label">Anschlusstyp: </label><span>{{internet.mainAccessService}}</span></div>
+                                        <div><label class="label">Unterschrift-Zeichner: </label><span>{{internet.boardSignName}}</span></div>
+                                        <div><label class="label">Unterschriftsdatum: </label><span>{{internet.boardSignDate|date:'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Unterschrifts-Zeichner Kundenseite: </label><span>{{internet.primaryCustSignName}}</span></div>
+                                        <div><label class="label">Unterschriftsdatum Kunde: </label><span>{{internet.primaryCustSignDate}}</span></div>
+                                        <div><label class="label">Vertragslaufzeit: </label><span>{{internet.minimumDurationPeriod.value + ' ' + internet.minimumDurationPeriod.unit + ' ab '}}{{internet.minimumDurationPeriod.startDate|date:'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Bandbreite: </label><span>{{internet.dslBandwidth}}</span></div>
+                                        <div><label class="label">Surf-Sofort-Option: </label><span>{{internet.instantAccessIndicator?'YES':'NO'}}</span></div>
+                                        <div><label class="label">SIM-Karten-Nummer: </label><span>{{internet.simSerialNumber}}</span></div>
+                                        <div><label class="label">Zusatzliche Dienste: </label>
+                                            <ng-container *ngIf="internet.features?.length>0">
+                                                <span *ngFor="let feature of internet.features;let first = first;let index = index;" [ngClass]="{'alignSpanLeft':!first,'firstSpan':first}">{{feature}}<br></span>
+                                            </ng-container>
+                                        </div>
+
+                                        <div><label class="label">Einwahl-Account: </label><span>{{internet.dialInAccountName}}</span></div>
+                                        <div><label class="label">Feste IP-Adresse <br />&#40; sofern zutreffend&#41;: </label><span class="label">{{internet.fixedIPAddress}}</span></div>
+                                        <div><label class="label">Statische Einwahl-Account: </label><span>{{internet.dialInAccountNameStatic}}</span></div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="'Hardware Set'">
+                                    <div id="hardwareSet" class="hidden" *ngIf="serviceSelected === 'Hardware Set' && hardwares && hardwares?.length>0">
+                                        <h4>Kombiteilnehmer</h4>
+                                        <sncr-datatable [value]="hardwares" [cols]="hardwareCols" [sortField]="'articleNumber'">
+                                        </sncr-datatable>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="'Office Net Seats'">
+                                    <div id="officeNetSeats" class="hidden" *ngIf="serviceSelected === 'Office Net Seats' && officeNetSeat && (officeNetSeat|json) != '{}'">
+                                        <h4>Kombiteilnehmer</h4>
+                                        <div><label class="label">Vertragsnummer: </label><span>{{officeNetSeat.contractNumber}}</span></div>
+                                        <div><label class="label">Produkt: </label><span>{{officeNetSeat.productName}}</span></div>
+                                        <div><label class="label">Vertragsbeginn: </label><span>{{officeNetSeat.contractStartDate | date: 'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Dienstleistungsvertragsnummer: </label><span>{{officeNetSeat.serviceDeliveryContractCcbId}}</span></div>
+                                        <div><label class="label">Anschlusstyp: </label><span>{{officeNetSeat.mainAccessService}}</span></div>
+                                        <div><label class="label">Unterschrift-Zeichner: </label><span>{{officeNetSeat.primaryCustSignName}}</span></div>
+                                        <div><label class="label">Unterschriftsdatum: </label><span>{{officeNetSeat.primaryCustSignDate | date: 'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Unterschrifts-Zeichner Kundenseite: </label><span>{{officeNetSeat.boardSignName}}</span></div>
+                                        <div><label class="label">Vertragslaufzeit: </label><span>{{officeNetSeat.minimumDurationPeriod.value + ' ' + officeNetSeat.minimumDurationPeriod.unit}}&nbsp;{{officeNetSeat.minimumDurationPeriod.startDate| date: 'dd.MM.yyyy'}}</span></div>
+                                        <div><label class="label">Zusatzliche Dienste: </label>
+                                            <ng-template *ngIf="officeNetSeat && officeNetSeat.featuresList?.length>0">
+                                                <span *ngFor="let feature of officeNetSeat.featuresList;let first = first;let index = index;" [ngClass]="{'alignSpanLeft':!first,'firstSpan':first}">{{feature}}<br></span>
+                                            </ng-template>
+                                        </div>
+                                        <div><label class="label">Rufnummern: </label>
+                                            <ng-template *ngIf="officeNetSeat && officeNetSeat.phoneNumbersList?.length>0">
+                                                <span *ngFor="let phone of officeNetSeat.phoneNumbersList;let first = first;let index = index;" [ngClass]="{'alignSpanLeft':!first,'firstSpan':first}">&#43; {{phone.countryCode +' '+ phone.localAreaCode + ' ' + phone.pilotNumber + ' ' + phone.startRange + ' ' + phone.endRange + ' ' + phone.centralExtention}}<br></span>
+                                            </ng-template>
+                                        </div>
+                                        <ngb-pagination [collectionSize]="officeNetCollectionSize" [pageSize]="1" [(page)]="officeNetCurrentPage" [boundaryLinks]="true"
+                                                        [maxSize]="6" [ellipses]="true" (pageChange)="updateOfficeNetSeatObject($event)"></ngb-pagination>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="!productDetails || (productDetails| json) == '{}' && !isProductsLoading">
+                            <span>Keine Produktinformationen verfügbar</span>
+                        </ng-container>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+        </div>
+    </div>
+</div>
+
+
+

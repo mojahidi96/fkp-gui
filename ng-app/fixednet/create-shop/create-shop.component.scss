@@ -1,0 +1,63 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/mixins';
+@import '../../styles/page-title';
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.card-header {
+  border-radius: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+h1.primaryTitle {
+  color: $primary;
+  margin: 15px 0px 0px 20px;
+
+  font-family: 'vodafone_rgregular', Arial, Helvetica, sans-serif;
+  font-size: 45px;
+}
+
+.form-inline .form-control {
+  width: 100% !important;
+}
+
+.form-group {
+  margin-bottom: 0px;
+}
+
+.padding-on-customer-number {
+  padding-top: 10px !important;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+h5.subTitle {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+}
+
+.area {
+  background: #ededed;
+  padding: 5px 10px;
+  margin-bottom: 20px;
+}
+
+.customer-info {
+  margin: 0 0 -10px;
+  width: 174px;
+  float: left;
+  padding: 6px 0 0;
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}

@@ -1,0 +1,59 @@
+.margin-bottom-30 {
+  margin-bottom: 30px !important;
+}
+
+:host ::ng-deep .custom-dropdown {
+  .form-check {
+    margin-bottom: 1px !important;
+    height: 100% !important;
+  }
+}
+
+:host ::ng-deep .ui-datatable {
+  .col-editable + th,
+  .col-editable + td {
+    height: auto !important;
+    left: 0;
+    top: auto;
+    border: none !important;
+  }
+
+  .ui-datatable-data > tr.editRow td,
+  .ui-datatable-data > tr td {
+    height: auto !important;
+  }
+}
+
+.datatableHeader {
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  p {
+    margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep .editRow {
+  sncr-checkbox {
+    top: 16px;
+    position: relative;
+  }
+}
+
+.familyContent {
+  .form-check {
+    margin-bottom: 20px !important;
+
+    label {
+      padding-left: 0;
+    }
+
+    .content {
+      margin-left: 30px !important;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+}

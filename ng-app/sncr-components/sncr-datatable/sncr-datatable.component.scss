@@ -1,0 +1,595 @@
+@import '~font-awesome/scss/variables';
+@import '~font-awesome/scss/mixins';
+@import '../../styles/_custom-variables';
+@import '../../styles/modal';
+@import '../../styles/mixins';
+@import '../../styles/vodafone';
+
+:host ::ng-deep .col-select-all {
+  width: 80px;
+  text-align: center;
+}
+
+:host ::ng-deep .p-column-width {
+  width: auto;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-scrollable-header {
+  background-color: #fff !important;
+}
+
+:host ::ng-deep .ui-datatable-scrollable-header-box {
+  margin-right: 0px !important;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-thead .fa-check,
+:host ::ng-deep .ui-datatable .ui-datatable-thead .fa-remove {
+  width: 12px;
+}
+
+:host ::ng-deep .ui-datatable {
+  margin-top: 20px;
+  position: relative;
+  .fm-select {
+    margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep table.ui-custom-loader thead,
+:host ::ng-deep table.ui-custom-loader tbody {
+  display: table;
+  width: 100%;
+}
+
+:host ::ng-deep table.ui-custom-loader tbody {
+  position: relative;
+  height: 11px;
+  min-height: 100px;
+}
+
+:host ::ng-deep table.ui-custom-loader tbody:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 40px;
+  background-color: #f4f4f4;
+  content: '';
+}
+
+:host ::ng-deep .ui-overflow-hidden {
+  overflow: hidden !important;
+}
+
+.text-bold,
+::ng-deep #dataSelectedInfo {
+  font-weight: bold;
+}
+
+:host ::ng-deep .ui-datatable-odd {
+  background-color: #fff;
+  color: #292b2c;
+  border: none;
+}
+
+:host ::ng-deep .ui-widget-header {
+  border: none;
+}
+
+:host ::ng-deep .ui-widget-content,
+:host ::ng-deep .ui-datatable .ui-datatable-thead > tr > th,
+:host ::ng-deep .ui-datatable .ui-datatable-tfoot > tr > td,
+:host ::ng-deep .ui-datatable .ui-datatable-data > tr > td {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-color: #979797;
+  padding: 10px;
+  word-break: break-all;
+}
+
+:host ::ng-deep .ui-datatable-data > tr.editRow:hover td,
+:host ::ng-deep .ui-datatable-data > tr.editRow td {
+  background-color: #fef5cc;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-data > tr > td {
+  vertical-align: top;
+  .form-group {
+    margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-thead > tr > th {
+  font-weight: bold;
+  cursor: pointer;
+  vertical-align: top;
+  min-width: 80px;
+  outline: none;
+  box-shadow: none;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-thead > tr > th:hover {
+  background: none !important;
+}
+
+:host ::ng-deep .ui-datatable thead th.ui-state-active:hover,
+:host ::ng-deep .ui-datatable thead th.ui-state-active {
+  color: #333;
+  border-color: #979797 !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-bottom: none !important;
+  box-shadow: none;
+  outline: none;
+}
+
+:host ::ng-deep .ui-datatable-hoverable-rows > tr:hover td {
+  background-color: #f5f5f5;
+}
+
+:host ::ng-deep .ui-datatable-data > tr:not(.editRow):hover td {
+  background-color: #f5f5f5;
+}
+
+:host ::ng-deep .ui-paginator .ui-paginator-last {
+  margin-right: 0px !important;
+}
+
+.column-selection {
+  margin-top: 10px;
+
+  .dropdown-menu {
+    z-index: 1199;
+  }
+}
+
+:host ::ng-deep .ui-datatable-scrollable-view {
+  overflow: hidden;
+}
+
+:host ::ng-deep .ui-datatable-scrollable-body {
+  overflow: auto;
+
+  & > div {
+    position: static !important;
+  }
+}
+
+:host ::ng-deep .ui-datatable {
+  .ui-datatable-thead {
+    .btn-block {
+      .btn-secondary {
+        &:first-child {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .ui-datatable {
+  .ui-datatable-header,
+  .ui-datatable-footer {
+    text-align: center;
+    font-weight: bold;
+    padding: 0 15px;
+    border: none;
+    color: #666666;
+    & .row {
+      margin-top: 5px;
+    }
+
+    & .text-left,
+    & .text-right {
+      font-weight: normal;
+    }
+  }
+}
+
+:host ::ng-deep .ui-widget-content {
+  background-color: #ffffff;
+  border-top: 1px solid #979797 !important;
+  border-bottom: none !important;
+  .eligible {
+    background-color: #f4f8f0 !important;
+  }
+  .partialEligible {
+    background-color: #fef5cc !important;
+  }
+  .ineligible {
+    background-color: #fdf0f0 !important;
+  }
+  .new {
+    background-color: #ffeaea !important;
+  }
+}
+
+:host ::ng-deep .fa.fa-trash {
+  cursor: pointer;
+}
+
+:host ::ng-deep .col-editable {
+  width: 80px;
+  height: 100%;
+  left: 0;
+  top: auto;
+  text-align: center;
+  border: none !important;
+  padding-top: 10px;
+}
+
+:host ::ng-deep .ui-state-highlight .fa-selected-circle {
+  background-image: url(~/public/icons/svg/notification/success.svg) !important;
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+  &:before {
+    content: '';
+  }
+}
+
+:host
+  ::ng-deep
+  .ui-datatable
+  .ui-datatable-data
+  tr.ui-datatable-even.ui-state-highlight.editRow,
+:host
+  ::ng-deep
+  .ui-datatable
+  .ui-datatable-data
+  tr.ui-datatable-odd.ui-state-highlight.editRow {
+  background-color: #fef5cc !important;
+}
+
+.editing ::ng-deep th,
+.loading ::ng-deep th {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-tablewrapper {
+  white-space: nowrap;
+  overflow-x: visible;
+  overflow-y: hidden;
+  width: 100%;
+  min-height: 100px;
+  & > table {
+    width: 100%;
+  }
+}
+
+:host ::ng-deep .loading .ui-datatable .ui-datatable-tablewrapper {
+  min-height: 220px;
+}
+
+:host ::ng-deep p-paginator {
+  display: none;
+}
+
+::ng-deep .d-inline-block .Checkbox {
+  vertical-align: top !important;
+  margin-top: 3px !important;
+
+  &-visible {
+    background: none !important;
+  }
+  span {
+    width: 100%;
+    margin-left: 30px !important;
+  }
+  > input {
+    z-index: 1001;
+    opacity: 10 !important;
+    display: inline-block;
+    cursor: pointer;
+    width: 12px !important;
+    height: 12px !important;
+    left: 6px !important;
+  }
+
+  > input:checked + .Checkbox-visible {
+    background: none !important;
+    width: atuo !important;
+    height: atuo !important;
+  }
+}
+
+:host ::ng-deep .btn.btn-secondary.btn-sm {
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+:host ::ng-deep .d-inline-block.dropdown .Checkbox > input {
+  margin-top: 7px !important;
+}
+
+.export-button ::ng-deep button::before {
+  @include fa-icon();
+  content: $fa-var-download;
+  left: -5px;
+  position: relative;
+}
+
+:host ::ng-deep .ui-cell-data {
+  .btn.btn-secondary.btn-sm.editDelBtn {
+    padding: 2px !important;
+    height: 24px;
+    width: 24px;
+    background: $editDeleteBtnBg;
+
+    .fa-pencil-square-o {
+      background-image: url(~/public/icons/svg/vodafone/blog.svg);
+      @include icon-sizes20;
+      position: relative;
+
+      &:before {
+        content: none;
+      }
+    }
+
+    .fa.fa-trash-o {
+      background-image: url(~/public/icons/svg/vodafone/delete.svg);
+      @include icon-sizes20;
+      position: relative;
+      &:before {
+        content: none;
+      }
+    }
+  }
+
+  .boolean-false,
+  .boolean-true {
+    width: 24px;
+    height: 24px;
+  }
+
+  .boolean-true svg path {
+    stroke: $color-verdun-green;
+    stroke-width: 20;
+  }
+
+  .editCancel {
+    @include icon-sizes20;
+  }
+  .editCancel svg * {
+    stroke: $color-vodafone-red;
+  }
+  .saveIcon {
+    @include icon-sizes20;
+  }
+  .saveIcon svg * {
+    stroke: $color-verdun-green;
+  }
+  label.form-check-label {
+    width: auto;
+    margin: 0 auto;
+    padding-left: 0px;
+    .Checkbox {
+      width: 20px;
+      position: relative;
+    }
+  }
+}
+
+:host ::ng-deep .ui-cell-data {
+  .icon-button {
+    border-radius: 3px;
+    box-shadow: $btn-box-shadow;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .icon-edit {
+    background-image: url(~/public/icons/svg/vodafone/blog.svg);
+  }
+
+  .icon-delete {
+    background-image: url(~/public/icons/svg/vodafone/delete.svg);
+  }
+
+  .icon-24 {
+    height: 24px;
+    width: 24px;
+    background-size: 20px 20px;
+  }
+}
+
+:host ::ng-deep .editRow {
+  vertical-align: bottom;
+  td {
+    vertical-align: inherit !important;
+  }
+
+  .ui-cell-data {
+    label {
+      margin-top: 0px;
+      font-weight: bold;
+    }
+
+    label.form-check-label {
+      margin: 0;
+    }
+
+    .editTitle {
+      font-weight: bold;
+    }
+
+    .popover-body {
+      min-width: 240px;
+    }
+  }
+}
+
+:host ::ng-deep .tab-content {
+  .alert-danger {
+    margin-bottom: 30px;
+  }
+  .alert-sucess {
+    margin-bottom: 30px !important;
+  }
+}
+
+:host ::ng-deep .ui-cell-data sncr-button:last-child .btn.btn-secondary.btn-sm {
+  margin-left: 10px;
+}
+
+:host ::ng-deep .ui-custom-wrapper > .ui-datatable-tablewrapper {
+  overflow: visible !important;
+  .dropdown-toggle {
+    &:after {
+      position: absolute;
+      color: #8d9191 !important;
+      top: 6px;
+      right: 25px;
+      border-right: 0em solid transparent;
+      border-top: 0em solid;
+      content: '\f078';
+      font-family: FontAwesome;
+      cursor: pointer;
+      padding-left: 10px;
+      border-left: 1px #dadada solid;
+      min-height: 20px;
+    }
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    .dropdown-item {
+      white-space: normal;
+      .form-group.dropdown {
+        margin-bottom: 20px;
+        .form-control {
+          width: 100% !important;
+        }
+      }
+    }
+    .dropdown-scroll {
+      max-height: 150px;
+      overflow-y: scroll;
+    }
+    .fa.fa-search {
+      position: relative;
+      float: right;
+      margin-top: -44px;
+      margin-right: 35px;
+    }
+  }
+}
+
+:host ::ng-deep .fa-fw {
+  width: auto;
+  margin-left: 5px;
+}
+
+:host ::ng-deep .showInfo.fa.infoGreyIcon {
+  @include icon-sizes20;
+  background-image: url(~/public/icons/svg/notification/info-gray.svg);
+  margin-right: 2px;
+  display: inline-block;
+  & + .popover {
+    pointer-events: none !important;
+  }
+}
+
+:host ::ng-deep .ui-column-title .popover {
+  min-width: 153px !important;
+  max-width: 149px !important;
+  min-height: 61px !important;
+  background: #ffffeb;
+  display: inline-block;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: normal;
+  &:before {
+    background: #ffffeb;
+  }
+}
+
+:host ::ng-deep .ui-cell-data ngb-popover-window {
+  max-width: 450px !important;
+}
+
+.requiredField {
+  color: $primary;
+}
+
+/* Temporary styles */
+:host ::ng-deep .ui-datatable-loading-content {
+  display: flex;
+  width: 100% !important;
+  min-height: 80px;
+  height: calc(100% - (215px));
+  top: 145px;
+  position: absolute;
+  background-color: #f4f4f4;
+  z-index: 1015;
+  padding: 10px;
+  & i {
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+  }
+  .fa-circle-o-notch1 {
+    background-image: url(~/public/icons/svg/misc/spinner.svg);
+    width: 48px;
+    height: 48px;
+    margin-top: -20px;
+    position: relative;
+  }
+}
+
+:host ::ng-deep .form-group.inputMainDiv.has-danger.dropdown {
+  width: 250px;
+}
+
+:host ::ng-deep .form-group.inputMainDiv input[placeholder],
+.form-group.inputMainDiv input::placeholder {
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .form-group.selectMainDiv.has-danger {
+  width: 250px;
+}
+
+:host ::ng-deep .form-group.has-danger {
+  position: relative;
+}
+
+:host ::ng-deep sncr-datepicker .dropdown-menu {
+  .bg-light {
+    background-color: #ececec !important;
+  }
+}
+
+:host ::ng-deep sncr-datepicker .form-group {
+  margin-top: -5px;
+  min-width: 114px;
+}
+
+:host ::ng-deep .loader {
+  font-size: 10px;
+  margin: 25% auto 0;
+  text-indent: -9999em;
+  width: 3em !important;
+  height: 3em !important;
+}
+
+.assign-link {
+  color: #0606f8;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.marT7 {
+  margin-top: 7px;
+}

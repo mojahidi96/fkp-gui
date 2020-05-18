@@ -1,0 +1,249 @@
+<ng-content select="sncr-header"></ng-content>
+<div class="row" *ngIf="paginator">
+    <sncr-results [currentCols]="currentCols" [lazy]="lazy" [prefix]="prefix"
+                  [maxSelectCount]="maxSelectCount" [maxSelectionErrMsg]="maxSelectCountError"
+                  [multiSelection]="multiSelection" [resultCount]="resultCount" [selection]="selection"
+                  [selectCount]="selectCount" [value]="value" [resultMessage]="resultMessage"
+                  [selectMessage]="selectMessage" [selectionMessage]="selectionMessage" [isNew]="isNew()"
+                  [selectionTitle]="selectionTitle" [singleSelectionMsg]="singleSelectionMsg" [filteredValue]="filteredValue"
+                  [totalRecords]="totalRecords" [totalRecordsWithoutFilter]="totalRecordsWithoutFilter"></sncr-results>
+
+    <div class="col-sm-12 text-right">
+        <div class="column-selection" *ngIf="columnSelection">
+            <sncr-multi-select [cols]="cols" [hideColSelect]="hideColSelect"
+                               (colsChange)="colsChange($event)"></sncr-multi-select>
+        </div>
+    </div>
+
+    <div class="col-sm-12 text-right" *ngIf="exportToCsv">
+        <div class="export-to-csv">
+            <sncr-button class="export-button" type="secondary" (click)="exportCustomCSV()">
+                <span *ngIf="isNew()" sncrTranslate>DATATABLE-CSV_DOWNLOAD</span>
+                <span *ngIf="!isNew()">Als CSV exportieren</span>
+            </sncr-button>
+        </div>
+    </div>
+</div>
+
+<div [hidden]="currentCols.length === 0" #dtWrapper [class.loading]="loading">
+    <p-dataTable #datatable
+                 [value]="currentValue"
+                 [paginator]="paginator"
+                 [rows]="rows"
+                 [totalRecords]="totalRecords"
+                 [rowsPerPageOptions]="rowsPerPageOptions"
+                 [responsive]="false"
+                 [selectionMode]="selectionMode"
+                 [(selection)]="selection"
+                 [editable]="editable"
+                 [filterDelay]="300"
+                 [lazy]="lazy"
+                 [loading]="loading"
+                 loadingIcon="fa-circle-o-notch1"
+                 [resizableColumns]="false"
+                 columnResizeMode="fit"
+                 [styleClass]="styleClass"
+                 sortMode="single"
+                 [sortField]="sortField"
+                 [sortOrder]="sortOrder"
+                 [csvSeparator]="csvSeparator"
+                 [exportFilename]="exportFilename"
+                 [emptyMessage]="lazy && loading ? null : getEmptyMessage('DATATABLE-EMPTY_MESSAGE') | translate:lang"
+                 [tabindex]="1"
+                 [rowStyleClass]="rowClass"
+                 [sortableRowGroup]="true"
+                 [rowHover]="rowHover"
+                 [first]="first"
+                 rowExpandMode="single"
+
+                 (selectionChange)="selectionChange.emit($event)"
+                 (onRowClick)="onRowClick.emit($event)"
+                 (onRowSelect)="onRowSelect.emit($event)"
+                 (onRowUnselect)="onRowUnselect.emit($event)"
+                 (onHeaderCheckboxToggle)="onHeaderCheckboxToggle.emit($event)"
+                 (onLazyLoad)="onLazyLoadEvent($event)"
+                 (onEdit)="onEdit($event)"
+                 [ngClass]="{editing: !!editing, editable: editable, disableFields: isSelectAllLoading}">
+
+        <p-header *ngIf="paginator">
+            <div class="row">
+                <sncr-paginator [rowsPerPageOptions]="rowsPerPageOptions"
+                                [totalRecords]="totalRecords" [(first)]="first" [(rows)]="rows"
+                                (onPageChange)="onPageChange($event)" [allEditForm]="allEditForm"
+                                [isNew]="isNew()" [prefix]="prefix" [restoreViewOption]="restoreFilters"></sncr-paginator>
+            </div>
+        </p-header>
+
+        <p-column *ngIf="editable" [styleClass]="'col-editable'">
+            <ng-template pTemplate="header">
+                &nbsp;
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row="rowData">
+                <span *ngIf="!editing" class="icon-button icon-edit icon-24" aria-hidden="true" (click)="onEdit(row)">
+                </span>
+                <span *ngIf="!editing" class="icon-button icon-delete icon-24 ml-2" aria-hidden="true" (click)="onDeleteRow(popup,row)">
+                </span>
+                <ng-container *ngIf="editing && row.editing">
+                    <span class="btn btn-secondary btn-sm editDelBtn" (click)="cancelEdit(row)">
+                        <svg-icon class="editCancel" name="vodafone/close" size="auto"></svg-icon>
+                    </span>
+                    <span class="btn btn-secondary btn-sm editDelBtn ml-sm-2" (click)="saveEdit(row)">
+                        <svg-icon class="saveIcon" name="vodafone/tick-or-solved" size="auto"></svg-icon>
+                    </span>
+                </ng-container>
+            </ng-template>
+        </p-column>
+
+        <p-column *ngIf="multiSelection && currentValue" sortField="_sncrChecked" field="_sncrChecked"
+                  [styleClass]="'col-select-all'" sortable="custom" (sortFunction)="sortChecked($event)"
+                  [header]="getSelectionTitle('DATATABLE-SELECTION_TITLE') | translate:lang"
+                  [filter]="true">
+            <ng-template pTemplate="filter">
+                <div class="btn-block marT7">
+                    <sncr-button type="secondary btn-sm h-auto" (click)="toggleAllRowsWithCheckbox({checked: true})">
+                        <i class="fa fa-check"></i>
+                    </sncr-button>
+                    <sncr-button type="secondary btn-sm h-auto" (click)="toggleAllRowsWithCheckbox({checked: false})">
+                        <i class="fa fa-remove"></i>
+                    </sncr-button>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row="rowData">
+                <sncr-checkbox *ngIf="!row.selectHidden"
+                               [(ngModel)]="row._sncrChecked"
+                               (change)="cbChange($event, row)" [disabled]="row.readonly">
+                </sncr-checkbox>
+            </ng-template>
+        </p-column>
+
+        <p-column *ngIf="selectionMode === 'radio'" [header]="getSelectionTitle('DATATABLE-SELECTION_TITLE') | translate:lang">
+            <ng-template pTemplate="body" let-row="rowData" let-i="rowIndex">
+                <sncr-check-group [name]="radioSelectionName" [ngModel]="row._sncrChecked"
+                                  (ngModelChange)="radioChange(row, i)">
+                    <sncr-radio [value]="i" [checked]="radioChecked(row._sncrChecked)"></sncr-radio>
+                </sncr-check-group>
+            </ng-template>
+        </p-column>
+
+        <p-column *ngIf="customCol!==undefined && !lastCustomCol" [styleClass]="'custom-col'">
+            <ng-template pTemplate="body" let-col let-row="rowData">
+                <ng-template [ngTemplateOutlet]="customCol"
+                             [ngTemplateOutletContext]="{$implicit:{col: col, row: row}}">
+                </ng-template>
+            </ng-template>
+        </p-column>
+
+        <p-column *ngFor="let column of currentCols" [field]="column.field" [header]="column.title | translate:lang"
+                  [sortable]="column.sortable" [style]="column?.width ?({'min-width': column?.width}):''"
+                  [styleClass]="column?.width?'':'p-column-width'"
+                  (sortFunction)="column.sortFunction ? column.sortFunction($event) : customSortFunction($event)"
+                  [filter]="filter && stringToBoolean(column.filter)">
+            <ng-template *ngIf="column.required" pTemplate="header">
+                <span sncrTranslate>{{column.title}}</span> <span class="requiredField">*</span>
+            </ng-template>
+
+            <ng-template *ngIf="column.showInfoIcon" pTemplate="header">
+                <span sncrTranslate>{{column.title}}</span>
+                <i class="showInfo fa infoGreyIcon"
+                   [ngbPopover]="column.infoMsg | translate:lang"
+                   triggers="mouseover:mouseleave"></i>
+            </ng-template>
+
+            <ng-template *ngIf="column.assignAll" pTemplate="header">
+                <span sncrTranslate>{{column.title}}</span><br/>
+                <span class="font-weight-normal assign-link" (click)="assignToCol()" sncrTranslate> {{column.infoMsg}}</span>
+            </ng-template>
+
+            <ng-template *ngIf="filter && stringToBoolean(column.filter)" pTemplate="filter" let-col>
+                <sncr-advanced-filter #advFilters [col]="col" [type]="column.type" [filters]="previousFilters" [isNew]="isNew()"
+                                      (onFilter)="filtering($event)" [prefix]="prefix"
+                                      [advSearchFilter]="advSearchFilter" [quickSearchOptions]="getCol(col).quickSearchOptions"
+                                      [restoreFilters]="restoreFilters" >
+                </sncr-advanced-filter>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-col let-row="rowData">
+                <ng-container *ngIf="(!row.editing && !allEditable) || column.nonEditable">
+                    <ng-container *ngIf="column.bodyTemplate">
+                        <ng-template [ngTemplateOutlet]="column.bodyTemplate"
+                                     [ngTemplateOutletContext]="{$implicit:{col: col, row: row}}"></ng-template>
+                    </ng-container>
+
+                    <ng-container *ngIf="!column.bodyTemplate">
+                        <div class="editTitle" *ngIf="row.editing" l10nTranslate>{{column.title}}</div>
+
+                        <ng-container *ngIf="column.type === 'date'">
+                            {{row[col.field] || '' | date:'dd.MM.yyyy'}}
+                        </ng-container>
+                        <ng-container *ngIf="column.type === 'boolean'">
+                            <div *ngIf="stringToBoolean(row[col.field])" class="boolean-true"><svg-icon name="vodafone/tick-or-solved" size="auto"></svg-icon></div>
+                            <div *ngIf="!stringToBoolean(row[col.field])" class="boolean-false"><svg-icon name="vodafone/minus-or-less" size="auto"></svg-icon></div>
+                        </ng-container>
+                        <ng-container *ngIf="column.type !== 'date' && column.type !== 'boolean'">
+                            <div class="NonEditText" l10nTranslate>{{row[col.field]}}</div>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+
+                <sncr-editable *ngIf="(row.editing || allEditable) && !column.nonEditable" [column]="column"
+                               [form]="getForm(row)" [dirty]="getForm(row)?.dirty" [invalid]="getForm(row).invalid"
+                               [lazy]="lazy" (paymentFieldsChanges)="handlePaymentFields($event)" [flowId]="flowId"
+                               [disabled]="getForm(row).controls[column.field].disabled"></sncr-editable>
+            </ng-template>
+        </p-column>
+
+        <p-column *ngIf="customCol!==undefined && lastCustomCol" [styleClass]="'custom-col'">
+            <ng-template pTemplate="body" let-col let-row="rowData">
+                <ng-template [ngTemplateOutlet]="customCol"
+                             [ngTemplateOutletContext]="{$implicit:{col: col, row: row}}">
+                </ng-template>
+            </ng-template>
+        </p-column>
+
+        <p-footer>
+            <div class="row" *ngIf="paginator">
+                <sncr-paginator [rowsPerPageOptions]="rowsPerPageOptions"
+                                [totalRecords]="totalRecords" [(first)]="first" [(rows)]="rows"
+                                (onPageChange)="onPageChange($event)" [allEditForm]="allEditForm"
+                                [isNew]="isNew()" [prefix]="prefix" [restoreViewOption]="restoreFilters"></sncr-paginator>
+            </div>
+            <ng-content select="sncr-footer"></ng-content>
+        </p-footer>
+    </p-dataTable>
+</div>
+
+<div *ngIf="currentCols.length==0 && !loading" class="col-sm-12 text-center">
+    <span *ngIf="isNew() && !noDataFound" sncrTranslate>DATATABLE-NO_FIELDS</span>
+    <span *ngIf="!isNew() && !noDataFound">Kein verfügbares Feld ausgewählt</span>
+    <span *ngIf="noDataFound">{{noDataFound}}</span>
+</div>
+
+<ng-template #popup let-c="close" let-d="dismiss" ngbModalContainer>
+    <div class="modal-header">
+        <h4 class="modal-title" sncrTranslate>{{removableContent.headerTitle}}</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <p *ngIf="!isNew()">
+                {{removableContent.bodyTitle1}} <strong>{{removableContent.message}}</strong>
+                {{removableContent.bodyTitle2}}
+                <strong>{{removableContent.message1}}</strong> {{removableContent.bodyTitle3}}
+            </p>
+
+            <p *ngIf="isNew()" [innerHTML]="getTranslation(removableContent.bodyMessage, prefix, removableContent)"></p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')">
+            <span *ngIf="isNew()" sncrTranslate>DATATABLE-POPUP-CANCEL</span>
+            <span *ngIf="!isNew()">Abbrechen</span>
+        </sncr-button>
+        <sncr-button type="primary" (click)="deleteRow();c('Close click')">
+            <span *ngIf="isNew()" sncrTranslate>DATATABLE-POPUP-DELETE</span>
+            <span *ngIf="!isNew()">Löschen</span>
+        </sncr-button>
+    </div>
+</ng-template>

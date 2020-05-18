@@ -1,0 +1,23 @@
+<p [innerHTML]="prefix+'REVIEW-SUB_TITLE_MSG'| translate:lang"></p>
+<sncr-notification [handler]="orderReviewNotify" scrollableSelector=".fixed-hieght-block"></sncr-notification>
+
+<client-order-details #clientOrderDetails="clientOrderDetails"></client-order-details>
+
+<order-overview [orderSummary]="orderSummary" [prefix]="prefix"></order-overview>
+
+<div class="buttons" [ngClass]="{buttons_with_flexend: !deleteCartAccess}">
+    <delete-shopping-cart *ngIf="deleteCartAccess" [rowData]="cart" [prefix]="'REVIEW-'"
+                            (deletedResponse)="deleteResponse($event)" class="mr-auto">
+    </delete-shopping-cart>
+    <save-shopping-cart *ngIf="isPSCEnabled && !cartProcessing && (editCartAccess || createCartAccess)"
+        [cart]="cart" [reviewBtnTitle]="prefix+'REVIEW-SAVE_CART' | translate:lang"
+        [orderType]="defaultCartName | translate:lang" (saveCart)="saveCartDetails()" [prefix]="prefix"
+        (processSaveCartDetails)="processSaveCart($event)" #saveCart>
+    </save-shopping-cart>
+    <sncr-button type="strong" (click)="processOrder()" [btnStyle]="'btn btn-primary'"
+        [disabled]="timeOutService.isReadOnlyUser || (!timeOutService.isReadOnlyUser && isInvalidCart)" [ngClass]="{disableFields: (timeOutService.isReadOnlyUser || (!timeOutService.isReadOnlyUser && isInvalidCart))}">
+        <span l10nTranslate>{{prefix}}REVIEW-SUBMIT_YOUR_REQUEST</span>
+    </sncr-button>
+</div>
+
+<sncr-loader class="dark" [isLoading]="isLoading"></sncr-loader>

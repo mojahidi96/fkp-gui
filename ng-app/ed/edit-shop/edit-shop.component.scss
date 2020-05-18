@@ -1,0 +1,43 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/mixins';
+@import '../../styles/modal';
+@import '../../styles/page-title';
+
+.contentPanelBody > .card {
+  & > .card-block {
+    padding: 20px;
+  }
+}
+
+.padding-0 {
+  padding: 0px;
+}
+
+.area {
+  background: $area-background;
+  padding: 5px 10px;
+  margin-bottom: 20px;
+}
+
+.break-word {
+  word-wrap: break-word !important;
+}
+
+.err-color {
+  color: red;
+}
+
+.scroll-customer {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.modal-body {
+  max-height: 350px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.Pbox {
+  height: 20px;
+}

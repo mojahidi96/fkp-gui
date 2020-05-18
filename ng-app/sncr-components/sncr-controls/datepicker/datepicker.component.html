@@ -1,0 +1,32 @@
+<div class="form-group" [sncrValidationStyles]="hasErrors()" [class.disabled]="disabled">
+    <sncr-validation-messages *ngIf="hasErrors()" [messages]="getErrors()"></sncr-validation-messages>
+
+    <label [for]="name">
+        {{label}}
+        <span #labelContent><ng-content></ng-content></span>
+        <span *ngIf="showAsterisk(labelContent)">*</span>
+    </label>
+
+    <div class="input-group" [class.reset-group]="isResetVisible()" #inputGroup>
+        <input [id]="name"
+               [name]="name"
+               class="form-control sncr-control"
+               [(ngModel)]="model"
+               [placeholder]="placeholder || ''"
+               [disabled]="disabled"
+               (blur)="onBlur()"
+               (keydown)="onKeydown()"
+               (click)="toggleDatepicker()"
+               ngbDatepicker
+               [markDisabled]="disabled"
+               [minDate]="minDate"
+               [maxDate]="maxDate"
+               [readonly]="readonly"
+               [autocomplete]="autocomplete"
+               #d="ngbDatepicker">
+        <i *ngIf="isResetVisible()" (click)="resetValue()" class="fa fa-times" aria-hidden="true"></i>
+        <div class="input-group-text" (click)="!disabled && toggleDatepicker()">
+            <i class="fa fa-calendar" aria-hidden="true"></i>
+        </div>
+    </div>
+</div>

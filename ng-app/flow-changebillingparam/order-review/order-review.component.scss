@@ -1,0 +1,17 @@
+@import '../../styles/custom-variables';
+
+.next-button {
+  text-align: right;
+}
+
+.searchTD .row {
+  margin: 0px;
+}
+
+.searchTD .col-form-label {
+  padding: 0px;
+  font-weight: bold;
+}
+.form-control {
+  border: 1px solid $input-text-border-color;
+}

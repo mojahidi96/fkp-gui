@@ -1,0 +1,10 @@
+<div class="pt-4">
+  <sncr-notification [handler]="notifyError"></sncr-notification>
+  <file-explorer [fileElements]="fileElements | async" [path]="currentPath"
+    [root]="currentRoot ? currentRoot.id : 'root'" [canNavigateUp]="canNavigateUp" (folderAdded)="addFolder($event)"
+    (elementRemoved)="removeElement($event)" (navigatedDown)="navigateToFolder($event,false,false)" [isReadOnlyUser] = "isReadOnlyUser" [vfUser]="vfUser"
+    (navigatedUp)="navigateUp()" (elementRenamed)="renameElement($event)" (uploadedFile)="uploadedFile($event)" [isReadOnlyVodafoneUser]="isReadOnlyVodafoneUser"
+    (elementMoved)="moveElement($event)" [isLoading]="loading" (fileDownloaded)="downloadFile($event)" (clearParentAlert)="clearAlert()" [vodafoneAccountManager]="vodafoneAccountManager"
+    [supportedFiles]="supportedFiles" (shopSelected)="shopSelected()" [folderList]="foldersList" [writeAccess]="writeAccess" [regex]="regex" [noFolders]="noFolders">
+  </file-explorer>
+</div>

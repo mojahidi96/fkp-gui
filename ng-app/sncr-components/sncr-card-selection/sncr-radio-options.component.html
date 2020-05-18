@@ -1,0 +1,26 @@
+<sncr-check-group [(ngModel)]="value" [required]="mandatory && eligibleOptions" [showValidation]="showValidation">
+    <div class="radio-option" *ngFor="let option of options" [class.disabled]="option.disabled" [hidden]="!option.show">
+        <sncr-radio [value]="option.value" (change)="userClick(option,$event)" [disabled]="option.disabled"
+                    [checked]="option.selected">
+            {{option.text}}
+            <ng-container *ngIf="option.urlLink">
+                <a [href]="option.urlLink" class="externalLink" target="_blank">
+                    <i class="fa fa-external-linkIcon" aria-hidden="true"></i>
+                </a>
+            </ng-container>
+            <ng-container *ngIf="option.pdfLink">
+                <a [href]="option.pdfLink" class="pdfIcon" target="_blank">
+                    <i class="fa fa-file-pdf-oIcon" aria-hidden="true"></i>
+                </a>
+            </ng-container>
+        </sncr-radio>
+
+        <sncr-options-extra [excluded]="excluded" [infoDesc]="infoDesc" [option]="option" [properties]="properties"
+                            [showDescription]="showDescription" [isCheckbox]="false" [flowType]="flowType"
+                            [showSelected]="value === option.value && originalValue !== option.value"
+                            [totalLength]="totalLength" (reset)="reset(option)" [masterOptions]="masterOptions"
+                            [triggerOption]="triggerOption" [showValidation]="showValidation"
+                            [isLazy]="isLazy" [isChanged]="isChanged" [lazyUrl]="lazyUrl" [infomsg]="infomsg">
+        </sncr-options-extra>
+    </div>
+</sncr-check-group>

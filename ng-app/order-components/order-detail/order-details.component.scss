@@ -1,0 +1,69 @@
+@import '../../styles/custom-variables';
+@import '../../styles/mixins';
+@import '../../styles/custom-tabs';
+@import '../../styles/page-title';
+
+:host ::ng-deep .clearfix {
+  margin-top: 32px;
+}
+
+.contentPanel {
+  background: $txt-white;
+  margin: 20px 0px 0px 0px;
+  border-right: 2px solid $layout-border;
+  border-bottom: 2px solid $layout-border;
+  padding-top: 18px;
+
+  h1.primaryTitle {
+    color: $primary;
+    margin: 15px 0px 20px 20px;
+
+    font-family: 'vodafone_rgregular', Arial, Helvetica, sans-serif;
+    font-size: 45px;
+  }
+
+  :host ::ng-deep .fa-check-circle {
+    font-size: 26px;
+    color: #3c763d;
+  }
+
+  :host ::ng-deep .alert-success {
+    border-radius: 3px;
+    background-color: #dff0d8;
+    border: solid 1px #3c763d;
+    padding: 20px;
+    margin: 0px 0px 30px;
+    color: #3c763d;
+
+    .close {
+      color: #e60000;
+      opacity: 1;
+    }
+
+    .padding-left-20 {
+      padding-left: 20px;
+
+      span {
+        display: inline-block;
+        margin-top: 2px;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  :host ::ng-deep a {
+    color: black;
+    text-decoration: none;
+  }
+  :host ::ng-deep a:hover {
+    color: black;
+    text-decoration: none;
+  }
+}
+
+.red-color {
+  color: red;
+}

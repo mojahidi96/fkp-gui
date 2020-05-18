@@ -1,0 +1,360 @@
+@import '../../styles/mixins';
+@import '../../styles/_custom-variables';
+@import '../../styles/datatables';
+@import '../../styles/modal';
+@import '../../styles/planned-changes';
+@import '../../styles/vodafone';
+
+:host ::ng-deep .carousel {
+  outline: none;
+  .carousel-control-next {
+    border-radius: 6px 0 0 6px;
+    box-shadow: -4px 0 5px 0 rgba(0, 0, 0, 0.5);
+  }
+  .carousel-control-prev {
+    border-radius: 0 6px 6px 0;
+    box-shadow: 4px 0 5px 0 rgba(0, 0, 0, 0.5);
+  }
+  .carousel-control-next,
+  .carousel-control-prev {
+    width: 35px;
+    height: 96px;
+    background-color: #ffffff;
+    margin-top: 20%;
+    background-image: none;
+  }
+  .carousel-control-next-icon:after {
+    content: '❯';
+  }
+  .carousel-control-prev-icon:after {
+    content: '❮';
+  }
+  .carousel-control-next-icon:after,
+  .carousel-control-prev-icon:after {
+    font-size: 20px;
+    color: black;
+    position: absolute;
+    margin: -5px;
+  }
+
+  .carousel-indicators .active {
+    background-color: #e60000;
+  }
+  .carousel-control-prev {
+    left: 10px;
+  }
+
+  .carousel-control-next {
+    right: 10px;
+  }
+}
+:host ::ng-deep .carousal-slides {
+  .carousal-slides-row {
+    display: flex;
+
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    .carousal-box {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff;
+      box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.4);
+      border-radius: 3px;
+      overflow: hidden;
+
+      .carousal-header {
+        padding: 12px 20px;
+        height: 64px;
+        background-color: rgba(204, 204, 204, 0.55);
+        color: #e60000;
+
+        p {
+          font-size: 18px;
+          margin-bottom: 10px;
+        }
+        h3 {
+          font-size: 30px;
+          margin-bottom: 0;
+        }
+      }
+
+      .carousal-footer {
+        padding: 0;
+
+        .carousal-footer-content {
+          padding: 0 20px 12px 20px;
+
+          hr {
+            margin-top: 0;
+          }
+
+          a {
+            color: #9c2aa0;
+          }
+        }
+
+        .optionsCheck {
+          padding: 20px;
+          background-color: rgba(204, 204, 204, 0.55);
+          color: #e60000;
+          font-size: 14px;
+
+          .radioBoxDiv {
+            margin-bottom: 0px !important;
+          }
+
+          .radioBox-visible {
+            border: solid 2px #e60000;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: none;
+
+            & + .radioContent {
+              font-weight: normal;
+            }
+          }
+        }
+      }
+
+      .carousal-body {
+        padding: 20px;
+        color: #262626;
+      }
+
+      ul {
+        padding-left: 0;
+        margin-left: 10px;
+        margin-bottom: 0;
+
+        color: #e60000;
+
+        li {
+          color: #e60000;
+
+          .font-dark {
+            color: #262626;
+          }
+        }
+      }
+
+      &.active {
+        .carousal-header,
+        .carousal-footer .optionsCheck {
+          background-color: #e60000;
+          color: #fff;
+        }
+
+        .form-check-input:checked {
+          & ~ .radioBox-visible {
+            background-color: #e60000;
+            background-image: none !important;
+            border: solid 2px #fff;
+
+            &:after {
+              content: '';
+              background-color: #fff;
+              position: absolute;
+              border-radius: 50%;
+              width: 12px;
+              height: 12px;
+              top: 2px;
+              left: 2px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.tariff-eligibility {
+  position: relative;
+  height: 4.5rem;
+}
+
+.row .w-75 {
+  padding: 30px 20px;
+  .p-3 {
+    padding: 0px !important;
+    margin-bottom: 30px;
+  }
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  & > * {
+    flex-grow: 1;
+    max-width: percentage(1/3);
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+}
+
+.tariff {
+  flex-grow: 1;
+  max-width: calc(#{percentage(1/3)} - 15px);
+  width: calc(#{percentage(1/3)} - 15px);
+  &:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+.mt-2-2 {
+  margin-top: 2.2rem;
+}
+:host ::ng-deep .radioBox input[type='radio'] + div + span {
+  margin-left: 32px !important;
+}
+
+:host ::ng-deep td div.radioBox-visible {
+  margin-left: 32px;
+}
+
+:host ::ng-deep .next-button-right {
+  text-align: right;
+
+  .btn-grid {
+    .btn {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+  }
+
+  .btn-tiles {
+    .btn {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+
+  .btn-primary {
+    background: #666 !important;
+    color: #ffffff;
+    box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+
+    .listIcon svg * {
+      stroke: #fff;
+    }
+
+    .gridIcon svg * {
+      stroke: #fff;
+    }
+  }
+}
+
+.listIcon {
+  display: inline-block;
+  @include icon-sizes28;
+}
+
+.gridIcon {
+  display: inline-block;
+  @include icon-sizes28;
+}
+
+:host ::ng-deep .paddingr42 {
+  padding-right: 36px;
+  padding-bottom: 14px;
+}
+
+.widthfull {
+  width: 100% !important;
+}
+
+.c-d-flex {
+  display: flex !important;
+  width: 100%;
+}
+
+.tilesview,
+.listview {
+  margin: 15px 0;
+}
+
+.redfont {
+  color: red;
+}
+
+.select-tariff {
+  display: flex;
+}
+
+svg-icon.orange ::ng-deep svg,
+svg-icon.orange ::ng-deep svg > * {
+  stroke: $color-international-orange;
+}
+
+.desc-icon {
+  float: left;
+  margin-left: 6px;
+  margin-right: 10px;
+  width: 24px;
+  height: 24px;
+  .infoIcon {
+    color: transparent;
+    background-image: url(~/public/icons/svg/vodafone/info-circle.svg);
+    @include icon-sizes24;
+    display: inline-block;
+    margin-top: -1px;
+  }
+}
+
+.ineligible-subs {
+  color: #ff874b;
+  display: flex;
+  a {
+    color: #ff874b;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0px 5px;
+  }
+}
+
+.tariff-details-popup {
+  cursor: pointer;
+}
+
+.font-size-30 {
+  font-size: 30px;
+}
+
+ul.bullets {
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    &::before {
+      content: '•';
+      color: $primary;
+      font-size: 20px;
+      width: 15px;
+    }
+  }
+}
+
+.activation-date {
+  display: flex;
+
+  & > *:not(:last-child) {
+    margin-right: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  .question-circle-icon {
+    @include icon(20px);
+    background-image: url(~/public/icons/svg/vodafone/help-circle.svg);
+    flex: 0 0 20px;
+  }
+
+  .selectMainDiv {
+    margin-bottom: 0;
+  }
+}

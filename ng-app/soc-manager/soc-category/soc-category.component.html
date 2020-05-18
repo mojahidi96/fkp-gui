@@ -1,0 +1,51 @@
+<sncr-notification [handler]="alertMessage"></sncr-notification>
+<div *ngIf="loader; else elsePart">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<ng-template #elsePart>
+
+    <div class="clickableDataRows">
+        <sncr-datatable #sncrData [value]="categoryData" [cols]="socCols" [editable]="true" (onOpenEdit)="editOpen($event)"
+                        (onEditSave)="saveChanges($event)" [selectionMode]="'single'" (onRowClick)="rowClick($event)"
+                        [removableContent]="removableContent" (onDelete)="deleteRow($event)"
+                        [resultMessage]="resultMessage">
+            <sncr-header>
+
+                <div class="margin-bottom-30">
+                    <sncr-button type="secondary" (click)="toggle = !toggle ">
+                        Neue Kategorie erstellen
+                        <i class="fa fa-chevron-down" *ngIf="!toggle" aria-hidden="true"></i>
+                        <i class="fa fa-chevron-up" *ngIf="toggle" aria-hidden="true"></i>
+                    </sncr-button>
+                </div>
+
+                <div *ngIf="toggle">
+                    <form [formGroup]="saveForm" (ngSubmit)="saveCategory(saveForm)">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <sncr-input label="Name" [type]="text" [formControlName]="'categoryName'"
+                                            autocomplete="off" required></sncr-input>
+                            </div>
+                        </div>
+                        <sncr-button type="submit" [disabled]="formSubmit">
+                            <span>Neue Kategorie erstellen</span>
+                        </sncr-button>
+                    </form>
+                </div>
+                <br>
+            </sncr-header>
+        </sncr-datatable>
+    </div>
+
+    <div *ngIf="!selectedCategory">
+        <soc-category-asl [socCategory]="selected"></soc-category-asl>
+    </div>
+</ng-template>
+
+<ng-template #delete let-context ngbModalContainer>
+    <div *ngIf="!context.row.editing">
+        <delete-model e-model [row]="context.row" [name]="context.row.categoryName" [title]="'Kategorie löschen'"
+                      [bodyTitle]="'Möchten die Kategorie '" [bodyTitle2]="'und entsprechende Gruppenzuweigung vom gesammten Portal unwideruflich löschen?'"
+                      (onDelete)="deleteRow($event)"></delete-model>
+    </div>
+</ng-template>

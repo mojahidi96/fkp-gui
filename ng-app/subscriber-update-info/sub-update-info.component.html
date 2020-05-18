@@ -1,0 +1,157 @@
+<div class="subscriberUpdateInfo">
+    <h2 class="pageTitle">
+        <div class="row-1">
+            <div class="description"><span *ngIf="cart?.shoppingCartName">{{cart?.shoppingCartName}} - </span><span l10nTranslate>PAGE_TITLE</span></div>
+        </div>
+    </h2>
+    <div [hidden]="!orderDetails.mutlipleOrders">
+        <order-confirmation [orderDetails]="orderDetails"></order-confirmation>
+    </div>
+    <div [hidden]="!cartLoading">
+        <sncr-loader [isLoading]="true"></sncr-loader>
+    </div>
+    <div [hidden]="orderDetails.mutlipleOrders">
+        <sncr-notification [handler]="submitErrorNotify"></sncr-notification>
+        <sncr-flow #flow="sncrFlow" [prefilled]="prefilled" [ngClass]="{disableFields:orderProcessing}">
+            <sncr-flow-section [titleText]="'SELECTION-TITLE' | translate:lang" [changeLink]="'COMMON-CHANGE-LINK' | translate:lang"
+                               modelSortKey="selected" modelSortVal="2" [eventType]="eventType" (clearMessage)="clearNotifier($event)" #subsFlow="sncrFlowSection">
+                <div *sncrSummaryTemplate>
+                    <div *ngIf="subsFlow.model?.selectCount > 0 && !subsFlow.model?.uploadChanges">
+                        <span *ngIf="subsFlow.model.selectCount === 1" l10nTranslate>SELECTION-ONE_SUBS_SELECTED</span>
+                        <span *ngIf="subsFlow.model.selectCount !== 1" [l10nTranslate]="{selectCount: subsFlow.model.selectCount}">SELECTION-SUBSCRIBERS_WERE_SELECTED</span>
+                    </div>
+                    <div *ngIf="subsFlow.model?.uploadChanges">
+                        <span l10nTranslate>SELECTION-MANAGE_UPLOAD</span>
+                    </div>
+                </div>
+
+                <div *sncrSectionTemplate class="dataTableMSoc">
+                    <subscriber-selection [lazy]="true" [lazyLoadUrl]="constants.lazyLoadUrlSubsDetails" [columns]="columns"
+                                          [subsFlow]="subsFlow" [properties]="getSubsUpdateProperties()" (onDataChange)="eventType = $event">
+                    </subscriber-selection>
+
+                </div>
+            </sncr-flow-section>
+
+            <sncr-flow-section [titleText]="'MANAGE_DETAILS-TITLE' | translate:lang" [changeLink]="'COMMON-CHANGE-LINK' | translate:lang"
+                               (clearMessage)="clearNotifier($event)" #subManagementFlow="sncrFlowSection">
+                <div *sncrSummaryTemplate>
+                    <ng-container *ngIf="subManagementFlow.model?.selectCount > 0">
+                        <ng-container *ngIf="!subsFlow.model?.singleEdit && !subsFlow.model?.bulkEdit">
+                            <span *ngIf="subManagementFlow.model.selectCount === 1" l10nTranslate>MANAGE_DETAILS-ONE_SUB_CHANGED</span>
+                            <span *ngIf="subManagementFlow.model.selectCount > 1" [l10nTranslate]="{selectCount: subManagementFlow.model.selectCount}">MANAGE_DETAILS-SUBSCRIBERS_WERE_CHANGED</span>
+                        </ng-container>
+
+                        <ng-container *ngIf="subsFlow.model?.singleEdit || subsFlow.model?.bulkEdit">
+                            <span *ngIf="subsFlow.model.selectCount === 1" l10nTranslate>MANAGE_DETAILS-ONE_SUB_CHANGED</span>
+                            <span *ngIf="subsFlow.model.selectCount > 1" [l10nTranslate]="{selectCount: subsFlow.model.selectCount}">MANAGE_DETAILS-SUBSCRIBERS_WERE_CHANGED</span>
+                        </ng-container>
+                    </ng-container>
+                </div>
+
+                <div class="dataTableMSoc" *sncrSectionTemplate>
+                    <ng-container *ngIf="subsFlow && !subsFlow.model?.uploadChanges  && ((subsFlow.model?.selectCount > 0 && !prefilled) || prefilled)">
+                        <ng-container *ngIf="!subsFlow.model?.singleEdit && !subsFlow.model?.bulkEdit">
+                            <sub-management [selectedSubs]="subsFlow.model.hasChanged"
+                                            [lazy]="true" [totalRecords]="subsFlow.model.selectCount"
+                                            [lazyLoadUrl]="constants.lazyLoadUrlSubsManager" [subManagementFlow]="subManagementFlow"
+                                            [countries]="countries"
+                                            [pattern]="pattern"
+                                            [columns]="columns"
+                                            [flowType]="flowType"
+                                            resetEditedRows = false
+                                            continueLabel="MANAGE_DETAILS-CONTINUE_TO_ORDER_OVERVIEW"
+                                            (processingEvent)="manageSubProcessing($event)">
+                            </sub-management>
+                        </ng-container>
+                        <ng-container *ngIf="subsFlow.model?.bulkEdit || subsFlow.model?.singleEdit">
+                            <bulk-edit [flowType]="flowType" [configId]="manageConfigId"
+                                       [managementFlow]="subManagementFlow"
+                                       [selectCount]="subsFlow.model?.selectCount"
+                                       [isChanged]="subsFlow.model.hasChanged"
+                                       [countries]="countries"
+                                       [pattern]="pattern"
+                                       [cols]="columns">
+                            </bulk-edit>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="subsFlow.model?.uploadChanges">
+                        <upload-changes [initialLoad]="subsFlow.model?.uploadChanges && !this.subsFlow.model.uploadCount"
+                                        [properties]="getSubsUpdateProperties()"
+                                        [changed]="subsFlow.model.hasChanged"
+                                        [reviewConfigId]="uploadReviewConfigId"
+                                        [manageConfigId]="manageConfigId" [uploadCount]="this.subsFlow.model.uploadCount"
+                                        [managementFlow]="subManagementFlow"
+                                        [nonData]="true"></upload-changes>
+                    </ng-container>
+                </div>
+            </sncr-flow-section>
+
+            <sncr-flow-section [titleText]="'REVIEW-TITLE' | translate:lang" [changeLink]="'COMMON-CHANGE-LINK' | translate:lang"
+                               #reviewSubFlow="sncrFlowSection">
+                <div *sncrSectionTemplate class="dataTableMSoc">
+                    <sncr-notification [handler]="orderReviewCartNotify"></sncr-notification>
+                    <sncr-notification [handler]="orderReviewNotify"></sncr-notification>
+                    <!-- Show the final pannel to be displayed with the update address and subscribers -->
+                    <ng-container *ngIf="subManagementFlow && ((subManagementFlow.model?.selectCount > 0 && !prefilled) || prefilled)">
+
+                        <p [innerHtml]="'REVIEW-SUB_TITLE_MSG' | translate:lang"></p>
+                        <sncr-notification *ngIf="subsFlow.model?.singleEdit && subsFlow.model?.selectCount>1" [message]="subsFlow.model?.reviewMsg" type="warning"></sncr-notification>
+
+                        <client-order-details #clientOrderDetails="clientOrderDetails"
+                                              [translationSupported]="true" [prefilledCart]="cart"
+                                              [ngClass]="{bulkEditShift:subsFlow.model?.singleEdit}"></client-order-details>
+
+                        <ng-container *ngIf="!subsFlow.model?.uploadChanges && ((subsFlow.model.selectCount > 0 && !prefilled) || prefilled)">
+
+                            <ng-container *ngIf="!subsFlow.model?.singleEdit">
+                                <sub-management-review [reviewUpdatedSub]="subManagementFlow.model?.hasChanged" [prefilled]="prefilled"
+                                                       [tableEdit]="!subsFlow.model?.singleEdit && !subsFlow.model?.bulkEdit"
+                                                       [lazyLoadUrl]="cart.configId === uploadReviewConfigId && subsFlow.model?.uploadChanges ?  constants.lazyLoadUrlSubsUploadReview : constants.lazyLoadUrlSubsReview"
+                                                       [ngClass]="{bulkEditShift:subsFlow.model?.singleEdit}">
+                                </sub-management-review>
+                            </ng-container>
+
+                            <ng-container *ngIf="subsFlow.model?.singleEdit">
+                                <sub-management-review [reviewUpdatedSub]="subManagementFlow.model?.hasChanged"
+                                                       [editedData]="subManagementFlow.model?.editedData"
+                                                       [selectCount]="subsFlow.model?.selectCount" [prefilled]="prefilled"
+                                                       [ngClass]="{bulkEditShift:subsFlow.model?.singleEdit}"
+                                                       [lazyLoadUrl]="cart.configId === uploadReviewConfigId && subsFlow.model?.uploadChanges ?  constants.lazyLoadUrlSubsUploadReview : constants.lazyLoadUrlSubsReview"
+                                                       [singleEdit]="subsFlow.model?.singleEdit">
+                                </sub-management-review>
+                            </ng-container>
+                        </ng-container>
+
+                        <ng-container *ngIf="subsFlow.model?.uploadChanges">
+                            <sub-management-review [reviewUpdatedSub]="subManagementFlow.model?.hasChanged"
+                                                   [uploadReview]="true"
+                                                   [lazyLoadUrl]="constants.lazyLoadUrlSubsUploadReview">
+                            </sub-management-review>
+                        </ng-container>
+
+                        <div class="buttons" [ngClass]="{buttons_with_flexend: !deleteCartAccess}">
+                            <delete-shopping-cart *ngIf="deleteCartAccess" [rowData]="cart" [prefix]="'REVIEW-'"
+                                                    (deletedResponse)="deleteResponse($event)" class="mr-auto">
+                            </delete-shopping-cart>
+                            <save-shopping-cart *ngIf="!cartProcessing && (editCartAccess || createCartAccess)"
+                                    [cart]="cart"
+                                    [reviewBtnTitle]="'REVIEW-SAVE_CART' | translate:lang"
+                                    [orderType]="'SUBS-UPDATE-ORDER_TYPE' | translate:lang"
+                                    (saveCart)="saveCartDetails()"
+                                    (processSaveCartDetails)="processSaveCart($event)"
+                                    #saveCart>
+                            </save-shopping-cart>
+                            <sncr-button type="submit" [disabled]="isReadOnlyUser || orderProcessing || isReadOnlyVodafoneUser" l10nTranslate
+                                            (click)="processUpdateSubsOrder()" [ngClass]="{disableFields:orderProcessing || isReadOnlyUser}">
+                                REVIEW-SUBMIT_YOUR_REQUEST
+                            </sncr-button>
+                        </div>
+                    </ng-container>
+                </div>
+
+            </sncr-flow-section>
+        </sncr-flow>
+    </div>
+</div>
+

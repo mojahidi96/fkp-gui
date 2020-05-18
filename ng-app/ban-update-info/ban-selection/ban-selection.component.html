@@ -1,0 +1,26 @@
+<div class="noDataMes">
+    <sncr-notification [handler]="alertNotify"></sncr-notification>
+    <p class="infoText"><span l10nTranslate>SELECTION-SELECTION_MESSAGE</span></p>
+    <div class="warningMessage" *ngIf="lazyCount == 0">
+        <sncr-notification [message]="noDataInfoMsg" type="warning"></sncr-notification>
+    </div>
+    <sncr-datatable #banSelection [cols]="cols"
+                    (onDataChange)="updateFlowEvent($event)"
+                    [(selection)]="banSelectionFlow.model.selected"
+                    [multiSelection]="true"
+                    [columnSelection]="true"
+                    [lazy]="lazy" [sortField]="'1'" [sortOrder]="1"
+                    [lazyLoadUrl]="lazyLoadUrl"
+                    [emptyMessage]="emptyMessage"
+                    [selectMessage]="banSelectionTranslations?.banSelectionMsg"
+                    [resultMessage]="banSelectionTranslations?.banSelectTotalCountMsg"
+                    [ngClass]="{disableFields:processing}">
+        <sncr-header>
+        </sncr-header>
+    </sncr-datatable>
+    <div class="row">
+        <div class="col-sm-12 review-right">
+            <sncr-button type="strong" (click)="manageNextSection(banSelection?.selectCount==1?true:false)" [disabled]="processing" l10nTranslate>SELECTION-CONTINUE_TO_NEXT</sncr-button>
+        </div>
+    </div>
+</div>

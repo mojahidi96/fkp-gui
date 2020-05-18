@@ -1,0 +1,117 @@
+@import '../../../styles/custom-variables';
+@import '../../../styles/mixins';
+@import '../../../styles/card';
+@import '../../../styles/modal';
+
+.row {
+  margin-bottom: 15px;
+}
+
+.title-with-link {
+  display: flex;
+  justify-content: space-between;
+}
+
+a.change-link {
+  color: #9c2aa0;
+  cursor: pointer;
+
+  &:hover {
+    color: #9c2aa0;
+  }
+}
+
+.inline-input {
+  display: flex;
+}
+
+.void-buttons {
+  margin-bottom: 1rem;
+
+  sncr-button {
+    margin-left: 10px;
+  }
+}
+
+sncr-loader.no-margins ::ng-deep .loader {
+  margin: 0 0 0 30px !important;
+  height: 4em;
+  width: 4em;
+}
+
+.button-tabs {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.selected-tab {
+  margin-top: 20px;
+}
+
+.manual-inputs {
+  margin-top: -40px;
+}
+
+.manual-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.overlay-content {
+  width: 100%;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: visible;
+  .modal-body {
+    max-height: calc(85vh - 60px);
+    overflow: visible;
+    .row {
+      padding: 0px;
+    }
+  }
+  label {
+    border-radius: 3px !important;
+    flex: 1;
+    background-color: #fff;
+    border: 0 solid;
+    color: #333;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.75);
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover {
+      box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    &.active {
+      box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.75);
+      background-color: #666;
+      color: #fff;
+    }
+  }
+}
+
+::ng-deep .modal-dialog .modal-content {
+  max-height: calc(100vh - 90px);
+  .modal-body {
+    div.row {
+      padding-bottom: 0 !important;
+      .fm-select {
+        margin-bottom: 0;
+      }
+    }
+    .buttons {
+      margin-top: 30px;
+    }
+  }
+}
+.company-id {
+  display: block;
+}

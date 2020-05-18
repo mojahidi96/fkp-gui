@@ -1,0 +1,25 @@
+<div class="shopTitle" *ngIf="selectedVfShop">
+    <i class="fa fa-toggle-right"></i>
+    <span class="ml-2" [l10nTranslate]="{shopName: selectedVfShop.shopName}">
+        SHOP_SELECTION-SELECTED_TITLE</span>
+</div>
+<ng-container *ngIf="!selectedVfShop">
+    <h2 class="title">
+        <i class="fa fa-toggle-right"></i>
+        <span class="ml-2" l10nTranslate>SHOP_SELECTION-TITLE</span>
+    </h2>
+    <div class="dataTableInfo">
+        <div *ngIf="loading">
+            <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+        </div>
+        <div *ngIf="!loading"  class="dataTable container">
+            <sncr-datatable
+                    #dataTable
+                    [cols]="cols"
+                    [value]="shopList"
+                    [(selection)]="selected"
+                    (onRowClick)="onShopSelection($event)">
+            </sncr-datatable>
+        </div>
+    </div>
+</ng-container>

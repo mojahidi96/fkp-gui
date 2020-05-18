@@ -1,0 +1,35 @@
+<sncr-check-group [(ngModel)]="value">
+    <div *ngFor="let option of options" [class.disabled]="option.disabled" [hidden]="!option.show">
+        <sncr-checkbox *ngIf="!option.mandatory; else mandatory"
+                       [name]="option.value" class="{{option.cssClass}}" [disabled]="option.disabled"
+                       [ngModel]="option.model" (ngModelChange)="checkChange(option, $event)">
+            <ng-container *ngTemplateOutlet="optionInfo"></ng-container>
+        </sncr-checkbox>
+
+        <ng-template #mandatory>
+            <div class="form-check">
+                <i class="fa fa-check fa-2x"></i>
+                <ng-container *ngTemplateOutlet="optionInfo"></ng-container>
+            </div>
+        </ng-template>
+
+        <ng-template #optionInfo><span class="font-weight-bold">{{option.text}}</span><ng-container *ngIf="option.urlLink">
+                <a [href]="option.urlLink" class="externalLink" target="_blank">
+                    <i class="fa fa-external-linkIcon"  aria-hidden="true"></i>
+                </a>
+            </ng-container>
+            <ng-container *ngIf="option.pdfLink">
+                <a [href]="option.pdfLink" class="pdfIcon" target="_blank">
+                    <i class="fa fa-file-pdf-oIcon" aria-hidden="true"></i>
+                </a>
+            </ng-container>
+        </ng-template>
+
+        <sncr-options-extra [excluded]="excluded" [infoDesc]="infoDesc" [isCheckbox]="true" [option]="option" [properties]="properties"
+                            [showDescription]="showDescription" [showSelected]="option.model !== undefined" [flowType]="flowType"
+                            [totalLength]="totalLength" (reset)="reset($event)" [masterOptions]="masterOptions"
+                            [triggerOption]="triggerOption" [showValidation]="showValidation"
+                            [isLazy]="isLazy" [isChanged]="isChanged" [lazyUrl]="lazyUrl">
+        </sncr-options-extra>
+    </div>
+</sncr-check-group>

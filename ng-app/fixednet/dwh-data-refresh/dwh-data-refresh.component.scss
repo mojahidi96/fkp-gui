@@ -1,0 +1,66 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/mixins';
+@import '../../styles/modal';
+@import '../../styles/page-title';
+
+.card {
+  border: 0px;
+  .card-header {
+    padding: 0px;
+    background: $body-bg;
+    border-bottom: 0px;
+    @extend .pageTitle;
+  }
+  .card-block {
+    background-color: $txt-white;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+    padding: 20px;
+  }
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+::ng-deep div.onboardLoading div.wrapper.in-container {
+  border-radius: 0px !important;
+  border: none;
+  padding: 30px 0px;
+  max-width: 100%;
+  max-height: 370px;
+  left: auto;
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+  width: 954px;
+  margin-top: 15px;
+  margin-left: 7px;
+  min-height: 260px;
+
+  .loader {
+    top: 40px;
+    position: relative;
+    margin: 3% auto !important;
+  }
+}
+
+::ng-deep .onboardFormBtn {
+  .btn-primary.disabled,
+  .btn-primary:disabled {
+    background: #9d36a2;
+  }
+}
+
+::ng-deep .onboardFormBtn1 {
+  .btn-primary.disabled,
+  .btn-primary:disabled {
+    background: #9d36a2;
+  }
+  .marR20 {
+    margin-right: 20px;
+  }
+}

@@ -1,0 +1,70 @@
+<h2 class="pageTitle">
+	<span l10nTranslate>PAGE_TITLE</span><br>
+</h2>
+<div>
+	<ngb-accordion [activeIds]="'panel_' + activePanel" [closeOthers]="true" (panelChange)="panelChange($event)">
+		<ng-container *ngFor="let panel of panels; let i = index">
+			<ngb-panel id="{{'panel_' + panel.id}}">
+				<ng-template ngbPanelTitle>
+					{{panel.title | translate: lang}}
+				</ng-template>
+				<ng-template ngbPanelContent *ngIf="!showDataTable">
+					<div>
+						<sncr-loader class="relative" [isLoading]="true"></sncr-loader>
+					</div>
+				</ng-template>
+				<ng-template ngbPanelContent *ngIf="showDataTable">
+                    <sncr-datatable #esimTable [cols]="columns" [multiSelection]="true" [columnSelection]="true"
+									[lazy]="true" [sortField]="2" [sortOrder]="1" [lazyLoadUrl]="lazyLoadUrl"
+									[maxSelectKey]="'ct-subscriber_max-selection'" [ngClass]="{disableFields:processing}"
+									[customCol]="receivedTime" (onRowUnselect)="onUncheckTableRows()"
+									(onHeaderCheckboxToggle)="onUncheckTableRows($event)" (onRowSelect)="onRowSelect()"
+					>
+					</sncr-datatable>
+                    <ng-container *ngIf="esimTable?.selectCount > 0">
+					<form [formGroup]="orderFalloutForm" (ngSubmit)="saveFalloutStatus(panel.id)">
+						<div class="row">
+							<div class="col-6">
+								<sncr-select [label]="'ESIM_CHANGE-STATUS' | translate:lang" formControlName="falloutStatus" (change)="dynamicAddOrRemoveCancelDropdown()" required>
+									<option value="" selected l10nTranslate>ESIM_SELECT-STATUS</option>
+									<option *ngFor="let status of statusList | keyvalue: asIsOrder" value="{{status.key}}" l10nTranslate>{{status.value}}</option>
+								</sncr-select>
+							</div>
+							<div class="col-6" *ngIf="showCancelDD">
+								<div>
+									<sncr-select [label]="'ESIM_CANCEL_DROPDOWN-LABEL' | translate:lang" formControlName="cancel">
+										<option *ngFor="let option of cancelOptions | keyvalue" value="{{option.key}}" l10nTranslate>{{option.value}}</option>
+									</sncr-select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<sncr-textarea [rows]="3" [cols]="10" [label]="'ESIM_CUSTOMER-INFO' | translate:lang" formControlName="customerInfo"
+											   [showValidation]="showValidation" autocomplete="off">
+								</sncr-textarea>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<sncr-button type="submit" l10nTranslate>ESIM_SAVE</sncr-button>
+						</div>
+					</form>
+                    </ng-container>
+				</ng-template>
+			</ngb-panel>
+		</ng-container>
+	</ngb-accordion>
+	<ng-template #receivedTime let-context>
+		<div *ngIf="context.row['1']" class="fa" [ngbPopover]="'ESIM_ULTRACART' | translate:lang" triggers="mouseover:mouseleave">U</div>
+	</ng-template>
+	<ng-template #orderLink let-context>
+		<a href="{{context.row['15']}}">{{context.row['7']}}</a>
+	</ng-template>
+	<ng-template #receivedEpochTime let-context>
+		{{ context.row['10'] | customDate}}
+	</ng-template>
+	<ng-template #responseEpochTime let-context>
+		{{ context.row['11'] | customDate}}
+	</ng-template>
+</div>
+

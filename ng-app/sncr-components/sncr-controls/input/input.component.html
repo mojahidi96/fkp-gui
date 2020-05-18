@@ -1,0 +1,49 @@
+<ng-container *ngIf="!withDropDown">
+    <ng-container *ngTemplateOutlet="inputTmpl"></ng-container>
+</ng-container>
+
+<ng-container *ngIf="withDropDown">
+    <div ngbDropdown #dropDown="ngbDropdown" class="dropdown" autoClose="outside">
+        <div ngbDropdownAnchor>
+            <ng-container *ngTemplateOutlet="inputTmpl"></ng-container>
+        </div>
+
+        <ul *ngIf="filteredDropDown.length > 0 && !hasErrors()" ngbDropdownMenu class="menu-scroll col-md-12" aria-labelledby="dropdownMenu" #dropDownMenu>
+            <li class="dropdown-item" *ngFor="let key of filteredDropDown" (click)="model = key.data; this.dropDown.close();">
+                {{key.data}}
+            </li>
+        </ul>
+    </div>
+</ng-container>
+
+<ng-template #inputTmpl>
+    <div class="form-group inputMainDiv" [sncrValidationStyles]="hasErrors()" (click)="inputClick()">
+        <sncr-validation-messages *ngIf="hasErrors()" [messages]="getErrors()"></sncr-validation-messages>
+        <label *ngIf="!lazy" [for]="name">
+            <div class="labelText">{{label}}</div>
+            <span [ngClass]="{'required': showAsterisk(labelContent), 'labelText1' : !showAsterisk(labelContent)}" #labelContent><ng-content></ng-content></span>
+            <i tooltip *ngIf="infoIcon" class="fa infoIcon infoGreyIcon" title="{{infoIcon}}"></i>
+        </label>
+
+        <div [class.reset-group]="isResetVisible()">
+            <input [id]="name"
+                   [name]="name"
+                   [type]="(type === 'price' || type === 'number') ?'text':type"
+                   class="form-control sncr-control"
+                   [(ngModel)]="model"
+                   (ngModelChange)="updateFilteredDropDown()"
+                   [placeholder]="placeholder || ''"
+                   [disabled]="disabled"
+                   [readonly]="readonly"
+                   (blur)="onBlur()"
+                   (focus)="onFocus()"
+                   (keydown)="onKeyDown($event)"
+                   (paste)="onBeforePaste($event)"
+                   [autocomplete]="autocomplete"
+                   [attr.maxLength]="maxLength?maxLength:null"
+                   [pattern]="pattern">
+            <span *ngIf="asyncValidationInPorgress" class="asyncValText">validation in progress</span>
+            <i class="fa fa-times" aria-hidden="true" *ngIf="isResetVisible()" (click)="resetValue()"></i>
+        </div>
+    </div>
+</ng-template>

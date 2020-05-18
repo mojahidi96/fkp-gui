@@ -1,0 +1,399 @@
+<h2 class="pageTitle">
+    <span l10nTranslate>ED-HEADER_TITLE</span>
+</h2>
+<div class="card">
+    <div class="card-block">
+        <sncr-notification [handler]="alertNotify" [dismissible]="false"></sncr-notification>
+
+        <div class="margin-bottom-30">
+            <sncr-button type="secondary" (click)="advancedSearchToggle()" l10nTranslate>
+                ED-ADV_SEARCH_TOGGLE_BUTTON
+                <i class="fa fa-chevron-down" *ngIf="!toggle" aria-hidden="true"></i>
+                <i class="fa fa-chevron-up" *ngIf="toggle" aria-hidden="true"></i>
+            </sncr-button>
+        </div>
+
+        <ng-container *ngIf="toggle">
+            <form [formGroup]="advancedSearchForm" (ngSubmit)="search()" class="mt-4 error-msg">
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.customerAccountNumber.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.customerAccountNumber.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.customerOrderDetails.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.customerOrderDetails.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.orderNo.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.orderNo.field" [showValidation]="true"></sncr-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.projectName.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.projectName.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.serviceNumber.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.serviceNumber.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.vfReferenceNumber.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.vfReferenceNumber.field" [showValidation]="true"></sncr-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <sncr-check-group id="ed-check-group" name="radio-group" [formControlName]="advancedSearchFields.orderCreated.field" [label]="'ED-ADV_SEARCH_RADIO_BETW' | translate:lang">
+                            <div class="col-12 pl-0" style="display: flex;">
+                                <div class="col-4 radio-width-80 pl-0">
+                                    <sncr-radio value="1">
+                                        <sncr-select id="ed-select-dropdown" [label]="'ED-ADV_SEARCH_DURATION' | translate:lang" [formControlName]="advancedSearchFields.durationDays.field" [showValidation]="true">
+                                            <option value="0" l10nTranslate >ED-ADV_SEARCH_NO_DURATION_OPTION</option>
+                                            <option value="30" l10nTranslate>ED-ADV_SEARCH_DURATION_OPTION</option>
+                                        </sncr-select>
+                                    </sncr-radio>
+                                </div>
+                                <div class="col-8">
+                                    <sncr-radio value="2" id="ed-date-range">
+                                        <div class="col-6 pl-0">
+                                            <sncr-datepicker [label]="'ED-ADV_SEARCH_FROM_DATE' | translate:lang" placeholder="tt.mm.jjjj" [formControlName]="advancedSearchFields.fromDate.field" [showValidation]="true" [showReset]="true"></sncr-datepicker>
+                                        </div>
+                                        <div class="col-6">
+                                            <sncr-datepicker [label]="'ED-ADV_SEARCH_TO_DATE' | translate:lang" placeholder="tt.mm.jjjj" [formControlName]="advancedSearchFields.toDate.field" [showValidation]="true" [showReset]="true"></sncr-datepicker>
+                                        </div>
+                                    </sncr-radio>
+                                </div>
+                            </div>
+                        </sncr-check-group>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-select [label]="'HEADER_'+advancedSearchFields.orderType.labelText | translate:lang" [formControlName]="advancedSearchFields.orderType.field" [showValidation]="true">
+                            <option value="choose" l10nTranslate>ED-DROPDOWN-CHOOSE</option>
+                            <option [value]="orderType" *ngFor="let orderType of fieldOptions['8']">{{orderType}}</option>
+                        </sncr-select>
+                    </div>
+                    <div class="col-4">
+                        <sncr-select [label]="'HEADER_'+advancedSearchFields.product.labelText | translate:lang" [formControlName]="advancedSearchFields.product.field" [showValidation]="true">
+                            <option value="choose" l10nTranslate>ED-DROPDOWN-CHOOSE</option>
+                            <option [value]="product" *ngFor="let product of fieldOptions['16']">{{product}}</option>
+                        </sncr-select>
+                    </div>
+                    <div class="col-4">
+                        <sncr-select [label]="'HEADER_'+advancedSearchFields.bandwidth.labelText | translate:lang" [formControlName]="advancedSearchFields.bandwidth.field" [showValidation]="true">
+                            <option value="choose" l10nTranslate>ED-DROPDOWN-CHOOSE</option>
+                            <option [value]="bandwidth" *ngFor="let bandwidth of fieldOptions['17']">{{bandwidth}}</option>
+                        </sncr-select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-select [label]="'HEADER_'+advancedSearchFields.serviceLevel.labelText | translate:lang" [formControlName]="advancedSearchFields.serviceLevel.field" [showValidation]="true">
+                            <option value="choose" l10nTranslate>ED-DROPDOWN-CHOOSE</option>
+                            <option [value]="serviceLabel" *ngFor="let serviceLabel of fieldOptions['20']">{{serviceLabel}}</option>
+                        </sncr-select>
+                    </div>
+                    <div class="col-4">
+                        <sncr-select [label]="'HEADER_'+advancedSearchFields.status.labelText | translate:lang" [formControlName]="advancedSearchFields.status.field" [showValidation]="true">
+                            <option value="choose" l10nTranslate>ED-DROPDOWN-CHOOSE</option>
+                            <!--<option [value]="status.value" *ngFor="let status of fieldOptions" l10nTranslate>{{status.text}}</option>-->
+                            <option [value]="status" *ngFor="let status of fieldOptions['144']" l10nTranslate>{{status}}</option>
+                        </sncr-select>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc1.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc1.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc1Area.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc1Area.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc1BU.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc1BU.field" [showValidation]="true"></sncr-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc1CompanyName.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc1CompanyName.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc1Network.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc1Network.field" [showValidation]="true"></sncr-input>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc2.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc2.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc2Area.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc2Area.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc2BU.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc2BU.field" [showValidation]="true"></sncr-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc2CompanyName.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc2CompanyName.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4">
+                        <sncr-input [label]="'HEADER_'+advancedSearchFields.loc2Network.labelText | translate:lang" autocomplete="off" [formControlName]="advancedSearchFields.loc2Network.field" [showValidation]="true"></sncr-input>
+                    </div>
+                    <div class="col-4" *ngIf="vfUser || vodafoneAccountManager">
+                        <sncr-input name="shopName" [label]="'HEADER_'+advancedSearchFields.shopName.labelText | translate:lang" [formControlName]="advancedSearchFields.shopName.field" [autocomplete]="'off'" [withDropDown]="shopNames"
+                                    type="text" [disabled]="loading" [pattern]="pattern" [showValidation]="true"></sncr-input>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4">
+                        <sncr-button type="secondary" class="mr-1" (click)="resetSearchForm()" l10nTranslate>
+                            ED-ADV_RESET
+                        </sncr-button>
+                        <sncr-button type="submit" [disabled]="processing" [ngClass]="{disableFields:processing}" l10nTranslate>ED-LANDING_SEARCH</sncr-button>
+                    </div>
+                </div>
+            </form>
+        </ng-container>
+      
+
+        <div class="row" class="mt-4" id="table">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="custom-button" ngbDropdown #myDrop="ngbDropdown" autoClose="outside">
+                        <sncr-button ngbDropdownToggle
+                                        [disabled]="loading || dtDataLoading" (focus)="myDrop.open()">
+                            <span *ngIf="(selectedSavedFilter && selectedSavedFilter.reportName);then selContent else noSelContent"></span>
+                            <ng-template #noSelContent><span l10nTranslate>ED_SAVED_FILTERS_SELECT</span></ng-template>
+                            <ng-template #selContent>
+                                <span class="truncateSocName">{{selectedSavedFilter.reportName}}</span>
+                            </ng-template>
+                        </sncr-button>
+                        <div *ngIf="!loading && !dtDataLoading" ngbDropdownMenu class="dropdown-menu">
+                            <div *ngIf="savedFilters && savedFilters.length > 0" class="dropdown-scroll" (click)="$event.stopPropagation()">
+                                <div class="dropdown-item" *ngFor="let filter of savedFilters" ngbDropdownItem>
+                                    <div class="dropdown-itemTxt" (click)="onModelChange(filter);myDrop.close();">
+                                        <div class="row">
+                                            <div class="col-sm-8"><span l10nTranslate>{{filter.reportName}}</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-disable-fader" *ngIf="loading || dtDataLoading"></div>
+                    </div>
+                </div>
+                <div class="deleteBtnSection" *ngIf="!loading && showFilterReset && !dtDataLoading" [title]="'ED_OM_FILTER_RESET' | translate: lang">
+                    <span>
+                        <i class="fa fa-refresh fa-2x trash-border" aria-hidden="true" (click)="resetDtFilters()"></i>
+                    </span>
+                </div> 
+                <div class="deleteBtnSection" *ngIf="!loading && showDelete && !dtDataLoading">
+                    <span>
+                        <i class="fa fa-trash-o fa-2x trash-border" aria-hidden="true" (click)="deletePopUp()"></i>
+                    </span>
+                </div> 
+
+                <div class="saveBtnSection" *ngIf="(filters || dtFilters )&& !loading && !dtDataLoading">
+                    <sncr-button type="primary" btnStyle="strong" (click)="openPopUp();" >
+                        <span l10nTranslate>ED_OM_FILTER_SAVE_TEMP_TITLE</span>
+                    </sncr-button>
+                </div>
+              
+                <div *ngIf="isTemplateDelete" class="col-sm-12 mt-2 text-left">
+                    <span l10nTranslate>ED_FILTER_DELETE_NO_RESULT_SELECT</span>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="!loading">
+                <sncr-datatable-op #omLandingPage [state]="OrderManagerState$ | async" [multiSelection]="true" [columnSelection]="true"
+                                   (onLazyLoad)="onLazyLoad($event)" [sortField]="sortField" [sortOrder]="sortOrder"
+                                   (onSelectionChange)="onSelectionChange($event)" (onColumnChange)="onColumnChange($event)" 
+                                   [advSearchFilter]="advSearchFilter" [ngClass]="{disableFields:processing}"
+                                   prefix="ED_OM" [customCol]="lockIconCol" [restoreFilters]="'true'" > 
+                </sncr-datatable-op>
+            </div>
+        </div>
+
+        <form [formGroup]="orderStatusForm" (ngSubmit)="orderStatusChange()">
+            <div class="row">
+                <div class="col-4">
+                    <sncr-select [label]="'ED-ORDER_STATUS' | translate:lang" l10nTranslate formControlName="status" [disabled]="orderStatusList.length == 0">
+                        <option [value]="''" l10nTranslate>ED-DROPDOWN-CHOOSE</option>
+                        <option *ngFor="let status of orderStatusList" value="{{status}}" l10nTranslate>{{status}}</option>
+                    </sncr-select>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="col-4 px-0">
+                    <sncr-textarea [rows]="5" [cols]="10" [label]="'ED-CUSTOMER_MESSAGE' | translate:lang" l10nTranslate formControlName="message" [showValidation]="true" autocomplete="off">
+                    </sncr-textarea>
+                </div>
+                <sncr-button type="secondary" [disabled]="disablehistory" (click)="downloadHistory()" l10nTranslate>
+                    ED-DOWNLOAD_SYSTEM_HISTORY
+                </sncr-button>
+                <sncr-button type="secondary" [disabled]="disableUOF" class="float-right" (click)="downloadUOFfile()" l10nTranslate>
+                    ED-DOWNLOAD_UOF
+                </sncr-button>
+            </div>
+
+            <sncr-button type="submit" *ngIf="!vodafoneAccountManager" l10nTranslate [ngClass]="{disableFields:processing || readonlyUser}" [disabled]="disableSubmitButton || processing || readonlyUser || !orderStatusForm.dirty">ED-LANDING_SAVE</sncr-button>
+        </form>
+    </div>
+</div>
+
+<ng-template #msgContentModal>
+    <div class="row">
+        <div class="col-10 m-auto">
+            <sncr-notification *ngIf="updateOrder" type="success">
+                <span l10nTranslate>{{messageKey}}</span>
+            </sncr-notification>
+            <sncr-notification *ngIf="noOrderSelected" type="error">
+                <span [innerHTML]="'ED_OM_SELECT_ORDER_NO_ERR_MSG' | translate:lang"></span>
+            </sncr-notification>
+            <sncr-notification *ngIf="error" type="error">
+                <span [innerHTML]="'ED_OM_FAILURE_ERR_MSG' | translate:lang"></span>
+            </sncr-notification>
+            <sncr-notification *ngIf="eligibilityFailed" type="error">
+                <span [innerHTML]="'ED_OM_ELIGIBILITY_ERR_MSG' | translate:lang"></span>
+            </sncr-notification>
+            <sncr-notification *ngIf="orderLocked" type="error">
+                <span [innerHTML]="'ED_OM_LOCKED_ERR_MSG' | translate:lang"></span>
+            </sncr-notification>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="md-4">
+                <sncr-button class="submit" (click)="closeModal()" l10nTranslate>ED_OM_MODAL_BTN_OK</sncr-button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #orderNo let-context>
+    <div class="row">
+        <div class="col-12">
+            <div class="ellipiss">
+                <span (click)="showorderdetails(context.row['23'])">{{context.row['16']}}</span>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #lockIconCol let-context>
+    <div>
+        <i *ngIf="context.row.readonly"
+           class="fa fa-lock closeIconFont text-danger"
+           placement="top" [ngbTooltip]="'ED-LOCKED_HOVER_MSG' | translate:lang:{lockedUser: context.row.lockedUser}">
+        </i>
+    </div>
+</ng-template>
+
+<!-- the below displays popup list of saved templates -->
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" l10nTranslate>ED_OM_FILTER_SAVE_TEMP_TITLE</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+
+    </div>
+
+    <div class="modal-body">
+        <sncr-input class="internCustId"
+                    [(ngModel)]="searchText"
+                    [label]="'ED_FILTER_SAVE_AS' | translate:lang"
+                    [type]="'text'"
+                    [name]="name"
+                    [pattern]="pattern"
+                    (input)="checkFilterExists()"
+                    [maxLength]="70"
+                    [placeholder]="'ED_OM_FILTER_SAVE_TEMP_TITLE' | translate:lang" #name="ngModel"></sncr-input>
+        <div *ngIf="name.errors">
+            <span class="validError" l10nTranslate>ED_OM_FILTER_SAVE_PATTERN_MESSAGE</span>
+        </div>
+        <div class="scrolling">
+            <table class="table table-hover saved-report">
+                <tbody>
+                    <tr *ngFor="let filter of savedFilters | filter : searchText.trim():'reportName'" (click)="selectedTemplate(filter)">
+                        <td>{{filter.reportName}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')">
+            <span l10nTranslate>ED_OM_FILTER_SAVE_ABORT</span>
+        </sncr-button>
+
+        <sncr-button type="primary" [disabled]="!searchText || saveReport"
+                     (click)="saveExistingOrNewTemplate()">
+            <span l10nTranslate>ED_OM_FILTER_SAVE_BUTTON</span>
+        </sncr-button>
+    </div>
+</ng-template>
+
+<!-- If existing template then over ride message to be shown with a new popup  -->
+
+<!-- the below displays popup list of saved templates -->
+<ng-template #overridecontent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" l10nTranslate>ED_OM_FILTER_SAVE_OVERRIDE_TITLE</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+    </div>
+
+    <div class="modal-body">
+        <span [innerHTML]="'ED_OM_FILTER_SAVE_OVERRIDE_DESC' | translate:lang:{searchText:searchText}"></span>
+    </div>
+
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')">
+            <span l10nTranslate>ED_OM_FILTER_SAVE_ABORT</span>
+        </sncr-button>
+        <sncr-button type="primary" [disabled]="!searchText"
+                     (click)="updateExistingTemplate()">
+            <span l10nTranslate>ED_OM_FILTER_SAVE_BUTTON</span>
+        </sncr-button>
+    </div>
+</ng-template>
+
+
+<!-- template to delete the saved view options -->
+
+<ng-template #delete let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" l10nTranslate>ED_OM_FILTER_DELETE_TEMP_TITLE</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+    </div>
+
+    <div class="modal-body">
+        <span [innerHTML]="'ED_OM_FILTER_DELETE_TEMP_DESC' | translate:lang:{reportName:selectedSavedFilter.reportName}" ></span>
+    </div>
+
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')">
+            <span l10nTranslate>ED_OM_FILTER_DELETE_NO</span>
+        </sncr-button>
+        <sncr-button type="primary" [disabled]="!selectedSavedFilter"
+                     (click)="deleteSavedFilter()">
+            <span l10nTranslate>ED_OM_FILTER_DELETE_YES</span>
+        </sncr-button>
+    </div>
+</ng-template>
+
+<ng-template #filterMsgModal let-c="close" let-d="dismiss">
+    <div class="row">
+        <div class="col-10 m-auto">
+            <sncr-notification type="success">
+                <span l10nTranslate>{{filterMessage}}</span>
+            </sncr-notification>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="md-4">
+                <sncr-button class="submit" (click)="c('Close click')" l10nTranslate>ED_OM_MODAL_BTN_OK</sncr-button>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,83 @@
+@import '../styles/_custom-variables';
+@import '../styles/mixins';
+@import '../styles/page-title';
+
+.card {
+  border: 0px;
+  .card-header {
+    padding: 0px;
+    background: $body-bg;
+    border-bottom: 0px;
+    @extend .pageTitle;
+  }
+  .card-block {
+    background-color: $txt-white;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+    .buttonPadding {
+      .col-md-12 {
+        padding: 0px;
+        .pad0 {
+          padding: 0px;
+        }
+        .col-md-4 {
+          padding: 0px;
+          ::ng-deep .form-group {
+            margin-bottom: 0;
+            .fm-select {
+              margin-bottom: 0;
+            }
+          }
+        }
+        .col-md-8 {
+          padding: 0px;
+          .mar3 {
+            margin-top: -3px;
+          }
+        }
+      }
+    }
+  }
+  label {
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+:host ::ng-deep .href:focus,
+.href:hover {
+  color: #014c8c;
+  cursor: pointer;
+}
+
+:host ::ng-deep .href {
+  text-decoration: underline;
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+  width: 958px;
+  min-height: 225px;
+
+  .loader {
+    top: 40px;
+    position: relative;
+    margin: 3% auto !important;
+  }
+}
+
+.redColor {
+  color: red;
+}
+
+:host ::ng-deep .card {
+  .card-block {
+    padding: 20px;
+  }
+}

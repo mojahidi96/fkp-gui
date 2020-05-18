@@ -1,0 +1,160 @@
+@import '../styles/_custom-variables';
+@import '../styles/page-title';
+@import '../styles/mixins';
+@import '../styles/datatables';
+
+.infoText {
+  margin-bottom: 30px;
+}
+
+:host ::ng-deep .errorAlert {
+  margin: 30px 20px;
+  .alert-danger {
+    margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep .ui-datatable-loading-content {
+  width: 100% !important;
+}
+
+:host ::ng-deep .buttonRow {
+  margin-top: 9px;
+  margin-left: 1px;
+}
+
+:host ::ng-deep .subscriberUpdateInfo {
+  .mx-4.text-muted {
+    padding: 30px 20px !important;
+    margin: 0px !important;
+  }
+}
+
+:host ::ng-deep .showInfo.fa.infoGreyIcon {
+  @include icon-sizes20;
+  background-image: url(~/public/icons/svg/notification/info-gray.svg);
+  margin-right: 2px;
+
+  & + .popover {
+    pointer-events: none !important;
+  }
+}
+
+:host ::ng-deep .subscriberUpdateInfo {
+  bulk-edit {
+    .card-block {
+      padding: 0px;
+      .internCustId {
+        .labelText1 {
+          position: absolute;
+          right: 20px;
+        }
+      }
+      h2 {
+        font-size: 18px;
+      }
+      .saveBtn {
+        padding-left: 0px;
+        padding-right: 0px;
+      }
+    }
+
+    .alert-danger {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+:host ::ng-deep .subscriberUpdateInfo {
+  p-header .ui-paginator {
+    padding: 0px;
+  }
+  .review {
+    padding: 0px;
+  }
+  .infoText {
+    margin-top: 0px;
+  }
+  client-order-details {
+    .container {
+      padding-right: 0px;
+      padding-left: 0px;
+    }
+  }
+  sub-management-review {
+    .container {
+      padding-right: 0px;
+      padding-left: 0px;
+    }
+  }
+
+  .alertTitle {
+    margin-bottom: 10px;
+  }
+}
+
+:host ::ng-deep .custom-dropdown {
+  min-width: 350px !important;
+}
+
+:host ::ng-deep .ui-datatable-tablewrapper {
+  .ui-datatable-thead {
+    tr {
+      th {
+        &:last-child {
+          sncr-datepicker {
+            .dropdown-menu {
+              left: auto !important;
+              right: 0px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep sub-management {
+  .subManagementMain {
+    padding: 0px !important;
+
+    .ui-datatable {
+      .ui-datatable-thead {
+        tr {
+          th {
+            min-width: 150px;
+          }
+        }
+      }
+    }
+
+    .ui-datatable-loading-content {
+      min-height: 120px;
+      height: calc(100% - (180px));
+      top: 91px;
+      & i {
+        top: 50%;
+      }
+    }
+  }
+}
+
+.description {
+  width: 100%;
+  word-break: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.buttons {
+  display: flex;
+  margin-bottom: 30px;
+
+  & > *:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+
+.buttons_with_flexend {
+  justify-content: flex-end;
+}

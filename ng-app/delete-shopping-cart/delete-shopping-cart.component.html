@@ -1,0 +1,27 @@
+<span *ngIf="landingPage" (click)="deleteCart()" class="fa fa-trash-o"></span>
+
+<sncr-button type="secondary" *ngIf="!landingPage && rowData.shoppingCartName"
+             l10nTranslate (click)="deleteCart()">{{prefix+'DELETE_CART'}}
+</sncr-button>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" l10nTranslate>SHOPPING_CART_DELETE_MSG_TOP</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row-1" [l10nTranslate]="{shoppingCartName:rowData ? rowData.shoppingCartName : cart.shoppingCartName}">
+            <div class="description">
+                SHOPPING_CART_DELETE_MSG_BOTTOM
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')" l10nTranslate>
+            SHOPPING_CART_POPUP_CANCEL
+        </sncr-button>
+        <sncr-button l10nTranslate (click)="deleteCartFromList()">SHOPPING_CART_POPUP_DELETE</sncr-button>
+    </div>
+</ng-template>

@@ -1,0 +1,11 @@
+{
+  "APP": {
+    "TOP": {
+      "LOGOUT": "Logout"
+    }
+  },
+  "CARD-SELECTION": {
+    "HIDE": "Hide description",
+    "SHOW": "Show description"
+  }
+}

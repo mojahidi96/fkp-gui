@@ -1,0 +1,146 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/mixins';
+
+.card {
+  border-radius: 4px !important;
+  box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.6);
+}
+
+.card-block {
+  padding: 0px;
+}
+
+:host ::ng-deep .innerCard-block {
+  padding: 0px !important;
+}
+
+.card-header {
+  background: transparent;
+  border-radius: 0px;
+  border-bottom: 1px solid $input-text-border-color;
+  font-size: 20px;
+  color: $cardH-txt-color;
+  padding: 0px 20px;
+  height: 43px;
+  border-top: 1px solid $input-text-border-color;
+
+  .stepCircle {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 25px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: $body-bg;
+    color: $iconNumberColor;
+    float: left;
+    position: relative;
+    margin-right: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    top: 9px;
+
+    .number {
+      position: absolute;
+      left: 30%;
+      position: absolute;
+      top: 0;
+    }
+  }
+
+  .text {
+    top: 6px;
+    position: relative;
+    display: inline-block;
+  }
+
+  .fa-check-circle {
+    background-image: url(~/public/icons/svg/notification/success.svg) !important;
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    background-size: 24px 24px;
+    width: 24px;
+    height: 24px;
+    margin-top: 9px;
+
+    &:before {
+      content: '';
+    }
+  }
+}
+
+.card-header:last-child {
+  border-bottom: 0px solid $input-text-border-color;
+}
+
+.card-header.card-primary {
+  box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.3);
+  border-top: 1px solid $input-text-border-color;
+  border-bottom: 0px solid $input-text-border-color;
+}
+
+.card-header.done {
+  box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.3);
+  border-top: 1px solid $input-text-border-color;
+  border-bottom: 0px solid $input-text-border-color;
+}
+
+.sncr-field-1 {
+  width: 95% !important;
+}
+
+.submit {
+  background: red !important;
+}
+
+.card-header.text-muted {
+  color: $muted !important;
+  cursor: default !important;
+}
+
+.fa.fa-check-circle {
+  display: none;
+}
+
+.editLink {
+  cursor: pointer;
+  color: #333333;
+  text-decoration: underline;
+  font-size: 14px;
+  margin-top: 11px;
+}
+
+.text-muted .stepCircle {
+  color: $muted;
+}
+
+.done .stepCircle {
+  display: none;
+}
+
+.done .fa.fa-check-circle {
+  color: $iconColor;
+  margin-right: 12px;
+  display: block !important;
+}
+
+.card-header .fa-chevron-up {
+  display: none;
+}
+
+.card-header .fa-chevron-down {
+  display: block;
+}
+
+.card-header.card-primary .fa-chevron-down {
+  display: none;
+}
+
+.card-header.card-primary .fa-chevron-up {
+  display: block;
+}
+
+.flow-section-summary {
+  padding: 30px 20px;
+}

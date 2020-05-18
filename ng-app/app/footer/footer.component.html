@@ -1,0 +1,20 @@
+<div id="footer">
+    <div class="container">
+            <div class="row">
+                    <div class="col" *ngFor="let col of footer.footers">
+                        <h3>{{col.title}}</h3>
+                        <ul>
+                            <li *ngFor="let link of col.links">
+                                <a [href]="link.url" target="_blank">{{link.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+            </div>
+
+            <p>{{footer.copyrightLine}}</p>
+            <p>{{footer.disclaimer}}</p>
+            <div *ngIf="showTariffDisclaimer">
+                <p>{{tariffDisclaimer}}</p>
+            </div>
+    </div>
+</div>

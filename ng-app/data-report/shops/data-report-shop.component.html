@@ -1,0 +1,25 @@
+<h2 class="title">
+    <i class="fa fa-toggle-right"></i>  <span l10nTranslate>DATA_REPORT-LIST-SHOP_TITLE</span>
+</h2>
+<div class="dataTableInfo">
+    <div *ngIf="loading">
+        <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+    </div>
+
+    <div *ngIf="!loading" class="dataTable container">
+        <sncr-datatable
+                #dataTable
+                [cols]="cols"
+                [value]="data"
+                [(selection)]="selected"
+                (onRowClick)="navigateToDataReport($event)">
+        </sncr-datatable>
+    </div>
+</div>
+
+<ng-template #shopList let-context>
+    <div>
+        <i *ngIf="context.row.reportConfig === 'N'" class="info-icon" [title]="'DATA_REPORT-NOT-ACTIVATED' | translate:lang"></i>
+        {{context.row.shopName}}
+    </div>
+</ng-template>

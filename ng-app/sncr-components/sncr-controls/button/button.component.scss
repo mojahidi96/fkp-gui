@@ -1,0 +1,140 @@
+@import '../../../styles/common-imports';
+@import '~bootstrap/scss/buttons';
+@import '../../../styles/_custom-variables';
+@import '../../../styles/mixins';
+
+:host {
+  appearance: none;
+}
+
+%btn-shared {
+  padding: 0px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.buttonSize {
+  @extend %btn-shared;
+  height: 34px;
+}
+
+button.btn:disabled {
+  pointer-events: none !important;
+}
+
+.btn-toolbar {
+  color: #fff;
+  background: rgba(0, 0, 0, 0)
+    linear-gradient(to bottom, #cc2b2b 0%, #950101 100%) repeat scroll 0 0;
+  border: 0;
+  font-weight: bold;
+  @include button-size(6px, 10px, $font-size-base - 1, inherit, 0);
+}
+
+.btn {
+  cursor: pointer;
+  font-family: $font-family-base;
+}
+
+.btn:focus,
+.btn.focus {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+::ng-deep .btn {
+  transition: none;
+}
+
+::ng-deep .btnDefault .btn {
+  @extend .buttonSize;
+}
+
+.buttonLoader {
+  position: relative;
+  padding-left: 30px;
+}
+
+.buttonLoader::before {
+  content: ' ';
+  border: 0px solid #fff;
+  border-top: 1px solid #fff;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  animation: spin 1s linear infinite;
+  display: block;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-primary {
+  @extend .buttonSize;
+  color: #fff;
+  background: $primary-btn-bg;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  &:hover {
+    background: $primary-btn-bg;
+    border-color: inherit;
+  }
+  &:focus {
+    background: $primary-btn-bg !important;
+  }
+  &[disabled] {
+    background: $primary-btn-bg;
+  }
+}
+
+::ng-deep .dropdown-toggle .btn-primary {
+  &:focus {
+    background: #fff !important;
+  }
+}
+
+%btn-secondary-shared {
+  color: #333;
+  background: $secondary-btn-bg;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  &:hover {
+    background: #fff;
+    color: #333;
+  }
+  &:focus {
+    background: #fff !important;
+    color: #333 !important;
+  }
+}
+
+.btn-secondary {
+  @extend .buttonSize;
+  @extend %btn-secondary-shared;
+}
+
+.btn-strong {
+  @extend .buttonSize;
+  color: #fff;
+  background: $btnStrong-bg;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  &:hover {
+    background: $btnStrong-bg;
+    color: #fff;
+  }
+}
+
+button.btn:disabled,
+button.btn[disabled] {
+  cursor: not-allowed !important;
+  opacity: 0.45;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.5);
+}

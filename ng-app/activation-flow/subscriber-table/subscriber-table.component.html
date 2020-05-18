@@ -1,0 +1,89 @@
+<div class="container subManagementMain">
+    <sncr-notification [handler]="alertNotify"></sncr-notification>
+    <p class="infoText" [innerHtml]="'MANAGE_DETAILS-EDIT_INFO_MESSAGE' | translate:lang"></p>
+    <div class="row marT30 ml-0" *ngIf="isPreQueryEligible">
+        <sncr-check-group *ngIf="enablePreQuery" [(ngModel)]="selectedSim" (ngModelChange)="resetColumns(true)">
+            <sncr-radio value="NEW_SIM" [label]="'SUB-MULTI-NEW-SIM' | translate:lang"></sncr-radio>
+            <sncr-radio value="EXISTING_SIM" [label]="'SUB-MULTI-EXISTING-SIM' | translate:lang"></sncr-radio>
+        </sncr-check-group>
+    </div>
+
+    <div *ngIf="loading" class="p-3">
+        <sncr-loader class="relative" [isLoading]="loading"></sncr-loader>
+    </div>
+
+    <div [hidden]="hideSubsTable || !(data.length > 0)">
+        <div class="row">
+            <sncr-results [currentCols]="columns" [totalRecords]="totalRecords"></sncr-results>
+        </div>
+        <div class="row">
+            <sncr-paginator [rowsPerPageOptions]="rowsPerPageOptions" [totalRecords]="totalRecords"
+                [first]="first" [rows]="rows" (onPageChange)="onPageChange($event)" #paginator1></sncr-paginator>
+        </div>
+        <form [formGroup]="subscriberForm">
+            <table class="table">
+                <thead>
+                <th *ngFor="let col of manageCols; let i=index" [id]="'th_' + i"
+                    [ngStyle]="col?.width ?({'min-width': col?.width}):''" [class]="col?.width?'':'p-column-width'" l10nTranslate>
+                <span l10nTranslate>{{col.title}}</span>
+                        <i class="showInfo fa infoGreyIcon" *ngIf="col.infoMsg"
+                            [ngbPopover]="col.infoMsg | translate:lang" triggers="mouseover:mouseleave"></i>
+                        <span class="font-weight-normal assign-link" *ngIf="col.assignAll"
+                              (click)="assignToAll(col.field)" l10nTranslate>{{col.infoTitle}}
+                        </span>
+                    </th>
+                </thead>
+                <tbody formArrayName="subscribers">
+                    <tr [formGroupName]="i + (currentPage * rows)" *ngFor="let group of displayData; let i=index">
+                        <td *ngFor="let column of manageCols">
+                            <sncr-validation-messages *ngIf="group.dirty && group.get(column.field)?.invalid"
+                                [messages]="getErrors(group, column.field)">
+                            </sncr-validation-messages>
+                            <div *ngIf="column.type === 'checkbox'" class="fm-check">
+                                <input type="checkbox" [formControlName]="column.field" [id]="column?.fieldName + '_' + (first + i)"
+                                    (change)="resetValidation(group, column.field, true)">
+                                <div class="bgdiv"></div>
+                            </div>
+                            <div *ngIf="column.type === 'text'">
+                                <input type="{{column.type}}" class="form-control" [formControlName]="column.field"
+                                    (keyup)="resetValidation(group, column.field, true)" [id]="column?.fieldName + '_' + (first + i)" autocomplete="none">
+                            </div>
+                            <div *ngIf="column.type === 'password'">
+                                <input type="text" class="form-control mask-text" [formControlName]="column.field"
+                                       (keyup)="resetValidation(group, column.field, true)" [id]="column?.fieldName + '_' + (first + i)" autocomplete="none">
+                            </div>
+                            <div *ngIf="column.type === 'select'" class="fm-select">
+                                <select [formControlName]="column.field" [id]="column?.fieldName + '_' + (first + i)"
+                                    (change)="resetValidation(group, column.field, true)">
+                                    <option value="" selected l10nTranslate *ngIf="!column.hideSelectionTitle">
+                                        {{column.defaultSelectLabel || 'DATATABLE-SELECTION_TITLE'}}</option>
+                                    <option *ngFor="let o of column.options" value="{{o.value}}" l10nTranslate>
+                                            {{o.text}}</option>
+                                </select>
+                                <span><i class="fa fa-chevron-down"></i></span>
+                            </div>
+                            <div *ngIf="column.type === 'select-lazy'" class="fm-select">
+                                <select [formControlName]="column.field" [id]="column?.fieldName + '_' + (first + i)" (change)="resetValidation(group, column.field, true)">
+                                    <option value="" selected l10nTranslate *ngIf="!column.hideSelectionTitle">
+                                        {{column.defaultSelectLabel || 'DATATABLE-SELECTION_TITLE'}}</option>
+                                    <option *ngFor="let o of getAvailableOptions(group, column.field)" value="{{o.value}}" l10nTranslate>
+                                        {{o.text}}</option>
+                                </select>
+                                <span><i class="fa fa-chevron-down"></i></span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <div class="row">
+            <sncr-paginator [rowsPerPageOptions]="rowsPerPageOptions" [totalRecords]="totalRecords"
+                [first]="first" [rows]="rows" (onPageChange)="onPageChange($event)"></sncr-paginator>
+        </div>
+    </div>
+
+    <div class="row continue-button pb-3" *ngIf="!hideSubsTable">
+        <sncr-button type="strong" (click)="persistSubscriber()" [disabled]="processing" [ngClass]="{disableFields:processing}"><span
+                l10nTranslate>{{continueLabel}}</span></sncr-button>
+    </div>
+</div>

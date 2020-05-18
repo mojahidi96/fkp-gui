@@ -1,0 +1,55 @@
+<button type="button" class="close-popup" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+<div class="modal-header">
+  <div class="navigation-bar">
+    <button class="btn bg-t" [disabled]="isRoot() || isLoading" (click)="goBack()">
+      <img class="resize-med" src="public/icons/svg/vodafone/arrow-left.svg">
+    </button>
+    <h3>{{newPath}}</h3>
+    <button class="btn bg-t" (click)="goHome()">
+      <img class="resize-med" src="public/icons/svg/filesystem/home-folder.svg">
+    </button>
+  </div>
+</div>
+<div class="modal-body h-60">
+  <sncr-notification [handler]="notifyError"></sncr-notification>
+  <sncr-notification *ngIf="noFolders" type="error">
+    <span l10nTranslate>ED_DRIVE_NO_FOLDER</span>
+  </sncr-notification>
+  <div class="folder-list">
+    <ul class="list-group">
+      <sncr-loader *ngIf="isLoading" class="custom-inline" [isLoading]="true"></sncr-loader>
+      <ng-container *ngIf="!isLoading && !noFolders">
+        <li *ngIf="isRoot() && folderToMove.parentId !== 'root'" class="list-group-item border-0">
+          <span class="float-left" (click)="makeTargetFolder(rootElement)">
+            <img class="resize-small" *ngIf="targetFolder !== rootElement" src="public/icons/svg/checkbox/normal.svg">
+            <img class="resize-small" *ngIf="targetFolder === rootElement" src="public/icons/svg/checkbox/checked.svg">
+          </span>
+          <span class="ml-3">
+            <img class="resize-med" src="public/icons/svg/filesystem/folder.svg">
+          </span>
+          <span class="ml-3" l10nTranslate>ED_DRIVE_MOVE_TO_ROOT</span>
+        </li>
+        <ng-container *ngFor="let element of folderList">
+          <li class="list-group-item border-0" *ngIf="element.id !== folderToMove.id">
+            <span class="float-left" (click)="makeTargetFolder(element)">
+              <img class="resize-small" *ngIf="targetFolder !== element" src="public/icons/svg/checkbox/normal.svg">
+              <img class="resize-small" *ngIf="targetFolder === element" src="public/icons/svg/checkbox/checked.svg">
+            </span>
+            <span class="ml-3">
+              <img class="resize-med" src="public/icons/svg/filesystem/folder.svg">
+            </span>
+            <span class="ml-3 href" (click)="navigate(element,false)">{{element.fileName}}</span>
+          </li>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('Cross click')"
+    l10nTranslate>ED_DRIVE_CANCEL
+  </button>
+  <sncr-button type=“strong” class="float-right" (click)="moveToTarget()" [disabled]="!targetFolder"
+    [btnStyle]="'btn btn-primary'" l10nTranslate>ED_DRIVE_MOVE
+  </sncr-button>
+</div>

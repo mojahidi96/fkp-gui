@@ -1,0 +1,37 @@
+<sncr-loader *ngIf="saving" class="relative"></sncr-loader>
+
+<ng-container *ngIf="!saving">
+    <div class="row" *ngIf="!readonly">
+        <div class="col-6">
+            <form [formGroup]="formGroup" (ngSubmit)="addComment()">
+                <sncr-textarea formControlName="comments"
+                               [placeholder]="commentPlaceholder | translate:lang"
+                               [rows]="4"
+                               [showValidation]="false" required>
+                    {{'COMMENTS-TEXTAREA_LABEL' | translate:lang}}
+                </sncr-textarea>
+
+                <sncr-button type="submit" l10nTranslate>COMMENTS-ADD_NOTE</sncr-button>
+            </form>
+        </div>
+    </div>
+
+    <sncr-datatable [cols]="cols" [value]="masterComments"></sncr-datatable>
+</ng-container>
+<ng-template #admincomments let-context>
+    <div class="description" (click)="context.row.ellipsis = !context.row.ellipsis">
+        {{(context.row.transComment?.length > 30 && !context.row.ellipsis) ? (context.row.transComment | slice:0:30) + '...' : (context.row.transComment) }}
+    </div>
+</ng-template>
+
+<ng-template #freetxts let-context>
+    <div class="description" (click)="context.row.ellipsis = !context.row.ellipsis">
+        {{(context.row.comments?.length > 30 && !context.row.ellipsis) ? (context.row.comments | slice:0:30) + '...' : (context.row.comments) }}
+    </div>
+</ng-template>
+<ng-template #freetxtsTimeStamp let-context>
+    {{ (context.row.createdTs | date:'dd.MM.yyyy HH:mm:ss') }}
+</ng-template>
+<ng-template #mastertxtsTimeStamp let-context>
+    {{ (context.row.timestamp | date:'dd.MM.yyyy HH:mm:ss') }}
+</ng-template>

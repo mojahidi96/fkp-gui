@@ -1,0 +1,51 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/page-title';
+
+:host ::ng-deep .href:focus,
+.href:hover {
+  color: #014c8c;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+:host ::ng-deep .fa-selected-circle {
+  background-image: url(~/public/icons/svg/notification/success.svg) !important;
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+
+  &:before {
+    content: '';
+  }
+}
+
+.next-button {
+  text-align: right;
+  margin-bottom: 30px;
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+  width: 958px;
+  min-height: 225px;
+
+  .loader {
+    top: 40px;
+    position: relative;
+    margin: 3% auto !important;
+  }
+}
+
+:host ::ng-deep .href {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}

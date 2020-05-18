@@ -1,0 +1,70 @@
+<h2 class="pageTitle">
+    <span l10nTranslate>PAGE_TITLE</span>
+</h2>
+<!--<sncr-notification [handler]="alertMessage"></sncr-notification>-->
+
+
+<div class="card">
+    <div class="card-block">
+        <div class="row">
+            <div class="col-md-12" *ngIf="loading">
+                <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+            </div>
+            <div class="col-md-12" *ngIf="!loading">
+                <ng-container>
+                    <sncr-datatable #sncrData [multiSelection]="true" [selectionTitle]="SelectionTitle" [sortField]="'orderNumber'" [header]="header"
+                                    sortOrder="-1" [value]="orderData" [cols]="orderListCols" [(selection)]="selected"
+                                    [selectMessage]="selectMessage" singleSelectionMsg="Eine" (selectionChange)="onSelection($event)">
+                    </sncr-datatable>
+                </ng-container>
+            </div>
+        </div>
+
+        <div>
+            <div class="row buttonPadding">
+
+                <div class="col-md-12">
+                    <div class="col-md-4 pl-3">
+                        <sncr-button type="secondary" class="pull-left pt-4" (click)="backButtonClicked()" l10nTranslate>BACK_BUTTON</sncr-button>
+                    </div>
+                    <div class="col-md-8 pull-right pr-3">
+                        <div class="col-md-4 pull-right pt-4">
+                            <sncr-button type="primary" [disabled]="isDisabledButton()" [ngClass]="{disableFields:isDisabledButton()}" class="primary pull-right" (click)="saveApprover()" l10nTranslate>SAVE_BUTTON</sncr-button>
+                        </div>
+                        <div class="col-md-4 pull-right mar3">
+                            <div *ngIf="showDropdown">
+                                <label><span l10nTranslate>SELECT_ACTION_LABLE</span><span class="redColor">*</span></label>
+                                <sncr-select [(ngModel)]="states">
+                                    <option value="0" selected>Auswählen</option>
+                                    <option *ngFor="let o of actoptions" value="{{o.value}}">{{o.text}}</option>
+                                </sncr-select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #locationDetails let-context>
+    <div class="">
+        <span>{{context.row.locationDetails1}}<br>
+            {{context.row.locationDetails2}}</span>
+    </div>
+</ng-template>
+
+<ng-template #productDetails let-context>
+    <div class="">
+        <span>{{context.row.productDetails1}}<br>
+            {{context.row.productDetails2}}</span>
+    </div>
+</ng-template>
+
+<ng-template #orderNo let-context>
+    <div class="ellipiss">
+        <span class="href" (click)="showOrderDetails(context.row)">{{context.row.orderNumber}}</span>
+    </div>
+</ng-template>

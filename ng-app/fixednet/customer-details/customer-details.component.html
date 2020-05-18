@@ -1,0 +1,102 @@
+<h2 class="pageTitle">
+    <span>{{headerTitle}}</span>
+</h2>
+<sncr-notification [handler]="notify" [dismissible]="false"></sncr-notification>
+<div>
+    <sncr-flow #flow="sncrFlow">
+        <sncr-flow-section titleText="Shop auswählen" #shopSelection="sncrFlowSection" [hideStepper]="hideShopSelection">
+            <div *sncrSummaryTemplate>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 break-word"><strong>Kundennummer</strong><br>{{shopSelection.model.selected.fnCustomerNumber?shopSelection.model.selected.fnCustomerNumber:''}}</div>
+                    <div class="col-sm-4 col-md-4 break-word"><strong>Top-Level Kunde</strong><br>{{shopSelection.model.selected.fnRootCustomerNumber}}</div>
+                    <div class="col-sm-4 col-md-4 break-word"><strong>Name des Shops</strong><br>{{shopSelection.model.selected.shopName}}</div>
+                </div>
+            </div>
+            <ng-container *ngIf="!hideShopSelection">
+            <div *sncrSectionTemplate class="dataTableCbillF">
+                <shop-selection [shops]="shops"
+                                [shopSelection]="shopSelection" [loading]="loading" [notify]="notify"></shop-selection>
+            </div>
+            </ng-container>
+        </sncr-flow-section>
+
+        <sncr-flow-section titleText="Kundennummer auswählen" #customerSelection="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 break-word"><strong>Kundennummer</strong><br>{{customerSelection?customerSelection.model.selected.fnCustomerNumber:''}}</div>
+                    <div class="col-sm-3 col-md-3 break-word"><strong>Kundenname</strong><br>{{customerSelection?customerSelection.model.selected.customerName:''}}</div>
+                    <div class="col-sm-3 col-md-3 break-word"><strong>Adresse des Vertragspartners</strong><br>{{customerSelection?customerSelection.model.selected.address1:''}}<br />{{customerSelection?customerSelection.model.selected.address2:''}}</div>
+                    <div class="col-sm-3 col-md-3"><strong>Hauptansprechpartner</strong><br>
+                        <div>
+                            <label class="label">Name:&nbsp;</label><span class="name">{{customerSelection?customerSelection.model.selected.contactName:''}}</span>
+                        </div>
+                        <div>
+                            <label class="label">Telefon:&nbsp;</label><span class="phone">{{customerSelection?customerSelection.model.selected.phoneNumber:''}}</span>
+                        </div>
+                        <div>
+                            <label class="label">Mobil:&nbsp;</label><span class="mobile">{{customerSelection?customerSelection.model.selected.mobileNumber:''}}</span>
+                        </div>
+                        <div>
+                            <label class="label">Fax:&nbsp;</label><span class="fax">{{customerSelection?customerSelection.model.selected.faxNumber:''}}</span>
+                        </div>
+                        <div>
+                            <label class="label">E-Mail:&nbsp;</label><span class="mail">{{customerSelection?customerSelection.model.selected.email:''}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *sncrSectionTemplate class="dataTableCbillF">
+                <customer-selection [shop]="shopSelection ? shopSelection.model.selected : ''"
+                                    [customerSelection]="customerSelection" [notify]="notify"></customer-selection>
+            </div>
+        </sncr-flow-section>
+        <sncr-flow-section titleText="Detailinformationen" #billOrdProd="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <ng-container [ngSwitch]="billOrdProd.model.type" *ngIf="billOrdProd && billOrdProd.model.type">
+                    <ng-container *ngSwitchCase="'order'">
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 break-word"><strong>Bestellnummer</strong><br>{{billOrdProd?billOrdProd.model.selected.barCodeId:''}}</div>
+                            <div class="col-sm-3 col-md-3 break-word"><strong>Standort</strong><br>{{billOrdProd?billOrdProd.model.selected.locationAddress1:''}}<br />
+                                                                                                   {{billOrdProd?billOrdProd.model.selected.locationAddress2:''}}
+                            </div>
+                            <div class="col-sm-3 col-md-3 break-word"><strong>Produkttyp</strong><br>{{billOrdProd?billOrdProd.model.selected.productBundleType:''}}</div>
+                            <div class="col-sm-3 col-md-3 break-word"><strong>Auftragstatus</strong><br>{{billOrdProd?billOrdProd.model.selected.orderStatus:''}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'product'">
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 break-word"><strong>Standort</strong><br>{{billOrdProd?billOrdProd.model.selected.locationAddress:''}}</div>
+                            <div class="col-sm-3 col-md-3 break-word"><strong>Paket-Konstellation</strong><br>{{billOrdProd?billOrdProd.model.selected.productType:''}}</div>
+                            <div class="col-sm-3 col-md-3 break-word"><strong>Paket-Tarif</strong><br>{{billOrdProd?billOrdProd.model.selected.salesPacketName:''}}</div>
+                            <div class="col-sm-3 col-md-3 break-word"><strong>Hauptrufnummer</strong><br>{{billOrdProd?billOrdProd.model.selected.mainAccessNo:''}}</div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <div *sncrSectionTemplate class="dataTableCbillF">
+                <bill-order-prod [customer]="customerSelection.model.selected"
+                                 [shop]="shopSelection?shopSelection.model.selected:''"
+                                 [billOrdProd]="billOrdProd" [notify]="notify"></bill-order-prod>
+            </div>
+        </sncr-flow-section>
+        <sncr-flow-section titleText="{{billOrdProd.model.type === 'order' ? 'Bestelldetails':'Produktinformationen'}}" #prodDetails="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+            </div>
+            <ng-container [ngSwitch]="billOrdProd.model.type" *ngIf="billOrdProd && billOrdProd.model.type">
+                <ng-container *ngSwitchCase="'order'">
+                    <div *sncrSectionTemplate class="dataTableCbillF">
+                        <order-details [order]="billOrdProd?billOrdProd.model.selected:''" [customer]="customerSelection?customerSelection.model.selected:''"
+                                       [shop]="shopSelection?shopSelection.model.selected:''" [notify]="notify"></order-details>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'product'">
+                    <div *sncrSectionTemplate class="dataTableCbillF">
+                        <prod-details [product]="billOrdProd?billOrdProd.model.selected:''" [shop]="shopSelection?shopSelection.model.selected:''"
+                                      [customer]="customerSelection?customerSelection.model.selected:''" [notify]="notify"></prod-details>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+        </sncr-flow-section>
+    </sncr-flow>
+</div>

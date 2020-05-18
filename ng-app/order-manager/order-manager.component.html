@@ -1,0 +1,43 @@
+<h2 class="pageTitle" l10nTranslate>ORDER_MANAGER-TITLE</h2>
+
+<ngb-accordion activeIds="ngb-panel-0">
+    <ngb-panel [title]="panelTitles.details">
+        <ng-template ngbPanelContent>
+            <om-detail [countries]="countries" [orderDetail]="orderDetail"
+                       [pattern]="pattern" [isEditable] = "isEditable"></om-detail>
+            <ng-container *ngIf="availableTabs?.length > 0 ">
+                <order-bulk-edit [id]="id" [tabdetails]="availableTabs" (output)="orderBulkOutput($event)"></order-bulk-edit>
+            </ng-container>
+        </ng-template>
+    </ngb-panel>
+
+    <ngb-panel *ngIf="orderDetail.orderType !== orderConfig.orderTypes.MA_CHANGE_TARIFF" [title]="panelTitles.shipmentTracking">
+        <ng-template ngbPanelContent>
+            <shipment-tracking></shipment-tracking>
+        </ng-template>
+    </ngb-panel>
+
+    <ngb-panel [title]="panelTitles.kias">
+        <ng-template ngbPanelContent>
+            <kias-activity [id]="orderDetail.orderNumber"></kias-activity>
+        </ng-template>
+    </ngb-panel>
+
+    <ngb-panel [title]="panelTitles.comments">
+        <ng-template ngbPanelContent>
+            <comments-history [id]="id" [pattern]="pattern" flowType="MASTER_TXT"></comments-history>
+        </ng-template>
+    </ngb-panel>
+
+    <ngb-panel [title]="panelTitles.history">
+        <ng-template ngbPanelContent>
+            <system-history [id]="id"></system-history>
+        </ng-template>
+    </ngb-panel>
+
+    <ngb-panel [title]="panelTitles.freeText">
+        <ng-template ngbPanelContent>
+            <comments-history [id]="id" [pattern]="pattern" flowType="FREE_TXT"></comments-history>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>

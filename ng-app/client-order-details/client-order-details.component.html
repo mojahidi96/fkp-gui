@@ -1,0 +1,54 @@
+<form #internalForm [formGroup]="saveForm" >
+    <div class="container">
+        <div class="row margin-0 d-flex align-items-end">
+            <div class="col-sm-4 pl-0 flexRow">
+                <sncr-input name="customerOrderNumber"
+                            [formControlName]="'custOrderNumber'"
+                            [maxLength]="'35'"
+                            [showValidation]="true"
+                            [infoIcon]="constants.popOverCustOrderNumber | translate:lang">
+                    <span l10nTranslate>DATATABLE-INTERNAL_ORDER_NO</span>
+                </sncr-input>
+            </div>
+
+            <div class="col-sm-4 flexRow">
+                <sncr-input name="custIntNote"
+                            [maxLength]="'35'"
+                            [showValidation]="true"
+                            [formControlName]="'custIntNote'"
+                            [infoIcon]="constants.popOverCustIntNote | translate:lang">
+                    <span l10nTranslate>DATATABLE-CUST_ORDER_INFO</span>
+                </sncr-input>
+            </div>
+
+            <div *ngIf="enterPrisePartner" class="col-sm-4 flexRow1">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <sncr-input type="number" [withDropDown]="voidList"
+                                    name="void" [autocomplete]="'off'"
+                                    [disabled]="loading"
+                                    [maxLength]="'8'"
+                                    [showValidation]="voipValidate"
+                                    (ngModelChange)="checkForVoid($event)"
+                                    [formControlName]="'voidNumber'"
+                                    [infoIcon]="constants.popOverVoid | translate:lang" required>
+                            <span l10nTranslate>DATATABLE-VO_ID</span>
+                        </sncr-input>
+                    </div>
+                        <div class="buttonG" *ngIf="saveForm.controls['voidNumber'].value && saveForm.controls['voidNumber'].value?.length === 8 && !voipValidate">
+                            <div class="col-2">
+                            <sncr-button *ngIf="buttonAdd" type="secondary" (click)="createVoid()">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </sncr-button>
+                            <sncr-button type="secondary" *ngIf="buttonDelete" (click)="deleteVoid()">
+                                <i class="fa fa-remove" aria-hidden="true"></i>
+                            </sncr-button>
+                            </div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</form>

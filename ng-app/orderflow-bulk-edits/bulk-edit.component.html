@@ -1,0 +1,466 @@
+<sncr-notification [handler]="alertNotify"></sncr-notification>
+<ng-container *ngIf="(flowType == bulkEditConfig.FL_TYPE_BAN) || (flowType == bulkEditConfig.FL_TYPE_SUB && isRsdLoaded) || (flowType == bulkEditConfig.FL_TYPE_ACT_SUB)">
+    <div class="card">
+        <div class="card-block">
+            <p *ngIf="selectCount!=1"><span l10nTranslate>MANAGE_DETAILS-BULK_EDIT_HEADER</span></p>
+            <p *ngIf="selectCount==1" [innerHtml]="'MANAGE_DETAILS-SINGLE_EDIT_HEADER' | translate:lang"></p>
+            <div class="row marT30 ml-0" *ngIf="isPreQueryEligible">
+                <sncr-check-group *ngIf="enablePreQuery" [(ngModel)]="selectedSim" (ngModelChange)="setSimSelection()">
+                    <sncr-radio value="NEW_SIM" [label]="'SUB-ONE-NEW-SIM' | translate:lang"></sncr-radio>
+                    <sncr-radio value="EXISTING_SIM" [label]="'SUB-ONE-EXISTING-SIM' | translate:lang"></sncr-radio>
+                </sncr-check-group>
+            </div>
+            <form *ngIf="formReset" [formGroup]="bulkEditForm" (ngSubmit)="saveBulkEditForm()" [ngClass]="{disableFields: processing, error: bulkEditForm.invalid}">
+                <ng-container>
+                    <div class="row mb-3" *ngIf="selectCount==1">
+                        <div class="col-sm-4" *ngIf="flowType!==bulkEditConfig.FL_TYPE_ACT_SUB">
+                            <div class="col-sm-6 readOnly"><label l10nTranslate>{{translations.ban}}</label></div>
+                            <div class="col-sm-6 readOnly"><span l10nTranslate>{{bulkEditForm.value[fieldControlNames.ban]}}</span></div>
+                        </div>
+                        <div class="col-sm-4" *ngIf="flowType==bulkEditConfig.FL_TYPE_SUB">
+                            <div class="col-sm-6"><label l10nTranslate>{{translations.subsNo}}</label></div>
+                            <div class="col-sm-6"><span>{{bulkEditForm.value[fieldControlNames.subsNo]}}</span></div>
+                        </div>
+                        <div class="col-sm-6" *ngIf="flowType==bulkEditConfig.FL_TYPE_BAN">
+                            <div class="col-sm-2"><label l10nTranslate>{{translations.legalNameAddress}}</label></div>
+                            <div class="col-sm-8">
+                            <span *ngFor="let val of bulkEditForm.value[fieldControlNames.legalNameAddress].split(',');let index = index; let last=last;">
+                              {{val}}{{!last ? ',':''}}<br />
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="flowType==bulkEditConfig.FL_TYPE_SUB || flowType==bulkEditConfig.FL_TYPE_ACT_SUB">
+                        <div class="col-sm-12">
+                            <div class="row" *ngIf="flowType==bulkEditConfig.FL_TYPE_ACT_SUB">
+                                <div class="col-sm-4" *ngIf="showInputs('simSerialNo')">
+                                    <sncr-input label="{{translations.simSerialNo | translate:lang}}" [formControlName]="fieldControlNames.simSerialNo"
+                                    (input)="simSerialNoExists(fieldControlNames.simSerialNo)" [showValidation]="showValidation">
+                                    </sncr-input>
+                                </div>
+                                <div class="col-sm-4" *ngIf="showInputs('msisdn') && selectedSim === 'EXISTING_SIM'">
+                                    <sncr-select label="{{translations.msisdn | translate:lang}}" [formControlName]="fieldControlNames.msisdn"
+                                                 [showValidation]="showValidation">
+                                        <option value="" selected l10nTranslate>MANAGE_DETAILS-CHOOSE</option>
+                                        <option *ngFor="let o of msisdn" [value]="o.value" l10nTranslate>
+                                            {{o.text}}
+                                        </option>
+                                    </sncr-select>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="flowType==bulkEditConfig.FL_TYPE_ACT_SUB">
+                                <div class="col-sm-4" *ngIf="showInputs('ultracardSimSerialNo1')">
+                                    <sncr-input label="{{translations.ultracardSimSerialNo1 | translate:lang}}"
+                                                [formControlName]="fieldControlNames.ultracardSimSerialNo1"
+                                                (input)="simSerialNoExists(fieldControlNames.ultracardSimSerialNo1)"
+                                                [showValidation]="showValidation">
+                                    </sncr-input>
+                                </div>
+                                <div class="col-sm-4" *ngIf="showInputs('ultracardSimSerialNo2')">
+                                    <sncr-input label="{{translations.ultracardSimSerialNo2 | translate:lang}}"
+                                                [formControlName]="fieldControlNames.ultracardSimSerialNo2"
+                                                (input)="simSerialNoExists(fieldControlNames.ultracardSimSerialNo2)"
+                                                [showValidation]="showValidation">
+                                    </sncr-input>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="flowType==bulkEditConfig.FL_TYPE_ACT_SUB && showInputs('simType')">
+                                <div class="col-sm-4" *ngIf="showInputs('simType')">
+                                    <sncr-select label="{{translations.simType | translate:lang}}" [formControlName]="fieldControlNames.simType"
+                                                 [showValidation]="showValidation">
+                                        <option *ngFor="let o of simCardOptions" [value]="o.value" l10nTranslate>
+                                            {{o.text}}
+                                        </option>
+                                    </sncr-select>
+                                </div>
+                                <div class="col-sm-4" *ngIf="showInputs('msisdn')">
+                                    <sncr-select label="{{translations.msisdn | translate:lang}}" [formControlName]="fieldControlNames.msisdn"
+                                                 [showValidation]="showValidation">
+                                        <option value="" selected l10nTranslate>MANAGE_DETAILS-CHOOSE</option>
+                                        <option *ngFor="let o of msisdn" [value]="o.value" l10nTranslate>
+                                            {{o.text}}
+                                        </option>
+                                    </sncr-select>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="flowType==bulkEditConfig.FL_TYPE_ACT_SUB && showInputs('ultracardSimType1')">
+                                <div class="col-sm-4">
+                                    <sncr-select label="{{translations.ultracardSimType1 | translate:lang}}" [formControlName]="fieldControlNames.ultracardSimType1"
+                                                 [showValidation]="showValidation">
+                                        <option value="" selected l10nTranslate>SIM_TYPE-DATATABLE-SELECTION_TITLE</option>
+                                        <option *ngFor="let o of ultraCardOptions" [value]="o.value" l10nTranslate>
+                                            {{o.text}}
+                                        </option>
+                                    </sncr-select>
+                                </div>
+                                <div class="col-sm-4" *ngIf="showInputs('ultracardSimType2')">
+                                    <sncr-select label="{{translations.ultracardSimType2 | translate:lang}}" [formControlName]="fieldControlNames.ultracardSimType2"
+                                                 [showValidation]="showValidation">
+                                        <option value="" selected l10nTranslate>SIM_TYPE-DATATABLE-SELECTION_TITLE</option>
+                                        <option *ngFor="let o of ultraCardOptions" [value]="o.value" l10nTranslate>
+                                            {{o.text}}
+                                        </option>
+                                    </sncr-select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <sncr-input class="internCustId" label="{{translations.internalCustId | translate:lang}}" [formControlName]="fieldControlNames.internalCustId" [disabled]="intCustIdDelete"
+                                                [showValidation]="showValidation">
+                                        <i class="showInfo fa infoGreyIcon" [ngbPopover]="'SELECTION-TOOLTIP-INTERNAL_CODE' | translate:lang" triggers="mouseover:mouseleave"></i>
+                                    </sncr-input>
+                                </div>
+
+                                <div class="pad-btn-input" *ngIf="selectCount != 1">
+                                    <sncr-button type="secondary" (click)="intCustIdDelete = !intCustIdDelete;deleteFieldControls(fieldControlNames.internalCustId)">
+                                        <i class="fa fa-trash-o" aria-hidden="true" *ngIf="!intCustIdDelete"></i>
+                                        <i class="fa fa-undo" aria-hidden="true" *ngIf="intCustIdDelete"></i>
+                                    </sncr-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="!isRSD">
+                    <h4 l10nTranslate>{{translations.nameFormat}}</h4>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-check-group [formControlName]="fieldControlNames.nameFormat"
+                                              [showValidation]="showValidation">
+                                <div class="row">
+                                    <div class="col-sm-6" *ngFor="let o of bulkEditConfig.nameFormatOptions">
+                                        <sncr-radio [value]="o.value" l10nTranslate>{{o.text}}</sncr-radio>
+                                    </div>
+                                </div>
+                            </sncr-check-group>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <sncr-select label="{{translations.salutation | translate:lang}}" [formControlName]="fieldControlNames.salutation"
+                                         [showValidation]="showValidation">
+                                <option value="" selected l10nTranslate>MANAGE_DETAILS-CHOOSE</option>
+                                <option *ngFor="let o of bulkEditConfig.salutationOptions" [value]="o.value" l10nTranslate>
+                                    {{o.text}}
+                                </option>
+                            </sncr-select>
+                        </div>
+
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <sncr-select label="{{translations.title | translate:lang}}" [formControlName]="fieldControlNames.title"
+                                                 [disabled]="titleDelete" [showValidation]="showValidation">
+                                        <option value="" selected l10nTranslate>MANAGE_DETAILS-CHOOSE</option>
+                                        <option *ngFor="let o of bulkEditConfig.titleOptions" [value]="o.value" l10nTranslate>
+                                            {{o.text}}
+                                        </option>
+                                    </sncr-select>
+                                </div>
+                                <!--<div class="col-sm-6 pad-btn-select">
+                                    <sncr-button type="secondary" (click)="titleDelete = !titleDelete;deleteFieldControls(fieldControlNames.title)">
+                                        <i class="fa fa-trash-o" aria-hidden="true" *ngIf="!titleDelete"></i>
+                                        <i class="fa fa-undo" aria-hidden="true" *ngIf="titleDelete"></i>
+                                    </sncr-button>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.firstName | translate:lang}}" [formControlName]="fieldControlNames.firstName"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.name1 | translate:lang}}" [formControlName]="fieldControlNames.name1"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <sncr-input label="{{translations.name2 | translate:lang}}" [formControlName]="fieldControlNames.name2" [disabled]="name2Delete"
+                                                [showValidation]="showValidation">
+                                    </sncr-input>
+                                </div>
+                                <div class="pad-btn-input" *ngIf="selectCount != 1">
+                                    <sncr-button type="secondary" (click)="name2Delete = !name2Delete;deleteFieldControls(fieldControlNames.name2)">
+                                        <i class="fa fa-trash-o" aria-hidden="true" *ngIf="!name2Delete"></i>
+                                        <i class="fa fa-undo" aria-hidden="true" *ngIf="name2Delete"></i>
+                                    </sncr-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <sncr-input label="{{translations.name3 | translate:lang}}" [formControlName]="fieldControlNames.name3" [disabled]="name3Delete"
+                                                [showValidation]="showValidation">
+                                    </sncr-input>
+                                </div>
+                                <div class="pad-btn-input" *ngIf="selectCount != 1">
+                                    <sncr-button type="secondary" (click)="name3Delete = !name3Delete;deleteFieldControls(fieldControlNames.name3)">
+                                        <i class="fa fa-trash-o" aria-hidden="true" *ngIf="!name3Delete"></i>
+                                        <i class="fa fa-undo" aria-hidden="true" *ngIf="name3Delete"></i>
+                                    </sncr-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h4 l10nTranslate>{{translations.headers.addressInfo}}</h4>
+
+                    <div class="row" *ngIf="flowType==bulkEditConfig.FL_TYPE_SUB || flowType==bulkEditConfig.FL_TYPE_ACT_SUB">
+                        <div class="col-sm-8">
+                            <sncr-check-group [label]="''" [formControlName]="fieldControlNames.addressFormat"
+                                              [showValidation]="showValidation">
+                                <div class="row">
+                                    <div class="col-sm-6" *ngFor="let o of bulkEditConfig.addressFormatOptions">
+                                        <sncr-radio [value]="o.value" l10nTranslate>{{o.text}}</sncr-radio>
+                                    </div>
+                                </div>
+                            </sncr-check-group>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <sncr-input label="{{translations.street | translate:lang}}" [formControlName]="fieldControlNames.street"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <sncr-input label="{{translations.houseNo | translate:lang}}" [formControlName]="fieldControlNames.houseNo"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="flowType==bulkEditConfig.FL_TYPE_SUB || flowType==bulkEditConfig.FL_TYPE_ACT_SUB">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.poBox | translate:lang}}" [formControlName]="fieldControlNames.poBox"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <sncr-input label="{{translations.postalCode | translate:lang}}" [formControlName]="fieldControlNames.postalCode"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <sncr-input label="{{translations.city | translate:lang}}" [formControlName]="fieldControlNames.city"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-select label="{{translations.country | translate:lang}}" [formControlName]="fieldControlNames.country"
+                                         [showValidation]="showValidation">
+                                <option value="" selected>Auswählen</option>
+                                <option *ngFor="let o of countries" [value]="o.value">{{o.text}}</option>
+                            </sncr-select>
+                        </div>
+                    </div>
+
+                    <h4 l10nTranslate>{{translations.headers.contactInfo}}</h4>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.nameContact | translate:lang}}" [formControlName]="fieldControlNames.nameContact" [disabled]="nameContactDelete"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                        <div class="pad-btn-input" *ngIf="selectCount != 1">
+                            <sncr-button type="secondary" (click)="nameContactDelete = !nameContactDelete;deleteFieldControls(fieldControlNames.nameContact)">
+                                <i class="fa fa-trash-o" aria-hidden="true" *ngIf="!nameContactDelete"></i>
+                                <i class="fa fa-undo" aria-hidden="true" *ngIf="nameContactDelete"></i>
+                            </sncr-button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.fax | translate:lang}}" [formControlName]="fieldControlNames.fax" [disabled]="faxDelete"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                        <div class="pad-btn-input" *ngIf="selectCount != 1">
+                            <sncr-button type="secondary" (click)="faxDelete = !faxDelete;deleteFieldControls(fieldControlNames.fax)">
+                                <i class="fa fa-trash-o" aria-hidden="true" *ngIf="!faxDelete"></i>
+                                <i class="fa fa-undo" aria-hidden="true" *ngIf="faxDelete"></i>
+                            </sncr-button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.phone | translate:lang}}" [formControlName]="fieldControlNames.phone" [disabled]="phoneDelete"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                        <div class="pad-btn-input" *ngIf="selectCount != 1">
+                            <sncr-button type="secondary" (click)="phoneDelete = !phoneDelete;deleteFieldControls(fieldControlNames.phone)">
+                                <i class="fa fa-trash-o" aria-hidden="true" *ngIf="!phoneDelete"></i>
+                                <i class="fa fa-undo" aria-hidden="true" *ngIf="phoneDelete"></i>
+                            </sncr-button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.email | translate:lang}}" [formControlName]="fieldControlNames.email" [disabled]="emailDelete"
+                                        [showValidation]="showValidation" autocomplete="off">
+                            </sncr-input>
+                        </div>
+                        <div class="pad-btn-input" *ngIf="selectCount != 1">
+                            <sncr-button type="secondary" (click)="emailDelete = !emailDelete;deleteFieldControls(fieldControlNames.email)">
+                                <i class="fa fa-trash-o" aria-hidden="true" *ngIf="!emailDelete"></i>
+                                <i class="fa fa-undo" aria-hidden="true" *ngIf="emailDelete"></i>
+                            </sncr-button>
+                        </div>
+                    </div>
+
+                </ng-container>
+
+                <ng-container *ngIf="flowType==bulkEditConfig.FL_TYPE_SUB || flowType==bulkEditConfig.FL_TYPE_ACT_SUB">
+                    <h4 l10nTranslate>{{translations.headers.password}}</h4>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <!--below content is only to avoide prefilling of the email/password fields from the browser-->
+                                    <ng-container hidden="true">
+                                        <sncr-input type="email" class="d-none">
+                                        </sncr-input>
+                                        <sncr-input type="password" class="d-none">
+                                        </sncr-input>
+                                    </ng-container>
+                                    <sncr-input label="{{translations.password | translate:lang}}" [formControlName]="fieldControlNames.password" [disabled]="passwordDelete"
+                                                [showValidation]="showValidation" [type]="'password'" autocomplete="off">
+                                    </sncr-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="flowType==bulkEditConfig.FL_TYPE_ACT_SUB">
+                        <div class="col-sm-8 mt-2">
+                            <sncr-checkbox label="{{translations.dep | translate:lang}}"
+                                           [formControlName]="fieldControlNames.dep">
+                            </sncr-checkbox>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="flowType==bulkEditConfig.FL_TYPE_SUB">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-checkbox label="{{translations.passwordResetInd | translate:lang}}"
+                                           (change)="passwordDelete = !passwordDelete"
+                                           [formControlName]="fieldControlNames.passwordResetInd">
+                            </sncr-checkbox>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8 mt-2">
+                            <sncr-checkbox label="{{translations.smsInd | translate:lang}}"
+                                           [formControlName]="fieldControlNames.smsInd">
+                            </sncr-checkbox>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="flowType==bulkEditConfig.FL_TYPE_BAN">
+                    <!--<div class="row">
+                        <div class="col-sm-8">
+                            <sncr-check-group [label]="translations.paymentType" [formControlName]="fieldControlNames.paymentMethod"
+                                              [showValidation]="showValidation">
+                                <div class="row">
+                                    <div class="col-sm-6" *ngFor="let o of bulkEditConfig.paymentOptions">
+                                        <sncr-radio [value]="o.value" disabled>{{o.text}}</sncr-radio>
+                                    </div>
+                                </div>
+                            </sncr-check-group>
+                        </div>
+                    </div>-->
+                    <h2 l10nTranslate>{{translations.headers.paymentInfo}}</h2>
+
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <div class="col-sm-4 readOnly"><label l10nTranslate>{{translations.paymentType}}</label></div>
+                            <div class="col-sm-4 readOnly"><span l10nTranslate>{{bulkEditForm.value[fieldControlNames.paymentMethod]}}</span></div>
+                        </div>
+                    </div>
+                    <!--<div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.bankCode}}" [formControlName]="fieldControlNames.bankCode"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.bankAccNo}}" [formControlName]="fieldControlNames.bankAccountNo"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                    </div>-->
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.accountHolder | translate:lang}}" [formControlName]="fieldControlNames.bankAccOwnership"
+                                        [showValidation]="showValidation">
+                            </sncr-input>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.iban | translate:lang}}" [formControlName]="fieldControlNames.iban"
+                                        [showValidation]="showValidation" (focusout)="onBlur(fieldControlNames.iban)" (focusin)="onFocus(fieldControlNames.iban)">
+                            </sncr-input>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sncr-input label="{{translations.bic | translate:lang}}" [formControlName]="fieldControlNames.bic"
+                                        [showValidation]="showValidation" (focusout)="onBlur(fieldControlNames.bic)" (focusin)="onFocus(fieldControlNames.bic)">
+                            </sncr-input>
+                        </div>
+                    </div>
+                </ng-container>
+
+
+                <div class="saveBtn">
+                    <sncr-button type="submit" btnStyle="strong" [disabled]="processing" [ngClass]="{disableFields:processing}">
+                        <span l10nTranslate>{{continueLabel}}</span>
+                    </sncr-button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-container>

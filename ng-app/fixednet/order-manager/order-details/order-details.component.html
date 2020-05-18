@@ -1,0 +1,185 @@
+<div class="card">
+    <div class="card-block">
+        <sncr-notification [handler]="alertNotify"></sncr-notification>
+        <div class="card py-2">
+            <div class="row">
+                <div class="col">
+                    <div class="row pl-4"><h4 l10nTranslate>OM-OD_DETAILS_TITLE</h4></div>
+                    <div class="row pl-4">{{order.orderNumber}}</div>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="loading">
+            <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+        </ng-container>
+        <ng-container *ngIf="!loading">
+            <h3 class="my-3"><span l10nTranslate>OM-OD_ORDER_TITLE</span></h3>
+            <div class="card">
+                <div class="well order-details-table">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr class="theader">
+                            <th *ngIf="orderDetails.cartDetails.location.postCode" l10nTranslate>OM-OD_POSTALCODE</th>
+                            <th *ngIf="orderDetails.cartDetails.location.city" l10nTranslate>OM-OD-CITY</th>
+                            <th *ngIf="orderDetails.cartDetails.location.street" l10nTranslate>OM-OD-STREET</th>
+                            <th *ngIf="orderDetails.cartDetails.location.houseNumber" l10nTranslate>OM-OD-HOUSE_NUMBER</th>
+                            <th *ngIf="orderDetails.name" l10nTranslate>OM-OD-NAME</th>
+                            <th *ngIf="orderDetails.cartDetails.product.productName" l10nTranslate>OM-OD-PRODUCT</th>
+                            <th *ngIf="orderDetails.cartDetails.product.salesProdBandWidth" l10nTranslate>OM-OD-BANDWIDTH</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td *ngIf="orderDetails.cartDetails.location.postCode">{{orderDetails.cartDetails.location.postCode}}</td>
+                            <td *ngIf="orderDetails.cartDetails.location.city">{{orderDetails.cartDetails.location.city}}</td>
+                            <td *ngIf="orderDetails.cartDetails.location.street">{{orderDetails.cartDetails.location.street}}</td>
+                            <td *ngIf="orderDetails.cartDetails.location.houseNumber">{{orderDetails.cartDetails.location.houseNumber}}</td>
+                            <td *ngIf="orderDetails.name">{{orderDetails.name}}</td>
+                            <td *ngIf="orderDetails.cartDetails.product.productName">{{orderDetails.cartDetails.product.productName}}</td>
+                            <td *ngIf="orderDetails.cartDetails.product.salesProdBandWidth">{{orderDetails.cartDetails.product.salesProdBandWidth}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3 class="my-3"><span l10nTranslate>OM-OD-CUST_INFO_TITLE</span></h3>
+            <div class="card">
+                <div class="well">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr class="theader">
+                            <th *ngIf="orderDetails.cartDetails.customerNumber" l10nTranslate>OM-OD-CUST_NUB</th>
+                            <th *ngIf="orderDetails.cartDetails.billingAccountNo" l10nTranslate>OM-OD-ACCOUNT_NO</th>
+                            <th *ngIf="orderDetails.cartDetails.location" l10nTranslate>OM-OD-LOCATION</th>
+                            <th *ngIf="!noContactDetails" l10nTranslate>OM-OD-NO_CONTANCT_DETAILS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td *ngIf="orderDetails.cartDetails.customerNumber">{{orderDetails.cartDetails.customerNumber}}</td>
+                            <td *ngIf="orderDetails.cartDetails.billingAccountNo">{{orderDetails.cartDetails.billingAccountNo}}</td>
+                            <td *ngIf="orderDetails.cartDetails.location">{{orderDetails.cartDetails.location.street +' '+ orderDetails.cartDetails.location.houseNumber}} <br /> {{orderDetails.cartDetails.location.postCode +' '+ orderDetails.cartDetails.location.city}}</td>
+                            <td>
+                                <span *ngIf="orderDetails.contactName"><b>Name:</b>&nbsp;{{orderDetails.contactName}}<br /></span>
+                                <span *ngIf="orderDetails.phone"><b>Phone:</b>&nbsp;{{orderDetails.phone}}<br /></span>
+                                <span *ngIf="orderDetails.mobile"><b>Mobile:</b>&nbsp;{{orderDetails.mobile}}<br /></span>
+                                <span *ngIf="orderDetails.fax"><b>Fax:</b>&nbsp;{{orderDetails.fax}}<br /></span>
+                                <span *ngIf="orderDetails.mail"><b>E-Mail:</b>&nbsp;{{orderDetails.mail}}</span>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <ngb-accordion #accordion (panelChange)="panelChange($event)">
+                <ngb-panel id="changeHistory">
+                    <ng-template ngbPanelTitle>
+                        <span class="history" l10nTranslate><i [ngClass]="toggle ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"></i>&nbsp;OM-OD-HISTORY_TITLE</span>
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <ng-container *ngIf="loadHistory">
+                            <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+                        </ng-container>
+                        <div [hidden]="loadHistory">
+                            <sncr-datatable [cols]="columns" [value]="history" [sortField]="'lastRefreshedEpoch'" [sortOrder]="-1"></sncr-datatable>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+            <br />
+            <ng-container *ngIf="manageOrders.length > 0">
+                <ngb-accordion #accState (panelChange)="toggleAcc($event)" activeIds="orderStatus_Id">
+                    <ngb-panel id="orderStatus_Id">
+                        <ng-template ngbPanelTitle>
+                            <span class="history" l10nTranslate><i [ngClass]="toggleState ? 'fa fa-chevron-right' : 'fa fa-chevron-down'"></i>&nbsp;{{accState.panelId}}OM-ORDER_STATUS</span>
+                        </ng-template>
+                        <ng-template ngbPanelContent>
+                            <form [formGroup]="orderStatusForm">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <sncr-select [label]="'OM-ORDER_STATUS' | translate:lang" formControlName="status" [showValidation]="showValidation" required l10nTranslate>
+                                            <option value="" selected l10nTranslate>OM-DROPDOWN-CHOOSE</option>
+                                            <option *ngFor="let status of manageOrders" value="{{status.value}}" l10nTranslate>{{status.text}}</option>
+                                        </sncr-select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <sncr-textarea [rows]="5" [cols]="10" [label]="'OM-CUSTOMER_MESSAGE' | translate:lang" l10nTranslate formControlName="message"
+                                                       [showValidation]="true" autocomplete="off">
+                                        </sncr-textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <sncr-button type="secondary" [ngClass]="{disableFields:submitting}" [disabled]="submitting"
+                                                     (click)="cancelOrder()" l10nTranslate>OM-OD_CANCEL
+                                        </sncr-button>
+                                        <sncr-button type="submit" class="ml-2" [ngClass]="{disableFields:submitting || fnUser.isReadOnlyUser}" [disabled]="submitting || fnUser.isReadOnlyUser"
+                                                     (click)="submitOrder()" l10nTranslate>OM-LANDING_SAVE
+                                        </sncr-button>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </ng-container>
+            <h3 class="my-3" l10nTranslate>OM-OD-ORDER_DETAILS_TITLE</h3>
+            <div class="card">
+                <dynamic-panels [panels]="panels" [readonly]="true"></dynamic-panels>
+            </div>
+        </ng-container>
+        <div class="row mt-2 text-right">
+            <div class="col-8">
+                <sncr-button type="secondary" class="float-left" (click)="backbuttonClicked()" l10nTranslate>OM-OD_BACK</sncr-button>
+            </div>
+            <div class="col-4" *ngIf="manageOrders.length > 0">
+                <sncr-button type="secondary" [ngClass]="{disableFields:submitting}" [disabled]="submitting"
+                             (click)="cancelOrder()" l10nTranslate>OM-OD_CANCEL
+                </sncr-button>
+                <sncr-button type="submit" class="ml-2" [ngClass]="{disableFields:submitting || fnUser.isReadOnlyUser}" [disabled]="submitting || fnUser.isReadOnlyUser"
+                             (click)="submitOrder()" l10nTranslate>OM-LANDING_SAVE
+                </sncr-button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #createdDateTime let-context>
+    {{ context.row.createdTs | customDate}}
+</ng-template>
+
+<ng-template #customerInfo let-context>
+    <div class="description" (click)="context.row.ellipsis = !context.row.ellipsis">
+        {{(context.row.transComment?.length > 30 && !context.row.ellipsis) ? (context.row.transComment | slice:0:30) + '...' : (context.row.transComment) }}
+    </div>
+</ng-template>
+
+<ng-template #code let-context>
+    <div class="description" (click)="context.row.ellipsis = !context.row.ellipsis">
+        {{(context.row.reasonCode?.length > 30 && !context.row.ellipsis) ? (context.row.reasonCode | slice:0:30) + '...' : (context.row.reasonCode) }}
+    </div>
+</ng-template>
+
+<ng-template #msgContentModal>
+    <div class="row">
+        <div class="col-10 m-auto">
+            <sncr-notification *ngIf="eligibilityFailed" type="error">
+                <span [innerHTML]="'OM_OD_ELIGIBILITY_ERR_MSG' | translate:lang"></span>
+            </sncr-notification>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="md-4">
+                <sncr-button class="submit" (click)="closeModal()" l10nTranslate>OM-MODAL_BTN_OK</sncr-button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+

@@ -1,0 +1,9 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/page-title';
+@import '../../styles/mixins';
+@import '../../styles/datatables';
+
+.next-button-right {
+  text-align: right;
+  margin-top: 20px;
+}

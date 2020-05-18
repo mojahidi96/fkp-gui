@@ -1,0 +1,1 @@
+module.exports = {"readOnlyVodafoneUser":false,"mandatory":false,"show":false,"disabled":false,"length":0,"excluded":0,"displayOrder":0,"subsCount":0,"bulletPoints":["- Von allen Konditionen bereits ab der ersten Karte profitieren","- Von allen Konditionen bereits ab der ersten Karte profitieren","new kiascode & MT added","- Der Einsteigertarif für das iPhone"]};

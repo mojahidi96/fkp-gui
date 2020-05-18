@@ -1,0 +1,19 @@
+<sncr-notification [handler]="alertMessage"></sncr-notification>
+<div *ngIf="loader; else elsePart">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<ng-template #elsePart>
+    <sncr-datatable #sncrData [value]="socBlackListData" [cols]="socCols" [(selection)]="selected" [resultMessage]="resultMessage"
+                    [exportFilename]="csvName" (onRowSelect)="formSubmit? '': save($event)" (onRowUnselect)="formSubmit ? '' : save($event)"
+                    [multiSelection]="true" [selectionTitle]="title" [selectionMessage]="selectionMessage"
+                    [sortField]="sortField" [sortOrder]="-1">
+    </sncr-datatable>
+
+    <div class="text-right">
+        <div class="">
+            <sncr-button type="secondary" (click)="exporCSV()">Exportiere Blacklist CSV Datei
+            </sncr-button>
+        </div>
+    </div>
+    <br><br>
+</ng-template>

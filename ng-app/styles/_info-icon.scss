@@ -1,0 +1,94 @@
+@import 'custom-variables';
+@import 'mixins';
+
+//description icon
+
+.descInner {
+  margin-top: 0px;
+  margin-left: 20px;
+  display: block;
+  width: 95%;
+  position: relative;
+
+  .infoCont {
+    margin-top: 0px;
+    margin-left: 4px;
+  }
+  .desc-icon {
+    float: left;
+    margin-left: 6px;
+    margin-right: 10px;
+    width: 24px;
+    height: 24px;
+    .infoIcon {
+      color: transparent;
+      background-image: url(~/public/icons/svg/vodafone/info-circle.svg);
+      @include icon-sizes24;
+      display: inline-block;
+      margin-top: -1px;
+    }
+  }
+  .descInner + .descInner1 {
+    clear: both;
+  }
+}
+.mainCardSel {
+  margin-top: 0px !important;
+}
+
+.description {
+  padding-left: 0px;
+  margin-bottom: 0px;
+  margin-top: 14px;
+  position: relative;
+  width: 100%;
+}
+
+.descriptions {
+  display: inline-block;
+  padding-left: 0px;
+  margin-bottom: 0px;
+  margin-top: 14px;
+  position: relative;
+  width: 100%;
+
+  .descInner {
+    margin-top: 0px;
+    margin-left: 20px;
+    display: block;
+    width: 95%;
+    position: relative;
+
+    .infoCont {
+      margin-top: 0px;
+      margin-left: 4px;
+    }
+    .desc-icon {
+      float: left;
+      margin-left: 6px;
+      margin-right: 10px;
+      width: 24px;
+      height: 24px;
+      .infoIcon {
+        color: transparent;
+        background-image: url(~/public/icons/svg/vodafone/info-circle.svg);
+        @include icon-sizes24;
+        display: inline-block;
+        margin-top: -1px;
+      }
+    }
+    .descInner + .descInner1 {
+      clear: both;
+    }
+  }
+  .mainCardSel {
+    margin-top: 0px !important;
+  }
+}
+
+.fa.infoGreyIcon {
+  float: right;
+  @include icon-sizes20;
+  background-image: url(~/public/icons/svg/notification/info-gray.svg);
+  margin-right: 6px;
+}

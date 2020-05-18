@@ -1,0 +1,255 @@
+<div class="row">
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-NUMBER</strong></div>
+        <div>{{orderDetail.orderNumber}}</div>
+    </div>
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-TYPE</strong></div>
+        <div>{{orderDetail.orderType}}</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-DATE</strong></div>
+        <div>{{orderDetail.date | date: 'dd.MM.yyyy'}}</div>
+    </div>
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-STATUS</strong></div>
+        <div>{{orderDetail.orderStatus}}</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-USER_NAME</strong></div>
+        <div>{{orderDetail.userName}}</div>
+    </div>
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-AGREEMENT</strong></div>
+        <div>{{orderDetail.skeletonContractNumber}}</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-CONTACT_USER_NAME</strong></div>
+        <div>{{orderDetail.contactUsername}}</div>
+    </div>
+</div>
+<div class="row">
+    <div class="title-with-link col-6 p-0">
+        <strong l10nTranslate class="col-6">OM_DETAIL-DEBITOR_NUMBER</strong>
+        <a *ngIf="!readonly && (orderDetail.debitorNumber === '000000' || isDebitorEditable)" class="change-link col-6"
+           (click)="openDebitorModal()" l10nTranslate>OM_DETAIL-EDIT</a>
+    </div>
+    <div class="col-12">{{orderDetail.debitorNumber}}<ng-container *ngIf="orderDetail.debitorType === 'T'">(T)</ng-container></div>
+</div>
+
+<div class ="row">
+    <div class="col-4">
+        <div class="title-with-link">
+            <strong l10nTranslate>OM_DETAIL-BILLING_ADDRESS</strong>
+            <!--<a *ngIf="!readonly && !editingBilling" class="change-link" (click)="editingBilling = true"
+               l10nTranslate>OM_DETAIL-EDIT</a>-->
+        </div>
+    </div>
+    <div class="col-4 offset-md-2">
+        <div class="title-with-link">
+            <strong l10nTranslate>OM_DETAIL-SHIPPING_ADDRESS</strong>
+        </div>
+    </div>
+    <div class="col-6">
+        <ng-container *ngIf="!loadingBilling">
+            <ng-container *ngIf="!editingBilling">
+                <div>{{billingAddress.street1}} {{this.billname2}} {{this.billname3}} {{this.billname4}}</div>
+                <div>{{billingAddress.streetName}} {{billingAddress.houseNumber}}</div>
+                <div>{{billingAddress.postalCode}} {{billingAddress.city}}</div>
+                <div>{{billingAddress.country}}</div>
+            </ng-container>
+
+            <create-edit-address *ngIf="editingBilling" addressSelectionType="SHIPMENT" [showSubtitle]="false"
+                                 [selectedAction]="addressEditAction" (output)="billingOutput($event)"
+                                 [countries]="countries" [address]="billingAddress" btnStyle="primary"></create-edit-address>
+        </ng-container>
+
+        <sncr-loader *ngIf="loadingBilling" [isLoading]="loadingBilling" class="relative no-margins"></sncr-loader>
+    </div>
+    <div class="col-6">
+        <ng-container *ngIf="!loadingShipping">
+            <div>{{shippingAddress.street1}} {{shippingAddress.street2}} {{shippingAddress.street3}}</div>
+            <div>{{shippingAddress.streetName}} {{shippingAddress.houseNumber}}</div>
+            <div>{{shippingAddress.postalCode}} {{shippingAddress.city}}</div>
+            <div>{{shippingAddress.country}}</div>
+        </ng-container>
+
+        <sncr-loader *ngIf="loadingShipping" [isLoading]="loadingShipping" class="relative no-margins"></sncr-loader>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-ORDER_NO</strong></div>
+        <div>{{orderDetail.customerOrderNo}}</div>
+    </div>
+    <div class="col-6">
+        <div><strong l10nTranslate>OM_DETAIL-ORDER_ID</strong></div>
+        <div>{{orderDetail.clientOrderId}}</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6 p-0">
+        <div class="title-with-link">
+            <strong l10nTranslate class="col-6">OM_DETAIL-VOID</strong>
+            <a *ngIf="!readonly && !editingVoid && isEditable" class="change-link col-6" (click)="editVoid(true)" l10nTranslate>OM_DETAIL-EDIT</a>
+        </div>
+        <div class="col-12">
+            <span *ngIf="!editingVoid">{{orderDetail.voId}}</span>
+            <div *ngIf="editingVoid" class="d-flex align-items-end">
+                <ng-container *ngIf="!loadingVoid">
+                    <sncr-input type="number" [(ngModel)]="newVoId" required [showValidation]="true"
+                                #voidInput="ngModel" [maxLength]="'8'"></sncr-input>
+                    <div class="void-buttons">
+                        <sncr-button (click)="saveVoId()" [disabled]="voidInput.invalid" [ngClass]="{disableFields:voidInput.invalid}">
+                            <i class="fa fa-check"></i>
+                        </sncr-button>
+                        <sncr-button type="secondary" (click)="editVoid(false)">
+                            <i class="fa fa-remove"></i>
+                        </sncr-button>
+                    </div>
+                </ng-container>
+                <sncr-loader *ngIf="loadingVoid" [isLoading]="loadingVoid" class="relative small-loader"></sncr-loader>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="company-id">
+            <strong l10nTranslate>OM_COMPANY-ID</strong>
+            <div>{{ orderDetail.companyId }}</div>
+        </div>
+    </div>
+</div>
+
+<ng-template #editDebitorModal let-c="close" let-d="dismiss">
+    <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('close')"></button>
+    <div class="overlay-content">
+        <div class="modal-header">
+            <h4 class="modal-title" l10nTranslate>OM_DETAIL-SELECT_DEBITOR</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="btn-group btn-group-toggle button-tabs" ngbRadioGroup name="radioBasic"
+                 [(ngModel)]="tabSelected" (ngModelChange)= onTabChanged($event)>
+                <label *ngIf="isTabEnabled" ngbButtonLabel class="" >
+                    <input  ngbButton type="radio" [value]="1"> Debitorennummer zuweisen
+                </label>
+                <label ngbButtonLabel class="">
+                    <input ngbButton type="radio" [value]="2"> Debitorennummer auswahlen
+                </label>
+                <label ngbButtonLabel class="">
+                    <input ngbButton type="radio" [value]="3"> Neuen Debitor anlegen
+                </label>
+            </div>
+
+            <div class="selected-tab" [ngSwitch]="tabSelected">
+                <ng-template ngSwitchCase="1" *ngIf="isTabEnabled">
+                    <form #manualForm="ngForm" (ngSubmit)="manualForm.valid && manualAdd()">
+                        <ng-container *ngIf="orderDetail.techFund; else nonTechFund">
+                            <div class="row">
+                                <div class="col-5">
+                                    <sncr-select name="techFundStatus" [(ngModel)]="techFundStatus"
+                                                 required label="Techfund-Kontostatus">
+                                        <option value="" l10nTranslate>ORDER_BULK-SELECT_STATUS</option>
+                                        <option *ngFor="let techfund of techFundStatusVal" [value]="techfund.key" l10nTranslate>{{techfund.value}}</option>
+                                    </sncr-select>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-template #nonTechFund>
+                            <div *ngIf="saveCPDnum">
+                                <sncr-notification type="error" [message]="'OM_DETAIL-SAVE_CPD_NUMBER'"></sncr-notification>
+                            </div>
+                            <div *ngIf="manualInput ==='debitor'">
+                                <div *ngIf=" newDebitorNumber === '000000'">
+                                    <sncr-notification type="error" [message]="'OM_DETAIL-DEFAULT_DEBITOR_NUMBER'"></sncr-notification>
+                                </div>
+                                <div *ngIf="debitorNumberExist">
+                                    <sncr-notification [message]="'DEBITOR_SELECTION-DEBITOR_NUMBER_EXIST'"  type="error">                                    </sncr-notification>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <sncr-check-group name="manualInput" [(ngModel)]="manualInput">
+                                        <sncr-radio value="debitor">Debitornumer</sncr-radio>
+                                    </sncr-check-group>
+                                </div>
+                                <div class="col-4">
+                                    <sncr-check-group name="manualInput" [(ngModel)]="manualInput">
+                                        <sncr-radio value="cpd">CPD Nummer</sncr-radio>
+                                    </sncr-check-group>
+                                </div>
+                            </div>
+
+                            <div class="row manual-inputs">
+                                <div class="col-4">
+                                    <sncr-input type="number" [minlength]="6" [maxLength]="'6'" name="newDebitorNumber" [(ngModel)]="newDebitorNumber"
+                                                [disabled]="manualInput !== 'debitor'"  required></sncr-input>
+                                </div>
+                                <div class="col-4">
+                                    <sncr-input type="number" [(ngModel)]="newCPD" name="newCPDNum" #newCPDNum="ngModel"
+                                                [disabled]="manualInput !== 'cpd'" [withDropDown]="cpds" (ngModelChange)="checkNewCpd(newCPDNum)"
+                                                [minlength]="6" [maxLength]="6" [autocomplete]="'off'" required></sncr-input>
+                                </div>
+                                <div class="col-4" *ngIf="isInvalidCpd" l10nTranslate style="color: red;">Bitte geben Sie eine gültige CPD Nummer ein.</div>
+                                <div class="col-4" *ngIf="(newCPDNum.valid && addNewCPD && !deleteCpd)">
+                                    <sncr-button  type="secondary" (click)="saveOneTimeDebitor()">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </sncr-button>
+                                </div>
+                                <div class="col-4" *ngIf="(newCPDNum.valid && deleteCpd)">
+                                    <sncr-button  type="secondary" (click)="deleteCpdNumber()">
+                                        <i class="fa fa-close" aria-hidden="true"></i>
+                                    </sncr-button>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                        <div>{{billingAddress.street1}} {{billingAddress.street2}} {{billingAddress.street3}} {{billingAddress.street4}}</div>
+                        <div>{{billingAddress.streetName}} {{billingAddress.houseNumber}}</div>
+                        <div>{{billingAddress.postalCode}} {{billingAddress.city}}</div>
+                        <div>{{billingAddress.country}}</div>
+
+                        <div class="manual-buttons mt-4">
+                            <sncr-button type="secondary" (click)="c('close')">
+                                <span l10nTranslate>OM_DETAIL-CANCEL</span>
+                            </sncr-button>
+
+                            <sncr-button type="submit">
+                                <span l10nTranslate>OM_DETAIL-SAVE</span>
+                            </sncr-button>
+                        </div>
+                    </form>
+                </ng-template>
+
+                <ng-template ngSwitchCase="2">
+                    <debitor-selection flowType="OM" addressSelectionType="DEBITOR"
+                                       (nextSelection)="nextSection($event)"></debitor-selection>
+                </ng-template>
+
+                <ng-template ngSwitchCase="3">
+                    <create-edit-address addressSelectionType="DEBITOR" [showSubtitle]="false"
+                                         [selectedAction]="addressAddAction" [countries]="countries"
+                                         [address]="newDebitorAddress" [editDebitorNumber]="true"
+                                         [debitorExistUrl]="debitorExistUrl"
+                                         [isTechfundEnabled]="orderDetail.techFund"
+                                         [forceTechfund]="orderDetail.techFund"
+                                         [pattern]="pattern"
+                                         (output)="newDebitorOutput($event)"></create-edit-address>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
+

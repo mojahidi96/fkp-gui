@@ -1,0 +1,41 @@
+<sncr-notification [handler]="alertMessage"></sncr-notification>
+
+<sncr-loader class="custom-inline" [isLoading]="loading"></sncr-loader>
+
+<sncr-datatable *ngIf="!loading" #sncrData [value]="socFamilyList" [cols]="columns" [(selection)]="selected"
+                [editable]="true" [removableContent]="removableContent" (onDelete)="deleteRow($event)"
+                (onEditSave)="save($event, true)" (onOpenEdit)="editOpen($event)" prefix="SOC_FAMILY">
+                <sncr-header>
+                    <div class="margin-bottom-30">
+                        <sncr-button type="secondary" (click)="toggle = !toggle" l10nTranslate>
+                            SOC_FAMILY-FORM-CREATE
+                            <i class="fa fa-chevron-down" *ngIf="!toggle" aria-hidden="true"></i>
+                            <i class="fa fa-chevron-up" *ngIf="toggle" aria-hidden="true"></i>
+                        </sncr-button>
+                    </div>
+                
+                    <div *ngIf="toggle">
+                        <form [formGroup]="formGroup" (ngSubmit)="saveFamily(formGroup)">
+                            <div class="row align-items-center familyContent">
+                                <div class="col-5">
+                                    <sncr-input formControlName="familyName" autocomplete="off" required l10nTranslate>
+                                        SOC_FAMILY-FORM-NAME
+                                    </sncr-input>
+                                </div>
+                            </div>
+                
+                            <div class="row">
+                                <div class="col-4">
+                                    <sncr-button type="submit" [disabled]="formSubmitting" l10nTranslate>
+                                        SOC_FAMILY-FORM-CREATE
+                                    </sncr-button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </sncr-header>
+</sncr-datatable>
+
+<ng-template #settings let-context>
+    {{getSettings(context.row[context.col.field])}}
+</ng-template>

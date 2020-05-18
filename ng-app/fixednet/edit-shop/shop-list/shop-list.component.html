@@ -1,0 +1,21 @@
+<h2 class="pageTitle">
+    <span>Shop suchen und anpassen</span>
+</h2>
+
+<sncr-notification [handler]="notify" [dismissible]="false"></sncr-notification>
+
+<div class="card">
+    <div class="card-block">
+        <div *ngIf="loading">
+            <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+        </div>
+        <div class="row">
+            <div class="col-md-12" *ngIf="!loading">
+                <ng-container>
+                    <sncr-datatable [value]="shopListData" [rowHover]="true" [cols]="shopListCols" (onRowClick)="rowClick($event)" sortField="fnRootCustomerNumber">
+                    </sncr-datatable>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+.fa-check {
+  color: green;
+}
+
+.fa-times {
+  color: red;
+}
+:host ::ng-deep .card-block > .col-sm-4 {
+  align-self: flex-end;
+}

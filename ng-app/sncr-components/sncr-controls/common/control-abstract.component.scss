@@ -1,0 +1,25 @@
+@import '../../../styles/custom-variables';
+
+.reset-group {
+  display: flex;
+
+  input {
+    padding-right: 23px !important;
+  }
+
+  i.fa-times {
+    margin-left: -20px;
+    margin-top: 10px;
+    margin-right: 9px;
+
+    z-index: 4;
+  }
+}
+
+label {
+  display: flex;
+}
+
+.requiredField {
+  color: $primary;
+}

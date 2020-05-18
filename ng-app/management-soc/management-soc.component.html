@@ -1,0 +1,72 @@
+<div *ngIf="isLoading">
+    <sncr-loader class="inline-loader" [isLoading]="isLoading"></sncr-loader>
+</div>
+
+<div class="container" *ngIf="!initialLoad && !allavailableSocs.groups" [hidden]="isLoading">
+    <div class="mx-4 my-1 text-muted">
+        <div l10nTranslate>
+            SOC_SELECTION-NO_SOCS
+        </div>
+    </div>
+</div>
+
+<div class="sncr-planned-changes" *ngIf="!initialLoad && allavailableSocs.groups" [hidden]="isLoading">
+    <div class="d-flex sncr-planned-changes-container">
+        <div class="leftPanel" [style.min-height]="getMaxHeight()">
+            <div class="px-20 pb-2">
+                <sncr-notification [handler]="notificationHandler"></sncr-notification>
+                <p [innerHTML]="'SOC_SELECTION-SUBTITLE_MSG'| translate:lang"> </p>
+                <div class="d-flex">
+                    <div class="flex-fill mr-4">
+                        <sncr-select [label]="'SOC_SELECTION-CATEGORIES'| translate:lang" [(ngModel)]="selectedCategory"
+                            (ngModelChange)="updateValueSelected($event)" required>
+                            <option *ngFor="let category of allavailableSocs.categories" value="{{category.name}}"
+                                [selected]="category.name === selectedCategory">{{category.name}}</option>
+                        </sncr-select>
+                    </div>
+                    <div class="flex-fill">
+                        <sncr-input [label]="'SOC_SELECTION-FILTER_TARIFF_OPTIONS'| translate:lang" name="textFilter" [placeholder]="'SOC_SELECTION-SEARCH'| translate:lang"
+                            [(ngModel)]="textFilter" (ngModelChange)="textFilterChange()"></sncr-input>
+                    </div>
+                </div>
+            </div>
+            <div *ngFor="let option of allavailableSocs.groups">
+                <div [hidden]="!option.show">
+                    <sncr-card-selection [showText]="showText" [hideText]="hideText" titleText="{{option.name}}"
+                        [icon]="option.icon" [properties]="properties" [titleText]="option.name"
+                        #options="sncrCardSelection" [filter]="textFilter">
+                        <div *ngFor="let family of option.families; let firstFamily = first" [hidden]="!family.show">
+                            <hr class="bg-inverse" *ngIf="!firstFamily && family.show && family.previousShow" />
+                            <sncr-checkbox-options [(value)]="family.isSelected" [properties]="properties"
+                                [options]="getValidSocs(family.socs)"
+                                [totalLength]="subscribers ? subscribers.length : 0"
+                                *ngIf="getValidSocs(family.socs).length === 1"
+                                [showDescription]="options.showDescriptions" [masterOptions]="true"
+                                [triggerOption]="true" [showAllOptions]="false">
+                            </sncr-checkbox-options>
+                            <sncr-radio-options [(value)]="family.isSelected" [properties]="properties"
+                                [options]="getValidSocs(family.socs)"
+                                [totalLength]="subscribers ? subscribers.length : 0"
+                                *ngIf="getValidSocs(family.socs).length !== 1"
+                                [showDescription]="options.showDescriptions" [masterOptions]="true"
+                                [triggerOption]="true" [showAllOptions]="false" [showValidation]="showValidation"
+                                [mandatory]="family.mandatory">
+                            </sncr-radio-options>
+                        </div>
+                    </sncr-card-selection>
+                </div>
+            </div>
+            <p class="pull-left small mt-4 padLR20">
+                {{superScript}}
+            </p>
+        </div>
+
+        <div class="rightPanel">
+            <sncr-sticky>
+                <sncr-planned-changes [plannedChangesService]="sncrPlannedChangesService"
+                    (review)="review.emit({allAvailableSocs:allavailableSocs, subscriberSocMap: subscriberSocMap})">
+                </sncr-planned-changes>
+            </sncr-sticky>
+        </div>
+    </div>
+</div>

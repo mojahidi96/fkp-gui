@@ -1,0 +1,231 @@
+<sncr-notification [handler]="notifyError"></sncr-notification>
+<div
+  *ngIf="!initialLoad && uploadRes && uploadRes.invalidRecords && !uploadUrl"
+>
+  <p l10nTranslate>UPLOAD_CHANGES-DESCRIPTION</p>
+</div>
+
+<sncr-notification *ngIf="showSuccess && !loading" type="success">
+  <span
+    [l10nTranslate]="{validRecords: uploadRes?.validRecords}"
+    [innerHTML]="successMsg"
+  ></span>
+</sncr-notification>
+
+<sncr-notification
+  [handler]="notifyinvalidRec"
+  *ngIf="showUploadButton"
+  contentClass="d-flex"
+>
+  <span
+    class="d-block ml-3 mt-n1"
+    *ngIf="downloadParams !== null && !uploadUrl"
+  >
+    <sncr-download-selections
+      [downloadParams]="downloadParams"
+      [prefix]="'UPLOAD_CHANGES-'"
+      [className]="'export-button'"
+    ></sncr-download-selections>
+  </span>
+</sncr-notification>
+<div class="errorTable" *ngIf="this.showErrorTable && errorRows.length > 0">
+  <b l10nTranslate>ED_UOF_ERROR_TABLE_TITLE</b>
+  <sncr-datatable
+    [value]="errorRows"
+    [rowHover]="true"
+    [resultCount]="'false'"
+    [cols]="errorTableCols"
+    sortField="row"
+  >
+  </sncr-datatable>
+</div>
+<div class="container uploadChanges pl-0 pr-0">
+  <div *ngIf="loading; else elsePart">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+  </div>
+
+  <ng-template #elsePart>
+    <ng-container *ngIf="initialLoad">
+      <div class="row">
+        <div class="col-md-12">
+          <div *ngIf="!loading && showUploadButton" class="file-drop mt-0">
+            <ngx-file-drop
+              dropZoneClassName="file-drop"
+              contentClassName="file-drop"
+              (onFileDrop)="onFileDrop($event, false)"
+            >
+              <ng-template ngx-file-drop-content-tmp>
+                <div [class.content]="!customstyle">
+                  <div class="xslIcon marB25 marT80">
+                    <svg-icon
+                      name="misc/file-format-xlsx"
+                      size="large"
+                    ></svg-icon>
+                  </div>
+                  <div class="dAndDropTxt marB80">
+                    <p *ngIf="!nonData" l10nTranslate>
+                      <b>UPLOAD_CHANGES-DRAG_DROP_DESC_1</b>
+                    </p>
+                    <p *ngIf="nonData" l10nTranslate>
+                      <b>UPLOAD_CHANGES-DRAG_DROP_DESC_1_NON_DATA</b>
+                    </p>
+                    <p l10nTranslate>
+                      UPLOAD_CHANGES-DRAG_DROP_DESC_12<label
+                        class="href"
+                        for="changesFiles"
+                        l10nTranslate
+                        >UPLOAD_CHANGES-DRAG_DROP_DESC_2</label
+                      >
+                      <span l10nTranslate>UPLOAD_CHANGES-DRAG_DROP_DESC_3</span>
+                    </p>
+                    <p class="text-muted" l10nTranslate>
+                      UPLOAD_CHANGES-FORMAT_DESC
+                    </p>
+                    <p class="text-muted" l10nTranslate>
+                      UPLOAD_CHANGES-FORMAT_DESC1
+                    </p>
+                    <input
+                      id="changesFiles"
+                      type="file"
+                      #fileupload
+                      style="visibility:hidden;"
+                      (change)="onFileSelect($event, false)"
+                      name="myChangesFile"
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-file-drop>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div
+      class="container"
+      *ngIf="
+        !initialLoad &&
+        (uploadRes && uploadRes?.invalidRecords) &&
+        showUploadButton
+      "
+    >
+      <div class="row">
+        <ul class="listGroup">
+          <li>
+            <div class="col-md-12 pl-0 pr-0">
+              <div class="file-drop" *ngIf="!loading">
+                <ngx-file-drop
+                  dropZoneClassName="file-drop"
+                  contentClassName="file-drop"
+                  (onFileDrop)="onFileDrop($event, true)"
+                >
+                  <ng-template ngx-file-drop-content-tmp>
+                    <div [class.content]="!customstyle">
+                      <div class="xslIcon marB25">
+                        <svg-icon
+                          name="misc/file-format-xlsx"
+                          size="large"
+                        ></svg-icon>
+                      </div>
+                      <div class="dAndDropTxt">
+                        <span
+                          [innerHTML]="
+                            'UPLOAD_CHANGES-DRAG_DROP_REUPLOAD_DESC'
+                              | translate: lang
+                          "
+                        ></span>
+                        <label class="href" for="reUpload" l10nTranslate
+                          >UPLOAD_CHANGES-DRAG_DROP_DESC_2</label
+                        >
+                        <span l10nTranslate
+                          >UPLOAD_CHANGES-DRAG_DROP_DESC_3</span
+                        >
+                        <p class="text-muted" l10nTranslate>
+                          UPLOAD_CHANGES-FORMAT_DESC
+                        </p>
+                        <p class="text-muted" l10nTranslate>
+                          UPLOAD_CHANGES-FORMAT_DESC1
+                        </p>
+                        <input
+                          id="reUpload"
+                          type="file"
+                          #fileupload
+                          style="visibility:hidden;"
+                          (change)="onFileSelect($event, true)"
+                          name="myChangesFile"
+                        />
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngx-file-drop>
+              </div>
+            </div>
+          </li>
+          <li></li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="row" *ngIf="!uploadUrl">
+  <div class="text-left col-sm-6 marB30">
+    <sncr-button
+      type="secondary"
+      btnStyle="strong"
+      [disabled]="loading || processToReview"
+      (click)="reloadPage()"
+    >
+      <span l10nTranslate>UPLOAD_CHANGES-CANCEL_UPLOAD_BUTTON</span>
+    </sncr-button>
+  </div>
+
+  <div class="text-right col-sm-6 marB30">
+    <sncr-button
+      type="secondary"
+      btnStyle="strong"
+      [disabled]="!uploadRes?.validRecords || loading || processToReview"
+      (click)="loadReviewPage()"
+    >
+      <span l10nTranslate>MANAGE_DETAILS-CONTINUE_TO_ORDER_OVERVIEW</span>
+    </sncr-button>
+  </div>
+</div>
+<div *ngIf="loadingTable">
+  <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<div *ngIf="showResults">
+  <div class="well order-details-table">
+    <table class="table">
+      <thead>
+        <tr class="theader">
+          <th *ngFor="let column of columns" l10nTranslate>
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.customerOrderNumber }}</td>
+          <td>{{ order.orderNumber }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row" *ngIf="uploadUrl">
+  <div class="text-right col-sm-12 marB30">
+    <sncr-button
+      type="secondary"
+      btnStyle="strong"
+      *ngIf="showUploadButton"
+      [disabled]="
+        !uploadRes?.validRecords || loading || isReadOnlyUser || disableSubmit
+      "
+      (click)="uploadFileChanges()"
+    >
+      <span l10nTranslate>OM-UPLOAD-BTN_SUBMIT</span>
+    </sncr-button>
+  </div>
+</div>

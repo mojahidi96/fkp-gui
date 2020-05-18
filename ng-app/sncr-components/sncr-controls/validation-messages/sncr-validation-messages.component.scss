@@ -1,0 +1,99 @@
+@import '../../../styles/common-imports';
+@import '../../../styles/mixins';
+
+:host ::ng-deep .popover.bs-popover-top {
+  background-color: $error-message;
+  bottom: 5px;
+  color: $white;
+  left: inherit !important;
+  top: inherit !important;
+  position: relative !important;
+  margin-top: 0;
+  margin-bottom: 14px;
+  max-width: inherit;
+  border-radius: 3px;
+  box-shadow: none;
+  transform: none !important;
+
+  &::before,
+  &::after {
+    left: 30px;
+  }
+
+  .arrow {
+    left: 22px !important;
+    &::after {
+      border-top-color: $primary;
+    }
+  }
+  .popover-body {
+    padding: 8px 14px 8px 8px;
+    min-height: 50px;
+    color: #fff;
+    .content-wrapper {
+      width: 100%;
+      .message {
+        font-size: 14px;
+        text-align: left;
+        margin-left: 10px;
+        padding-top: 5px;
+        white-space: normal;
+        width: 81%;
+        display: inline-block;
+        padding-right: 8px;
+        div {
+          white-space: normal;
+          word-break: normal;
+          word-wrap: normal;
+        }
+      }
+    }
+  }
+}
+
+.icon {
+  float: left;
+  margin-left: 4px;
+  display: inline;
+  .fa.fa-2x.fa-exclamation-circle {
+    font-size: 32px;
+  }
+}
+
+.content-wrapper {
+  display: inline-flex;
+  width: 100%;
+
+  &::after {
+    content: '';
+    clear: both;
+  }
+}
+
+:host ::ng-deep .form-group {
+  margin-bottom: 20px;
+}
+
+::ng-deep .padding-LR0 div.col-6,
+::ng-deep .padding-LR0 div.col-4 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+:host ::ng-deep .form-check {
+  margin-bottom: 20px !important;
+}
+
+:host ::ng-deep .arrow {
+  top: inherit;
+
+  &:before,
+  &:after {
+    border-width: 0.5rem 0.5rem 0;
+  }
+
+  &:after {
+    border-bottom-color: #e60000;
+    top: inherit;
+  }
+}

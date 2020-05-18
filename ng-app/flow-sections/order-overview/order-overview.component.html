@@ -1,0 +1,158 @@
+<div class="row" *ngIf="isPriceSectionRequired()">
+    <div class="col-sm-12">
+        <table class="table table-condensed customTable">
+            <thead>
+            <tr>
+                <th [attr.width]="!isNewTariff() ? '35%': '60%'"></th>
+                <th *ngIf="!isNewTariff()" width="25%"></th>
+                <th width="10%" id="amount" scope="col" l10nTranslate>
+                    {{prefix}}REVIEW-COL_QUANTITY
+                </th>
+                <th width="15%" id="monthly" scope="col" l10nTranslate>
+                    {{prefix}}REVIEW-COL_MONTHLY
+                </th>
+                <th width="15%" id="one-time" scope="col" l10nTranslate>
+                    {{prefix}}REVIEW-COL_ONE_TIME
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngIf="orderSummary.handySummary">
+                <th id="hardware" class="span" colspan="5" scope="colgroup" l10nTranslate>
+                    REVIEW-HARDWARE_TITLE
+                </th>
+            </tr>
+            <tr *ngIf="orderSummary.handySummary">
+                <td headers="hardware" id="hardware1" [ngClass]="{changeTariff:!isNewTariff()}" [attr.rowspan]="!isNewTariff()? orderSummary.tariffSummary.tariffs.length + 2: 1">
+                    <div class="d-flex">
+                        <div>
+                            <div *ngIf="orderSummary.handySummary.imagePaths">
+                                <img alt="" src="{{orderSummary.handySummary.imagePaths[0].path}}"
+                                     onerror="this.src='./public/illustrations/svg/no-image-available.svg'"
+                                     width="50" height="75">
+                            </div>
+                            <div *ngIf="!orderSummary.handySummary.imagePaths">
+                                <img alt="" src="{{'data:image/png;base64,'+orderSummary.handySummary.productImage}}"
+                                     onerror="this.src='./public/illustrations/svg/no-image-available.svg'"
+                                     width="50" height="75">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 pl-3">
+                            <span>{{orderSummary.handySummary.text}}</span>
+                            <p [l10nTranslate]="{articleNumber: orderSummary.handySummary.articleNumber}">REVIEW-ARTICLE_NUMBER</p>
+                            <div *ngIf="orderSummary?.displayDep && orderSummary?.depData" class="dep">
+                                <p>{{'REVIEW-DEP' | translate:lang}}</p>
+                                <p>{{'REVIEW-DEP-LIEFERANT' | translate:lang}} {{orderSummary?.depData?.depVendorName}}</p>
+                                <p>{{'REVIEW-DEP-KUNDEN-ID' | translate:lang}} {{orderSummary?.handySummary?.depCustomerId}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <ng-container *ngIf="isNewTariff()">
+                    <td headers="hardware hardware1 amount">
+                        {{orderSummary.handySummary.length}}
+                    </td>
+                    <td headers="hardware hardware1 monthly">
+                        <span *ngIf="orderSummary.handySummary.specialMonthlyPrice">
+                            {{orderSummary.handySummary.specialMonthlyPrice | currency:'EUR'}}
+                        </span>
+                    </td>
+                    <td headers="hardware hardware1 one-time">
+                        {{orderSummary.handySummary.subsidizedPrice | currency:'EUR'}}
+                    </td>
+                </ng-container>
+            </tr>
+            <ng-container *ngIf="orderSummary.handySummary && !isNewTariff()">
+                <tr>
+                    <td [attr.colspan]="4" l10nTranslate><i class="fa info-circleIcon mr-2"></i>REVIEW-HARDWARE_PRICE_WITH_MULTI_TARIFF</td>
+                </tr>
+                <tr *ngFor="let tariff of orderSummary.tariffSummary.tariffs">
+                    <td id="hardware{{tariff.text}}" headers="tariff-option">
+                        {{tariff.text}}
+                    </td>
+                    <td headers="hardware hardware{{tariff.text}} amount">
+                        {{tariff.subsCount}}
+                    </td>
+                    <td headers="hardware hardware{{tariff.value}} monthly">
+                        <span *ngIf="tariff.monthlyPrice">
+                            {{tariff.monthlyPrice | currency:'EUR'}}
+                        </span>
+                    </td>
+                    <td *ngIf="!subsidzesPrice(orderSummary.handySummary.subsidizedPrice)" headers="hardware hardware{{tariff.value}} one-time">
+                        {{tariff.amount | currency:'EUR'}}
+                    </td>
+                    <td *ngIf="subsidzesPrice(orderSummary.handySummary.subsidizedPrice)" headers="hardware hardware{{tariff.value}} one-time">
+                        {{orderSummary.handySummary.subsidizedPrice | currency:'EUR'}}
+                    </td>
+                </tr>
+            </ng-container>
+            <tr *ngIf="isNewTariff() && orderSummary.tariffSummary.tariffs">
+                <th id="tariff" class="span" colspan="5" scope="colgroup" l10nTranslate>
+                    {{prefix}}REVIEW-TARIFF_TITLE
+                </th>
+            </tr>
+            <tr *ngIf="isNewTariff()  && orderSummary.tariffSummary.tariffs">
+                <td id="tariff1" headers="tariff">
+                    {{orderSummary.tariffSummary.tariffs[0].text}}
+                </td>
+                <td headers="tariff tariff1 amount">
+                    {{orderSummary.tariffSummary.tariffs[0].subsCount}}
+                </td>
+                <td headers="tariff tariff1 monthly">
+                    {{(orderSummary.tariffSummary.tariffs[0].amount)| currency:'EUR'}}
+                </td>
+                <td headers="tariff tariff1 one-time">
+
+                </td>
+            </tr>
+            <tr *ngIf="orderSummary.socSummary && orderSummary.socSummary.length > 0">
+                <th id="tariff-option" class="span" colspan="5" scope="colgroup" l10nTranslate>
+                    REVIEW-SOC_TITLE
+                </th>
+            </tr>
+            <tr *ngFor="let soc of orderSummary.socSummary" [ngClass]="{'ht65': soc?.insSocMsg}">
+                <td id="tariff-option-od{{soc.value}}" headers="tariff-option">
+                    {{soc.text}}
+                    <p *ngIf="soc?.insSocMsg" class="soc-msg">{{soc?.insSocMsg}}</p>
+                </td>
+                <td *ngIf="!isNewTariff()"></td>
+                <td headers="tariff-option tariff-option-od{{soc.value}} amount">
+                    {{soc.length}}
+                </td>
+                <td headers="tariff-option tariff-option-od{{soc.value}} monthly">
+                    {{soc.charge.amount | currency:'EUR'}}
+                </td>
+                <td headers="tariff-option tariff-option-or{{soc.value}} one-time">
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="table table-condensed customTable">
+            <thead>
+            <tr>
+                <th width="70%" l10nTranslate>{{prefix}}REVIEW-COST_TITLE</th>
+                <th width="15%" id="totalMonthly" scope="col" l10nTranslate>{{prefix}}REVIEW-COL_MONTHLY</th>
+                <th width="15%" id="totaloneTime" scope="col" l10nTranslate>{{prefix}}REVIEW-COL_ONE_TIME</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td l10nTranslate>{{prefix}}REVIEW-COST_TOTAL</td>
+                <td>{{orderSummary.totalSummary.monthlyTotalValue| currency:'EUR'}}</td>
+                <td>{{orderSummary.totalSummary.oneTimeTotalValue| currency:'EUR'}}</td>
+            </tr>
+            <tr>
+                <td l10nTranslate>{{prefix}}REVIEW-COST_VAT</td>
+                <td>{{orderSummary.totalSummary.monthlyTotalVAT| currency:'EUR'}}</td>
+                <td>{{orderSummary.totalSummary.oneTimeTotalVAT| currency:'EUR'}}</td>
+            </tr>
+            <tr>
+                <td l10nTranslate><b>{{prefix}}REVIEW-COST_TOTAL_INC_VAT</b></td>
+                <td><b>{{(orderSummary.totalSummary.monthlyTotalValueWithVAT)| currency:'EUR'}}</b></td>
+                <td><b>{{(orderSummary.totalSummary.oneTimeTotalValueWithVAT)| currency:'EUR'}}</b></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

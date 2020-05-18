@@ -1,0 +1,68 @@
+<h2 class="pageTitle">
+    <span>Einzelverbindungsnachweis verwalten</span>
+</h2>
+<div [hidden]="!orderDetails.orderNumber">
+    <order-confirmation [orderDetails]="orderDetails"></order-confirmation>
+</div>
+<div [hidden]="orderDetails.orderNumber">
+    <sncr-flow #flow="sncrFlow" [ngClass]="{disableFields:orderProcessing}">
+        <sncr-flow-section titleText="Teilnehmer auswählen" modelSortKey="selected" modelSortVal="2"
+                           [eventType]="eventType"  #subsFlow="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <ng-container *ngIf="subsFlow.model?.selectCount > 0">
+                    <span *ngIf="subsFlow.model.selectCount === 1" l10nTranslate>SELECTION-ONE_SUBS_SELECTED</span>
+                    <span *ngIf="subsFlow.model.selectCount !== 1" [l10nTranslate]="{selectCount: subsFlow.model.selectCount}">SELECTION-SUBSCRIBERS_WERE_SELECTED</span>
+                </ng-container>
+            </div>
+
+            <div *sncrSectionTemplate class="dataTableCbillF">
+                <subscriber-selection [lazy]="true" [lazyLoadUrl]="lazyLoadUrlSubsSelection" [columns]="columns"
+                                      [subsFlow]="subsFlow" [properties]="getSubsUpdateProperties()" (onDataChange)="eventType = $event">
+                </subscriber-selection>
+            </div>
+        </sncr-flow-section>
+
+        <sncr-flow-section titleText="Einzelverbindungsnachweis verwalten" #itemizedFlow="sncrFlowSection">
+            <div class="selectedItem" *sncrSummaryTemplate>
+                <div>Ausgewählte Einstellung:</div>
+                <ul>
+                    <li *ngIf="itemizedFlow.model.itemized">{{constants.germanDescription[itemizedFlow.model.itemized]}}</li>
+                    <li *ngIf="itemizedFlow.model.targetNumber && itemizedFlow.model.itemized!=='N'">Verkürzte Zielrufnummer: {{constants.tnOptionsJson[itemizedFlow.model.targetNumber]}}</li>
+                </ul>
+            </div>
+
+            <div *sncrSectionTemplate class="alertDiv">
+                <manage-itemized [(itemized)]="itemizedFlow.model.itemized"
+                                 [(targetNumber)]="itemizedFlow.model.targetNumber"
+                                 [properties]="properties"
+                                 [totalLength]="subsFlow.model?.selectCount"
+                                 [isChanged]="subsFlow.model?.hasChanged"
+                                 [itemizedFlow]="itemizedFlow"
+                                 [infomsg]="infomsg"
+                                 (processingEvent)="processingEvent($event)">
+                </manage-itemized>
+            </div>
+        </sncr-flow-section>
+
+        <sncr-flow-section titleText="Bestellübersicht">
+            <div class="padLR20" *sncrSectionTemplate>
+                <sncr-notification [handler]="orderReviewNotify"></sncr-notification>
+                <p class="margin-top-30 margin-bottom-0">Bitte prüfen Sie Ihre gewünschten Änderungen auf dieser Seite. Anschließend können Sie die Bestellung absenden.</p>
+                <order-review
+                        [isChanged]="itemizedFlow.model.isChanged"
+                        (footerNoteEvent)="footerNoteEvent($event)">
+                </order-review>
+                <p class="pull-left small mt-4 padLR20" *ngIf="footerNoteForReview">
+                    {{superScript}}
+                </p>
+                <div class="next-button">
+                    <sncr-button type="primary" (click)="processOrder()"
+                                 [disabled]="orderProcessing || isReadOnly"
+                                 [ngClass]="{disableFields:orderProcessing || isReadOnly}">
+                        Bestellung absenden
+                    </sncr-button>
+                </div>
+            </div>
+        </sncr-flow-section>
+    </sncr-flow>
+</div>

@@ -1,0 +1,44 @@
+<h2 class="pageTitle">
+    <span>Tarifoptionen verwalten</span>
+</h2>
+
+<div class="contentPanel">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <ngb-tabset>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle><b>Tarifoptionen</b></ng-template>
+                        <ng-template ngbTabContent>
+                            <tariff-options></tariff-options>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle><b>Kategorien</b></ng-template>
+                        <ng-template ngbTabContent>
+                            <soc-category></soc-category>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle><b>Gruppen</b></ng-template>
+                        <ng-template ngbTabContent>
+                            <soc-groups></soc-groups>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle><b>Familien</b></ng-template>
+                        <ng-template ngbTabContent>
+                            <soc-family></soc-family>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle><b>Blacklist</b></ng-template>
+                        <ng-template ngbTabContent>
+                            <soc-blockedlist></soc-blockedlist>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+        </div>
+    </div>
+</div>

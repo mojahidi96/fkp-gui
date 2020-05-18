@@ -1,0 +1,294 @@
+@import '../../styles/custom-variables';
+@import '../../styles/mixins';
+
+.top-bar {
+  margin: 0 0 14px 0;
+  overflow: hidden;
+  width: 100%;
+
+  .tabset {
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    list-style: none;
+    margin: 0;
+    padding: 5px 0 1px 10px;
+
+    li {
+      float: left;
+      margin: 0 0 0 -1px;
+      padding: 5px 0 0 0;
+    }
+
+    a {
+      @include linear-gradient($txt-white, $right-inside-bg);
+      color: $topbar-links;
+      float: left;
+      height: 28px;
+      line-height: 28px;
+      overflow: hidden;
+      padding: 0 19px 0 19px;
+      border: 1px solid $topbar-links-border;
+      border-bottom: none;
+
+      &:hover {
+        color: $topbar-links-hover;
+        text-decoration: none;
+      }
+    }
+
+    .active {
+      margin: 0 0 -1px 0;
+      padding: 0;
+      position: relative;
+
+      a {
+        color: $topbar-links-hover;
+        height: 34px;
+        line-height: 33px;
+      }
+    }
+  }
+}
+
+.shop-info {
+  display: inline-block;
+  font-weight: bold;
+  text-align: center;
+  width: 200px;
+}
+
+.tools {
+  padding-top: 4px;
+}
+
+.fm-select [disabled] {
+  background: $select-disabled;
+}
+
+.fm-select {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+  background: none repeat scroll 0 0 $txt-white;
+  width: 200px;
+
+  select {
+    border: 0;
+    border-radius: 3px;
+    appearance: none;
+    box-shadow: inset 0 1px 2px rgba(50, 50, 50, 0.75);
+    border: 1px solid $input-text-border-color;
+    font-size: 100%;
+    font-weight: bold;
+    padding: 5px;
+    width: 100%;
+    height: 31px;
+  }
+
+  span {
+    background: $txt-white;
+    margin: 0 3px 0 0;
+    padding: 0px 9px 0px 6px;
+    pointer-events: none;
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    height: 21px;
+    z-index: 1;
+    border-left: 1px solid $select-separator;
+
+    i {
+      display: inline-block;
+      width: 19px;
+      position: relative;
+      top: 0px;
+      font-size: 14px;
+      color: $select-icon-color;
+    }
+  }
+}
+
+nav {
+  padding: 0;
+}
+
+.nav-link {
+  color: $txt-white;
+  padding: 10px 10px 15px 10px;
+}
+
+.nav-item {
+  margin: 0 1px 0 0;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 8px 5px 0 5px;
+  border-right: 1px solid $topbar-links-separator;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &.active {
+    background-color: $topbar-links-hover;
+  }
+}
+
+.dropdown:hover {
+  & .nav-link {
+    background: $txt-white;
+    color: $dropdown-hover-text;
+  }
+
+  & .dropdown-menu {
+    display: table;
+    border: 1px solid $layout-border;
+    border-top: 2px solid transparent;
+    margin-top: 0;
+    padding: 10px;
+    box-shadow: none;
+    left: 5px;
+
+    .list-inline {
+      padding: 0 15px 0 0;
+      min-width: 138px;
+
+      &:last-child {
+        padding: 0;
+      }
+    }
+
+    .adminMenu.megaMenu {
+      width: 800px;
+      display: flex;
+      flex-flow: row wrap;
+
+      .d-table-cell {
+        display: inline !important;
+      }
+    }
+
+    .dropdown-item {
+      border-bottom: 1px solid $layout-border;
+      font-size: 11px;
+      color: $txt-black;
+      padding: 1px 0;
+
+      a {
+        color: $txt-black;
+        text-decoration: none;
+
+        &:hover {
+          color: $topbar-links-hover;
+        }
+      }
+
+      strong {
+        font-size: 13px;
+      }
+
+      &:hover {
+        background: $txt-white;
+      }
+    }
+  }
+}
+
+.isReadOnlyUser {
+  position: absolute;
+  left: 90%;
+  top: 54px;
+}
+
+.sticky {
+  position: fixed !important;
+  top: 0px !important;
+}
+
+.VFlogo a {
+  background: url(~/public/icons/legacy/vodafone-logo.png) no-repeat;
+  left: -75px;
+  height: 60px;
+  top: 0;
+  width: 61px;
+  position: absolute;
+  z-index: 10;
+}
+
+.rhombus {
+  background-color: $primary;
+  height: 80px;
+  left: -2065px;
+  position: absolute;
+  top: -30px;
+  width: 1999px;
+  z-index: 1;
+
+  &:after {
+    border-right: 1999px inset transparent;
+    border-top: 1999px solid $primary;
+    content: ' ';
+    height: 0;
+    left: 43px;
+    position: absolute;
+    top: 77px;
+    width: 0;
+    z-index: 1;
+  }
+  &:before {
+    border-color: transparent transparent $primary;
+    border-style: none inset solid none;
+    border-width: medium 1999px 1999px medium;
+    content: ' ';
+    height: 0;
+    left: 43px;
+    overflow: hidden;
+    position: absolute;
+    top: -1956px;
+    width: 0;
+  }
+}
+
+.sub-nav {
+  background: $subnav-background;
+  height: 1%;
+  margin: 0 0 6px 1px;
+  overflow: hidden;
+  padding: 0 2px 2px 0;
+
+  ul {
+    background: $txt-white;
+    font-size: 11px;
+    height: 1%;
+    line-height: 24px;
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 4px 0 1px 14px;
+  }
+
+  li {
+    float: left;
+    margin: 0 16px 0 0;
+  }
+
+  a {
+    color: $txt-black;
+  }
+
+  .active {
+    a {
+      color: $subnav-active-color;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: none;
+        cursor: default;
+      }
+    }
+  }
+
+  .hidden {
+    show: hidden !important;
+  }
+}

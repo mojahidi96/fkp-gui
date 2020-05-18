@@ -1,0 +1,76 @@
+@import '../../../styles/custom-tabs';
+@import '../../../styles/custom-variables';
+
+.label {
+  color: $primary;
+  font-weight: bold;
+  margin-top: 5px;
+  padding: 10px 5px 5px 5px;
+}
+
+.fa-check {
+  color: green;
+}
+
+:host ::ng-deep .card-block > .col-sm-4 {
+  align-self: flex-end;
+}
+
+::ng-deep .Tarifauswahl {
+  .form-group {
+    label {
+      display: inline-block !important;
+    }
+  }
+}
+
+:host ::ng-deep .row.pb-2 {
+  field-switch {
+    .ui-datatable-tablewrapper {
+      .tableField > * {
+        justify-content: flex-start !important;
+      }
+
+      .tariff-check {
+        .form-check {
+          position: relative;
+
+          .form-check-label {
+            position: relative;
+            padding-left: 0px;
+
+            .Checkbox {
+              width: 20px;
+            }
+          }
+        }
+      }
+
+      .tariff-select {
+        float: left;
+      }
+
+      .ui-cell-data {
+        .form-group.selectMainDiv {
+          select {
+            padding-right: 26px;
+          }
+
+          @media screen and (-ms-high-contrast: active),
+            (-ms-high-contrast: none) {
+            select {
+              padding-right: 6px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.error-align {
+  .col-sm-4,
+  .col-sm-12,
+  .col-sm-8 {
+    align-self: flex-end;
+  }
+}

@@ -1,0 +1,11 @@
+**/*.iml
+**/*.ipr
+**/*.iws
+*.log
+.idea
+node_modules
+dist
+coverage
+test-reports
+.scannerwork
+.DS_Store

@@ -1,0 +1,85 @@
+@import '../styles/mixins';
+
+.modal-dialog {
+  width: 633px;
+}
+
+:host ::ng-deep .content {
+  height: auto !important;
+  min-height: 100px !important;
+}
+
+.errorTable {
+  padding: 20px;
+  border: solid 1px #e60000;
+}
+
+.marB30 {
+  margin-bottom: 30px;
+}
+.uploadChanges {
+  .marB25 {
+    margin-bottom: 25px;
+  }
+  .marT80 {
+    margin-top: 80px;
+  }
+  .marB80 {
+    margin-bottom: 80px;
+  }
+  .file-drop {
+    margin: auto;
+    min-height: 100px;
+    border-width: 2px;
+    border-style: dashed;
+    border-color: #979797;
+    color: #333333 !important;
+    padding: 10px 10px;
+    margin: 15px 0px 20px 0px;
+    .content > .dAndDropTxt {
+      color: #333333 !important;
+    }
+    .content {
+      text-align: center;
+      input[type='file'] {
+        width: 0px;
+      }
+      .href {
+        cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: normal;
+        box-shadow: 0;
+        text-decoration: underline;
+      }
+    }
+  }
+  .listGroup {
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+    width: 100%;
+    li {
+      h5 {
+        font-weight: bold;
+        margin-bottom: 12px;
+      }
+      .descriptionTxt {
+        font-weight: normal;
+      }
+      .marB15 {
+        margin-bottom: 15px;
+      }
+    }
+    .padT20 {
+      padding-top: 20px;
+    }
+  }
+
+  .href {
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    box-shadow: 0;
+    text-decoration: underline;
+  }
+}

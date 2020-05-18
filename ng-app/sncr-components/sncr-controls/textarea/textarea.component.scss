@@ -1,0 +1,29 @@
+@import '../../../styles/custom-variables';
+@import '../../../styles/mixins';
+
+label {
+  font-weight: bold;
+}
+
+small {
+  float: right;
+}
+
+.exceeded {
+  color: red;
+}
+
+textarea.form-control {
+  border: 1px solid $input-text-border-color !important;
+  box-shadow: inset 0 1px 2px 0 rgba(50, 50, 50, 0.75);
+  font-size: 14px;
+}
+
+textarea.form-control-danger {
+  border: 1px solid $error-message !important;
+  color: $error-message !important;
+}
+
+:host ::ng-deep .popover {
+  margin-top: 5px !important;
+}

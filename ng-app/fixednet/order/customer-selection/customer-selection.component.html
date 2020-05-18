@@ -1,0 +1,18 @@
+<sncr-notification [handler]="notify" [dismissible]="false"></sncr-notification>
+
+<div *ngIf="loading;else elsePart">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<ng-template #elsePart>
+    <sncr-datatable [value]="customers" [rowHover]="true" [cols]="customerCols"
+                    [(selection)]="selection" [sortField]="'fnCustomerNumber'"
+                    [sortOrder]="'1'" [selectionMode]="'radio'">
+    </sncr-datatable>
+
+
+    <div class="text-right">
+        <sncr-button class="btn-strong" type="strong" (click)="next()">
+            Weiter
+        </sncr-button>
+    </div>
+</ng-template>

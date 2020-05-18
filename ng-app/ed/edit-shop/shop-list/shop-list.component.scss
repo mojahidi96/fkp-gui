@@ -1,0 +1,17 @@
+@import '../../../styles/_custom-variables';
+@import '../../../styles/page-title';
+@import '../../../styles/mixins';
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-data > tr {
+  cursor: pointer;
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}

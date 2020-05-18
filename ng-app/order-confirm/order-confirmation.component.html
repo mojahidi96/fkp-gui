@@ -1,0 +1,37 @@
+<div class="contentPanel">
+    <h2 class="pageTitle" *ngIf="!orderDetails.hidePrintIcon">
+        <span l10nTranslate><i class="pl-2 fa fa-check-circle"></i>ORDER_CONFIRMATION</span><span *ngIf="!orderDetails.mutlipleOrders" class="pull-right fa fa-print" (click)="downloadPdf(orderDetails.orderNumber,orderDetails.orderType)"></span>
+    </h2>
+    <h2 class="pageTitle" *ngIf="orderDetails.hidePrintIcon">
+        <span l10nTranslate><i class="pl-2 fa fa-check-circle"></i>ORDER_CONFIRMATION</span>
+    </h2>
+
+    <div class="contentPanelBody">
+        <div class="orderStatusMsg">
+            <sncr-notification [handler]="statusNotify"></sncr-notification>
+        </div>
+        <div>
+            <sncr-notification *ngIf="!orderDetails.mutlipleOrders" type="success">
+                <p l10nTranslate class="sucessHeading">THANK_YOU_FOR_YOUR_ORDER</p>
+                <p>{{orderDetails.orderNote}} <span class ="font-weight-bold">{{orderDetails.orderNumber}}</span>. {{orderDetails.description}}</p>
+            </sncr-notification>
+            <sncr-notification *ngIf="orderDetails.mutlipleOrders" type="success">
+                <p l10nTranslate class="sucessHeading">THANK_YOU_FOR_YOUR_ORDER</p>
+                <p><span l10nTranslate>RECEVIED_SUCESS_MSG</span><br>
+                    <span l10nTranslate>ORDER_CONSISTS</span></p>
+                <ng-container *ngIf="orderDetails.multipleOrdersTemplate">
+                    <ng-template [ngTemplateOutlet]="orderDetails.multipleOrdersTemplate"></ng-template>
+                </ng-container>
+                <ng-container *ngIf="!orderDetails.multipleOrdersTemplate">
+                    <div *ngFor="let order of orderDetails.mutlipleOrders">
+                <span>
+                    {{order.orderType+'_DISPLAY_NOTE' | translate:lang}}<span class="href" (click)="downloadPdf(order.orderNumber,order.orderType)"><span class ="font-weight-bold">{{order.orderNumber}}</span></span><i class="fa fa-file-pdf-oIcon" aria-hidden="true"></i>
+                </span>
+                    </div>
+                </ng-container>
+                <p [innerHTML]="'ORDER_CONFIRM-DESCRIPTION' | translate:lang"></p>
+            </sncr-notification>
+        </div>
+    </div>
+
+</div>

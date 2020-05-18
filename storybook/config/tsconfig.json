@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs"
+  },
+  "exclude": ["../../ng-app/**/*.spec.ts"],
+  "include": ["../../ng-app/**/*"]
+}

@@ -1,0 +1,143 @@
+<sncr-notification [handler]="notify" [dismissible]="false"></sncr-notification>
+
+<div *ngIf="loading">
+    <sncr-loader [isLoading]="true"></sncr-loader>
+</div>
+
+<h3>Standort hinzufügen</h3>
+<section class="well">
+    <form [formGroup]="addressForm" class="datatable-advanced-filter" (ngSubmit)="getSuggestedAddresses()">
+        <div class="row align-items-end">
+            <div class="col">
+                <sncr-input [formControlName]="'code'" name="code" [autocomplete]="'off'" [placeholder]="'PLZ'"></sncr-input>
+            </div>
+            <div class="col">
+                <sncr-input [formControlName]="'city'" name="city" [autocomplete]="'off'" [placeholder]="'Stadt'"></sncr-input>
+            </div>
+            <div class="col">
+                <sncr-input [formControlName]="'street'" name="street" [autocomplete]="'off'" [placeholder]="'Straße'"></sncr-input>
+            </div>
+            <div class="col">
+                <sncr-input [formControlName]="'houseNumber'" name="houseNumber" [autocomplete]="'off'" [placeholder]="'Nr.'"></sncr-input>
+            </div>
+            <div class="col mb-3" *ngIf="!isAddressLoading">
+                <sncr-button type="submit">
+                    <span>Adresse prüfen</span>
+                </sncr-button>
+            </div>
+            <div class="col mb-4" *ngIf="isAddressLoading">
+                <load-data [loading]="true" message="Adressprüfung läuft"></load-data>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <ng-container *ngIf="addresses && !isAddressLoading && addressLoadTable">
+                <sncr-datatable [value]="addresses" [rowHover]="true" [cols]="addressesCols" (onRowSelect)="onAddressSelect($event)" [selectionMode]="'single'" [sortField]="'code'" [sortOrder]="'1'">
+                </sncr-datatable>
+            </ng-container>
+        </div>
+    </div>
+
+    <div *ngIf="addressErrorMessage">{{addressErrorMessage}}</div>
+</section>
+
+<h3>Standort</h3>
+<section class="well" *ngIf="!loading">
+    <div class="text-right">
+              <span>
+                <i class="fa fa-shopping-cart fa-1x" aria-hidden="true"></i>
+                  Positionen
+                <span class="badge badge-default">{{ cartItems }}</span>
+              </span>
+    </div>
+    <!--<div class="col-md-12">-->
+    <ng-container>
+        <sncr-datatable #productLocTable class="productLocTable" [value]="locations" [rowHover]="true" [cols]="locationCols" (onRowSelect)="onLocationSelect($event)" [selectionMode]="'single'" sortField="address">
+        </sncr-datatable>
+    </ng-container>
+    <!--</div>-->
+</section>
+
+
+<ng-container *ngIf="isInstalledProductsLoading">
+    <load-data [loading]="true" [message]="'Bitte warten Sie, Ihre Anfrage wird bearbeitet'"></load-data>
+</ng-container>
+
+
+<h3 *ngIf="installProducts && !isInstalledProductsLoading">Services installiert {{installServiceHeader}}</h3>
+<section class="well" *ngIf="installProducts && !isInstalledProductsLoading">
+    <div class="col-md-12">
+        <ng-container>
+            <sncr-datatable [value]="installProducts" [rowHover]="true" [cols]="installProductCols" (onRowSelect)="onRowSelect($event)" [sortField]="'productType'">
+            </sncr-datatable>
+        </ng-container>
+    </div>
+</section>
+
+<div class="row">
+    <div class="text-left col-md-6">
+        <sncr-button type="secondary" (click)="tab.select('tab1')">
+            Zurück
+        </sncr-button>
+    </div>
+    <div class="text-right col-md-6">
+        <sncr-button class="btn-strong" type="strong" (click)="next()">
+            Weiter
+        </sncr-button>
+    </div>
+</div>
+
+
+<ng-template #radio let-context>
+    <i *ngIf="context.row.multiSelect" class="fa fa-selected-rows"></i>
+</ng-template>
+
+<ng-template #radio1 let-context>
+    <i class="fa-selected-circle"></i>
+</ng-template>
+
+<ng-template #address let-context>
+    <div class="">
+        <span>
+            {{context.row.address1}} <br />
+            {{context.row.address2}}
+        </span>
+    </div>
+</ng-template>
+
+<ng-template #product let-context>
+    <div *ngIf="!context.row.availableProducts || context.row.availableProducts.length == 0 && !context.row.isAvlProductsLoading
+       && !context.row.isAvlProductsLoadedEmpty">
+        <sncr-button type="secondary" (click)="fetchCatalog(context.row)" clickStopPropagation>
+            <span>Verfügbarkeit prüfen</span>
+        </sncr-button>
+    </div>
+    <div *ngIf="context.row.isAvlProductsLoading" class="text-center">
+        <load-data [loading]="true"></load-data>
+    </div>
+    <div *ngIf="context.row.availableProducts && context.row.availableProducts.length > 0">
+        <sncr-select [(ngModel)]="context.row.productNameSelected" (change)="resetBwSelected(context.row)" clickStopPropagation>
+            <option [value]="'choose'" disabled>Ausw&#228;hlen</option>
+            <option *ngFor="let product of context.row.availableProducts" value="{{product.productName}}">{{product.productName}}</option>
+        </sncr-select>
+    </div>
+    <div *ngIf="context.row.isAvlProductsLoadedEmpty">
+        <span>Keine Produkte für diesen Standort verfügbar.</span>
+    </div>
+</ng-template>
+
+
+<ng-template #bandwidth let-context>
+    <div *ngIf="context.row.productNameSelected && context.row.productNameSelected != 'choose'">
+        <sncr-select [(ngModel)]="context.row.bandwidthSelected" clickStopPropagation>
+            <option [value]="'choose'" disabled>Ausw&#228;hlen</option>
+            <option *ngFor="let bandwidth of context.row.availableProducts|bandWidthFilter:context.row.productNameSelected" [value]="bandwidth.salesProdBandWidth">{{bandwidth.salesProdBandWidth}}</option>
+        </sncr-select>
+        <sncr-button type="secondary btn-add" [disabled]="context.row.bandwidthSelected && context.row.bandwidthSelected !='choose'?false:true" (click)="addCartItems(context.row,t);"
+                     ngbTooltip="Produkt dem Warenkorb hinzugefügt." triggers="manual" #t="ngbTooltip" placement="top" clickStopPropagation>
+            <!--<i class="fa fa-plus" aria-hidden="true"></i>-->
+            <span>Hinzufügen</span>
+        </sncr-button>
+    </div>
+</ng-template>

@@ -1,0 +1,96 @@
+<div
+  [class]="styleClass"
+  [ngStyle]="style"
+  [ngClass]="'ui-paginator ui-widget ui-widget-header ui-unselectable-text'"
+>
+  <ng-container *ngIf="rowsPerPageOptions && rowsPerPageOptions.length">
+    <div class="float-md-left datatableResult">
+      <span sncrTranslate>DATATABLE-PAGINATOR-RESULTS</span>
+    </div>
+    <div class="select-wrapper">
+      <sncr-select
+        [(ngModel)]="rows"
+        (ngModelChange)="onRppChange($event)"
+        [disabled]="formInvalid()"
+      >
+        <option *ngFor="let opt of rowsPerPageOptions" [value]="opt">{{
+          opt
+        }}</option>
+      </sncr-select>
+    </div>
+  </ng-container>
+
+  <div class="buttons-wrapper">
+    <a
+      href="#"
+      class="ui-paginator-prev ui-paginator-element ui-state-default ui-corner-all"
+      (click)="changePageToPrev($event)"
+      [ngClass]="{'ui-state-disabled': isFirstPage() || formInvalid()}"
+      [tabindex]="isFirstPage() ? -1 : null"
+    >
+      <svg-icon name="vodafone/chevron-left" size="small"></svg-icon>
+    </a>
+
+    <span class="ui-paginator-pages">
+      <a
+        href="#"
+        class="ui-paginator-page ui-paginator-element ui-state-default ui-corner-all"
+        (click)="onPageLinkClick($event, 0)"
+        [ngClass]="{'ui-state-active': 0 == getPage()}"
+        >1</a
+      >
+
+      <span *ngIf="getPageCount() > 8 && getPage() > 3" class="ellipsis"
+        >...</span
+      >
+
+      <ng-container *ngFor="let pageLink of pageLinks">
+        <a
+          href="#"
+          *ngIf="!isHidden(pageLink, getPage(), getPageCount())"
+          class="ui-paginator-page ui-paginator-element ui-state-default ui-corner-all"
+          (click)="onPageLinkClick($event, pageLink - 1)"
+          [ngClass]="{
+            'ui-state-active': pageLink - 1 == getPage(),
+            'ui-state-disabled': formInvalid()
+          }"
+          [class]="getButtonClass(pageLink)"
+        >
+          {{ pageLink }}
+        </a>
+      </ng-container>
+
+      <span
+        *ngIf="getPageCount() > 8 && getPage() < getPageCount() - 4"
+        class="ellipsis"
+        >...</span
+      >
+
+      <a
+        *ngIf="getPageCount() > 1"
+        href="#"
+        class="ui-paginator-page ui-paginator-element ui-state-default ui-corner-all"
+        (click)="onPageLinkClick($event, getPageCount() - 1)"
+        [ngClass]="{
+          'ui-state-active': getPageCount() - 1 == getPage(),
+          'ui-state-disabled': formInvalid()
+        }"
+        [class]="getButtonClass(getPageCount())"
+      >
+        {{ getPageCount() }}
+      </a>
+    </span>
+
+    <a
+      href="#"
+      class="ui-paginator-next ui-paginator-element ui-state-default ui-corner-all"
+      (click)="changePageToNext($event)"
+      [ngClass]="{'ui-state-disabled': isLastPage() || formInvalid()}"
+      [tabindex]="isLastPage() ? -1 : null"
+    >
+      <svg-icon name="vodafone/chevron-right" size="small"></svg-icon>
+    </a>
+  </div>
+
+  <div class="clearfix"></div>
+</div>

@@ -1,0 +1,79 @@
+@import 'custom-variables';
+@import 'mixins';
+
+//modal styles
+
+.close-popup {
+  width: 32px;
+  height: 32px;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: -40px;
+  opacity: 1;
+  display: block;
+  background: url(~/public/icons/svg/vodafone/close.svg) #ffffff;
+}
+
+::ng-deep .modal-dialog {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  width: 928px;
+  max-width: 928px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  .modal-content {
+    border-radius: 0px !important;
+    border: none;
+    padding: 30px 0px;
+    width: 100%;
+
+    .modal-header {
+      border-bottom: none;
+      padding: 0px;
+      width: 80%;
+      margin: 0px auto !important;
+
+      .modal-title {
+        font-size: 30px;
+        font-weight: normal;
+        line-height: normal;
+      }
+    }
+
+    .modal-body {
+      padding: 26px 0px;
+      width: 80%;
+      margin: 0px auto !important;
+      .row {
+        padding-bottom: 20px;
+
+        p:last-child {
+          margin-bottom: 0px;
+        }
+      }
+    }
+
+    .modal-footer {
+      justify-content: space-between;
+      padding: 0px;
+      width: 80%;
+      margin: 0px auto !important;
+      border-top: none;
+
+      &.flex-end {
+        justify-content: flex-end;
+      }
+
+      .btn-secondary {
+        &:hover {
+          background: #fff;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<div class="form-group" [sncrValidationStyles]="hasErrors()"> 
+    <sncr-validation-messages *ngIf="hasErrors()" [messages]="getErrors()"></sncr-validation-messages>
+
+    <label [for]="name">
+        {{label}}<span #labelContent><ng-content></ng-content></span><span *ngIf="showAsterisk(labelContent)" class="requiredField">*</span>
+    </label>
+
+    <textarea [id]="name"
+              [name]="name"
+              class="form-control sncr-control"
+              [(ngModel)]="model"
+              [placeholder]="placeholder || ''"
+              [disabled]="disabled"
+              [readonly]="readonly"
+              [rows]="rows"
+              [cols]="cols"
+              (blur)="onBlur()">
+    </textarea>
+    <small *ngIf="maxlength && !disableCounter"
+           [class.exceeded]="getRemaining() < 0">
+        {{getRemaining()}}
+    </small>
+</div>

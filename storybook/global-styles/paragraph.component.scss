@@ -1,0 +1,16 @@
+@import '../../ng-app/styles/vodafone';
+
+p:host {
+  margin: 0;
+
+  max-width: 70ch;
+
+  font: $weight-normal 14px/20px Arial, sans-serif;
+  color: $color-mine-shaft;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p + p:host {
+  text-indent: 1em;
+}

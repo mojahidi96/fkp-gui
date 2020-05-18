@@ -1,0 +1,149 @@
+@import '../../styles/mixins';
+
+$wrapper-width: 339px;
+
+.rightPanelBg {
+  background-color: #ebebeb;
+  position: relative;
+  width: $wrapper-width;
+}
+
+.wrapper {
+  width: $wrapper-width;
+  padding: 30px 0 30px 20px;
+
+  h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+}
+
+.group {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.soc {
+  overflow-wrap: break-word;
+  position: relative;
+  word-break: break-all;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.name {
+  word-wrap: normal;
+  word-break: normal;
+  float: left;
+  display: table-cell !important;
+}
+
+.price {
+  word-wrap: normal;
+  word-break: normal;
+  float: left;
+  display: table-cell !important;
+  margin-left: 5px;
+}
+
+.review {
+  padding-right: 20px;
+  margin-top: 20px;
+  text-align: right;
+}
+
+.selectedItemList {
+  margin-top: 9px;
+  margin-bottom: 10px;
+
+  li {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+    ul {
+      li:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+
+  .reset {
+    background-image: url(~/public/icons/svg/vodafone/close.svg);
+    @include icon(16px);
+    margin-left: 8px;
+  }
+
+  .plusIcon {
+    background-image: url(~/public/icons/svg/vodafone/add-or-plus.svg);
+    @include icon(16px);
+    background-size: 150% 150%;
+    margin-right: 5px;
+  }
+
+  .minusIcon {
+    background-image: url(~/public/icons/svg/vodafone/minus-or-less.svg);
+    @include icon(16px);
+    background-size: 150% 150%;
+    margin-right: 5px;
+  }
+
+  .reset,
+  .plusIcon,
+  .minusIcon {
+    margin-top: 2px;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+}
+
+.contents {
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 20px;
+  & > * {
+    width: calc(#{$wrapper-width} - 40px);
+  }
+}
+
+.sticky-top {
+  position: fixed;
+  top: 0;
+  width: $wrapper-width;
+  z-index: auto;
+}
+
+.sticky-bottom {
+  position: relative;
+  bottom: 0;
+}
+
+.no-results {
+  padding-right: 20px;
+}
+
+.pc-loader {
+  height: 35px;
+
+  & ::ng-deep .loader:after {
+    background-color: #ebebeb;
+  }
+}
+
+.max-height_226 {
+  max-height: 226px;
+}
+
+.max-window-height {
+  max-height: 80vh;
+}

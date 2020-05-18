@@ -1,0 +1,35 @@
+<div class="rightPanelBg">
+    <div class="wrapper" #wrapper>
+        <h3 l10nTranslate>SOC_SELECTION-PLANNED_CHANGES</h3>
+
+        <div class="contents {{cssClass}}">
+            <div [hidden]="loading" *ngFor="let change of plannedChanges | async">
+                <div class="group">{{change.groupName}}</div>
+                <ul class="selectedItemList">
+                    <li *ngFor="let soc of change.socs">
+                        <div *ngIf="!soc?.isExist" [ngClass]="soc?.isAddition?'plusIcon':'minusIcon'"></div>
+                        <div class="soc">
+                            <div class="name">{{soc.quantity}} x {{soc.name}}</div>
+                            <div class="price" *ngIf="soc.showPrice">
+                                ({{soc.price && soc.price > 0 ? getSocPrice(soc) : 'SOC_SELECTION-FREE_OF_CHARGE' | translate:lang}})
+                            </div>
+                        </div>
+                        <div class="reset" *ngIf="!soc.mandatory" title="{{revertChangesLabel}}" (click)="reset(soc)"></div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pc-loader" *ngIf="loading">
+                <sncr-loader class="relative" [isLoading]="loading"></sncr-loader>
+            </div>
+        </div>
+
+        <div class="mb-3 no-results" *ngIf="!loading && !(plannedChanges | async)?.length"  l10nTranslate>
+            {{'PLANNED_CHANGES-DESCRIPTION_MSG'|translate:lang}}
+        </div>
+
+        <div class="review">
+            <sncr-button type="strong" (click)="review.emit()" [disabled]="disableOnceClicked" [ngClass]="{disableFields:disableOnceClicked}">{{buttonLabel}}</sncr-button>
+        </div>
+    </div>
+</div>

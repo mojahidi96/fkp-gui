@@ -1,0 +1,75 @@
+<h2 class="pageTitle">
+    <span>Datenaktualisierung</span>
+</h2>
+
+
+<div class="card">
+    <div *ngIf="loading && !onBoarding;">
+        <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+    </div>
+    <div [hidden]="hideContent()">
+        <div class="card-block">
+            <sncr-notification [handler]="notify" [dismissible]="false" *ngIf="!modalError"></sncr-notification>
+            <div style="padding-bottom: 10px;">
+                <sncr-button type="secondary" (click)="openOnboardModal(onboard)">Top-Level Kunden hinzufügen</sncr-button>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <ng-container *ngIf="!loading || onBoarding">
+                        <sncr-datatable #onboarding [(value)]="dwhRefreshData" [rowHover]="true" [cols]="cols" [resultCount]="true" [(selection)]="selected" [multiSelection]="true" sortField="fnRootCustomerNumber"
+                                        [selectMessage]="selected.length>1?'Ergebnisse':'Ergebnis'">
+                        </sncr-datatable>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 nopadding">
+                    <sncr-button type="secondary" (click)="cancelRefreshChanges()">Zurück</sncr-button>
+                </div>
+
+                <div class="col-md-8 text-right onboardFormBtn1">
+                    <sncr-button class="marR20" type="submit" [disabled]="cancelRefreshDisable()" [ngClass]="{disableFields:cancelRefreshDisable()}" (click)="cancelRefresh()">Aktualisierung verwerfen</sncr-button>
+                    <sncr-button type="submit" [disabled]="submitRefreshDisable()" [ngClass]="{disableFields:submitRefreshDisable()}" (click)="submitRefresh()">Aktualisierung</sncr-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #onboard let-c="close" let-d="dismiss" ngbModalContainer>
+    <div *ngIf="loading && onBoarding;else elsePart " class="onboardLoading">
+        <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+    </div>
+    <ng-template #elsePart>
+
+
+        <div class="modal-header" *ngIf="!loading">
+            <h2 class="modal-title">Top-Level Kunden hinzufügen</h2>
+            <button type="button" class="close-popup" aria-label="Close closePopup" (click)="modalError=false;d('Cross click');createForm();"></button>
+        </div>
+
+
+        <form [formGroup]="onboardForm" class="datatable-advanced-filter" (ngSubmit)="saveOnboardCustomer(onboardForm)">
+            <div class="modal-body">
+
+                <sncr-notification [handler]="notify"></sncr-notification>
+
+                <strong>Top-Level Kunde <span class="required" style="color:red;">*</span></strong>
+                <sncr-input [formControlName]="'customerHierarchy'" (input)="validateNumberInputs('customerHierarchy')" name="customerHierarchy" [autocomplete]="'off'" required></sncr-input>
+
+                <div class="clearfix"></div>
+                <strong>Kundennummer</strong>
+                <sncr-input [formControlName]="'customerNumber'" (input)="validateNumberInputs('customerNumber')" name="customerNumber" [autocomplete]="'off'"></sncr-input>
+            </div>
+            <div class="modal-footer onboardFormBtn">
+                <sncr-button type="secondary" (click)="modalError=false;c('Close click');createForm();">Abbrechen</sncr-button>
+                <sncr-button type="submit" [disabled]="disableSaveButton() || loading" [ngClass]="{disableFields:disableSaveButton() || loading}" class="float-md-right">
+                    <span>Speichern</span>
+                </sncr-button>
+            </div>
+        </form>
+    </ng-template>
+</ng-template>

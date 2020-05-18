@@ -1,0 +1,20 @@
+<div class="form-check radioBoxDiv" [ngClass]="{'form-check-inline': inline}">
+    <label class="m-0 form-check-label">
+        <div class="radioBox">
+            <input type="radio"
+                   [id]="name"
+                   [name]="name"
+                   [(ngModel)]="model"
+                   class="form-check-input sncr-control"
+                   [checked]="checked"
+                   [required]="required"
+                   [value]="value"
+                   [disabled]="disabled">
+            <div class="radioBox-visible"></div>
+            <span class="radioContent">{{label}}
+        <ng-content *ngIf="!label"></ng-content></span>
+        </div> 
+    </label>
+    <input *ngIf="isReadOnly()" type="hidden" [(ngModel)]="model" />
+    <div class="clearfix"></div>
+</div>

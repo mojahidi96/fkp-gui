@@ -1,0 +1,32 @@
+@import '../../../styles/_custom-variables';
+
+.next-button {
+  text-align: right;
+  margin-bottom: 30px;
+}
+
+:host ::ng-deep .custom-inline .wrapper {
+  position: inherit !important;
+  display: inline-block;
+  width: 958px;
+  min-height: 225px;
+
+  .loader {
+    top: 40px;
+    position: relative;
+    margin: 3% auto !important;
+  }
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}
+
+.disabled {
+  opacity: 0.45;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.5);
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}

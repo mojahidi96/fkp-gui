@@ -1,0 +1,21 @@
+module.exports = {
+  "CSV-INVALID_RECORDS": "{{count}} hochgeladene Teilnehmer sind ungültig",
+  "CSV-INVALID_RECORDS-DOWNLOAD": "Laden Sie ungültige Datensätze als CSV-Datei herunter",
+  "CSV-NO_MATCHING_RECORDS": "No matching records",
+  "CSV-UPLOAD_AREA-CSV": "CSV",
+  "CSV-UPLOAD_AREA-SUPPORTED_FORMAT": "UNTERSTÜTZTE FORMATE",
+  "CSV-UPLOAD_AREA-TITLE": "Legen Sie Ihre Datei hier ab",
+  "CSV-UPLOAD_AREA-UPLOAD_1": "oder klicken Sie ",
+  "CSV-UPLOAD_AREA-UPLOAD_2": "hier",
+  "CSV-UPLOAD_AREA-UPLOAD_3": " um eine Datei auszuwählen",
+  "CSV-UPLOAD_BUTTON": "CSV-Datei hochladen",
+  "CSV-UPLOAD_BUTTON-CANCEL": "Abbrechen",
+  "CSV-VALID_RECORDS": "{{count}} Teilnehmer erfolgreich hochgeladen",
+  "MAINTAIN-SOC-DELETE_CART": "Warenkorb löschen",
+  "MAINTAIN-SOC-ORDER_TYPE": "MSOC",
+  "MAINTAIN-SOC-REVIEW-SAVE_CART": "Warenkorb speichern",
+  "WRONG_FILE_FORMAT": "Dateityp oder Format wird nicht unterstützt",
+  "RECEVIED_SUCESS_MSG": "Ihre Bestellung ist erfolgreich bei uns eingegangen und befindet sich in Bearbeitung.",
+  "ORDER_CONSISTS": "Ihre Bestellung besteht aus folgenden Teilen:",
+  "ORDER_CONFIRM-DESCRIPTION": "Bitte beachten Sie, dass die Aktualisierung der Informationen zum Folgetag vorgenommen wird. Wir möchten Sie bitten,\n" + "weiterführende Aufträge zu dieser/n Rufnummer/n erst nach Abschluss der Aktualisierung zu übermitteln."
+};

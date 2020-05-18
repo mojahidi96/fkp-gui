@@ -1,0 +1,22 @@
+@import '../../styles/mixins';
+
+:host ::ng-deep .review-right {
+  text-align: right !important;
+  margin-bottom: 30px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.infoText {
+  margin-bottom: 30px;
+}
+
+:host ::ng-deep .label-as-btn {
+  margin-bottom: 0px;
+  color: #fff;
+  background: #333;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}

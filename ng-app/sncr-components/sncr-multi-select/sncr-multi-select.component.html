@@ -1,0 +1,43 @@
+<div class="d-inline-block datatable-toggle-check" ngbDropdown placement="bottom-right" (click)="resetFilter($event)" autoClose="outside">
+    <div class="custom-button" id="dropdownMenu1" ngbDropdownToggle>
+        <div class="dropDownTxt" l10nTranslate>DATATABLE-COLUMN_SELECT-TITLE</div>
+        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+        <i class="fa fa-chevron-up" aria-hidden="true"></i>
+    </div>
+    <div ngbDropdownMenu (click)="$event.stopPropagation();">
+        <sncr-input type="text" class="searchForm" #inputFilter="ngModel" [ngModel]="searchCols"
+                    [placeholder]="getPlaceholderKeyword('DATATABLE-COLUMN_SELECT-PLACEHOLDER')"> </sncr-input>
+        <li class="fa fa-search input-search-icon"></li>
+
+        <div #dropdown class="custom-dropdown">
+            <div class="dropdown-item d-flex" *ngFor="let col of colsCopy; let index = index; let last =last;">
+                <div *ngIf="!col.hideSwitch" class="flex-grow-1 filterItems">
+                    <ng-container [ngSwitch]="hideColSelect">
+                        <ng-container *ngSwitchCase="true">
+                            <sncr-checkbox *ngIf="col.nonEditable == 'Y'" [(ngModel)]="col.show" (change)="colsChange.emit(cols)">
+                                <div class="dropdown-itemTxt" l10nTranslate>{{col.title}}</div>
+                            </sncr-checkbox>
+                            <sncr-checkbox *ngIf="!col.nonEditable || col.nonEditable !='Y'" [disabled]="true" [(ngModel)]="col.show"
+                                           [ngbTooltip]="'DATATABLE-COLUMN_SELECT-NOT_HIDDEN' | translate:lang">
+                                <div class="dropdown-itemTxt" l10nTranslate>{{col.title}}</div>
+                            </sncr-checkbox>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                            <sncr-checkbox [(ngModel)]="col.show" (change)="colsChange.emit(cols)">
+                                <div class="dropdown-itemTxt" l10nTranslate>{{col.title}}</div>
+                            </sncr-checkbox>
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <div *ngIf="!searchCols" class="sortArrows">
+                    <span (click)="moveUpAndDown(col,true)" *ngIf="index > 0" class="fa fa-angle-double-up fa-lg clickable"></span>
+                    <span (click)="reorderCols(col,0,-1)" *ngIf="index > 0" class="fa fa-angle-up fa-lg clickable"></span>
+                    <span (click)="reorderCols(col,0,1)" *ngIf="!last" class="fa fa-angle-down fa-lg clickable"></span>
+                    <span (click)="moveUpAndDown(col,false)" *ngIf="!last" class="fa fa-angle-double-down fa-lg clickable"></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<div *ngIf="loader">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<div *ngIf="!loader">
+    <sncr-datatable #sncrtable [value]="socData" [cols]="socCols" [styleClass]="'ui-custom-wrapper'"
+                    [editable]="true" (onOpenEdit)="editOpen($event)" (onEditSave)="updateRow($event)"
+                    [removableContent]="removableContent" (onDelete)="deleteRow($event)"
+                    [resultMessage]="resultMessage">
+        <sncr-header>
+            <div class="datatableHeader">
+                Ausgewählte Gruppe:<br><strong>{{socGroup.groupName}}</strong><br>
+            </div>
+            <asg-model #activeT [groupId]="socGroup.id" (saveActiveSoc)="saveRow($event)"></asg-model>
+        </sncr-header>
+    </sncr-datatable>
+
+</div>
+

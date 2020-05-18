@@ -1,0 +1,9 @@
+.rotate ::ng-deep svg {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}

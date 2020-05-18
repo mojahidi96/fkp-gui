@@ -1,0 +1,16 @@
+<h2 class="pageTitle">
+    <span l10nTranslate>PAGE_TITLE</span><br>
+</h2>
+<div class="card">
+    <span class="dataTableMSoc">
+    <sncr-datatable [cols]="columns" [lazy]="true" [sortField]="2" [sortOrder]="1" [lazyLoadUrl]="lazyLoadUrl"
+                    [ngClass]="{disableFields:processing}">
+    </sncr-datatable>
+    </span>
+</div>
+
+<ng-template #debitorId let-context>
+  <span class="link" (click)="selectDebitor()">
+      {{context.row[2]}} <span *ngIf="context.row[5]==='T'">(T)</span>
+  </span>
+</ng-template>

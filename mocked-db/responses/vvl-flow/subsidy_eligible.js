@@ -1,0 +1,1 @@
+module.exports = {"subsidySubsCount":2,"tariffSubsCount":2};

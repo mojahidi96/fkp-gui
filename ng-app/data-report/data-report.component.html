@@ -1,0 +1,201 @@
+<div *ngIf="vfLoading" class="loaderHeight">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<div *ngIf="!vfLoading">
+    <data-report-shop *ngIf="vfUser && !vfShopSelected" (selectedShop)="selectedShop($event)"></data-report-shop>
+    <!-- The above is the Main Page display -->
+    <div *ngIf="!vfUser || vfShopSelected" class="DataReportInfo">
+        <h2 class="pageTitle shopTitle">
+            <i class="fa fa-toggle-right"></i> <span [l10nTranslate]="{shopName:shopName}">DATA_REPORT-SHOP_TITLE</span>
+        </h2>
+
+        <h2 class="pageTitle">
+            <span l10nTranslate>DATA_REPORT-PAGE_TITLE</span>
+        </h2>
+
+        <div class="container w-100">
+            <div class="dataTableMSoc dropdownsec">
+                <div>
+                    <sncr-notification [handler]="alertNotify" [dismissible]="true"></sncr-notification>
+                    <div class="row">
+                        <h4 l10nTranslate>DATA_REPORT-SELECT_TEMPLATE</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="custom-button" ngbDropdown #myDrop="ngbDropdown" autoClose="outside">
+                                <sncr-button class="" id="dropdownMenu1" ngbDropdownToggle
+                                             [disabled]="loading || dtDataLoading" (focus)="myDrop.open()">
+                                    <span *ngIf="!selectedOption?.name;then noSelContent else selContent"></span>
+                                    <ng-template #noSelContent><span l10nTranslate>DATA_REPORT-SELECT_CHOOSE</span><span class="borderR"></span></ng-template>
+                                    <ng-template #selContent>
+                                        <span *ngIf="selectedOption.group === 'basic'" class="truncateSocName" l10nTranslate>{{selectedOption.name}}</span>
+                                        <span *ngIf="selectedOption.group === 'saved'" class="truncateSocName">{{selectedOption.name}}</span>
+                                    </ng-template>
+                                </sncr-button>
+                                <div *ngIf="!loading && !dtDataLoading" class="dropdown-menu">
+                                    <div class="dropdown-scroll" (click)="$event.stopPropagation()">
+                                        <label class="text-muted ml-2" l10nTranslate>DATA_REPORT-SELECT_BASIC_REQ</label>
+                                        <div class="dropdown-item" *ngFor="let b of filterOptions.basicReport">
+                                            <div class="dropdown-itemTxt" (click)="onModelChange(b);myDrop.close();">
+                                                <div class="row">
+                                                    <div class="col-sm-8"><span l10nTranslate>{{b.name}}</span></div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <label class="text-muted ml-2" l10nTranslate>DATA_REPORT-SELECT_STORED_TEMPLATE</label>
+                                        <div class="dropdown-item" *ngFor="let s of filterOptions.savedReport">
+
+                                            <div class="dropdown-itemTxt" (click)="onModelChange(s);myDrop.close();">
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+                                                        <span class="truncateSocName" title="{{s.name}}">{{s.name}}</span>
+                                                    </div>
+                                                    <div class="col-sm-4 text-muted text-right">-<span l10nTranslate>{{s.type}}</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="dropdown-disable-fader" *ngIf="loading || dtDataLoading"></div>
+                            </div>
+                        </div>
+
+                        <div class="deleteBtnSection" *ngIf="!loading && showDelete && !dtDataLoading">
+                            <span>
+                                <i class="fa fa-trash-o fa-2x trash-border" aria-hidden="true" (click)="deletePopUp()"></i>
+                            </span>
+                        </div>
+
+                        <div class="saveBtnSection" *ngIf="selectedOption !== '' && !loading && !dtDataLoading">
+                            <sncr-button type="primary" btnStyle="strong" (click)="openPopUp();"
+                                         [disabled]="processing || dataTableComponent.currentCols.length === 0" [ngClass]="{disableFields:processing}">
+                                <span l10nTranslate>DATA_REPORT-SAVE_TEMP_TITLE</span>
+                            </sncr-button>
+                        </div>
+                        <div class="exportBtnSection" *ngIf="currentReport.selected && (!loading && !dtDataLoading) && dataTableComponent.currentCols.length > 0">
+                            <sncr-download-selections [prefix]="'DATA_REPORT-'" [zip]="true"
+                                                      [disable]="processing"
+                                                      [savedFileName] = "selectedOption.group === 'saved' ? selectedOption.name : ''"
+                                                      [dataTableDetails]="dataTableComponent" [className]="'export-button'" [downloadParams]="downloadParam">
+                            </sncr-download-selections>
+                        </div>
+                        <div *ngIf="isTemplateDelete" class="col-sm-12 mt-2 text-left">
+                            <span l10nTranslate>DATA_REPORT-DELETE_NO_RESULT_SELECT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <sncr-loader *ngIf="loading || dtDataLoading" class="relative" [isLoading]="true"></sncr-loader>
+                <div [hidden]="dtDataLoading || loading || !currentReport.selected" class="dataTableMSoc">
+                    <sncr-datatable #dataTable [value]="currentReport.data" [cols]="currentReport.cols" [multiSelection]="true"
+                                    [columnSelection]="true" [(selection)]="selection"
+                                    [resultMessage]="resultMessage"
+                                    [selectionMessage]="selectionMessage"
+                                    [lazyLoadUrl]="lazyLoadUrl" [lazy]="true" (onHeaderCheckboxToggle)="onToggleSelection($event)"
+                                    [ngClass]="{disableFields:processing}"
+                                    [sortField]="currentSortColumn" [sortOrder]="currentSortOrder">
+                    </sncr-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- the below displays popup list of saved templates -->
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" l10nTranslate>DATA_REPORT-SAVE_TEMP_TITLE</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+
+    </div>
+
+    <div class="modal-body">
+        <sncr-input class="internCustId"
+                    [(ngModel)]="searchText"
+                    [label]="'DATA_REPORT-SAVE_AS' | translate:lang"
+                    [type]="'text'"
+                    [name]="name"
+                    [pattern]="pattern"
+                    [maxLength]="70"
+                    [placeholder]="'DATA_REPORT-SAVE_TEMP_TITLE' | translate:lang" #name="ngModel"></sncr-input>
+        <div *ngIf="name.errors">
+            <span class="validError" l10nTranslate>DATA_REPORT-SAVE_REPORT_PATTERN_MESSAGE</span>
+        </div>
+        <div class="scrolling">
+            <table class="table table-hover saved-report">
+                <tbody>
+                <tr *ngFor="let s of filterOptions.savedReport | filter : searchText:'name'" (click)="selectedTemplate(s)">
+                    <td>{{s.name}}</td>
+                    <td class="text-muted">-<span l10nTranslate>{{s.type}}</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')">
+            <span l10nTranslate>DATA_REPORT-BUTTON_ABORT_STOP</span>
+        </sncr-button>
+
+        <sncr-button type="primary" [disabled]="!searchText || saveReport"
+                     (click)="searchText !== '' && !invalidNameExists(searchText) && searchText.length <= 70 ?
+                     isExistingTemplate ? existingTemplate() : saveTemplate()
+                     : ''">
+            <span l10nTranslate>DATA_REPORT-BUTTON_TO_SAVE</span>
+        </sncr-button>
+    </div>
+</ng-template>
+
+<!-- If existing template then over ride message to be shown with a new popup  -->
+
+<!-- the below displays popup list of saved templates -->
+<ng-template #overridecontent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" l10nTranslate>DATA_REPORT-SAVE_TEMP_TITLE</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+    </div>
+
+    <div class="modal-body">
+        <span [innerHTML]="'DATA_REPORT-SAVE_TEMP_DESC' | translate:lang:{reportName:reportOptions.reportName}"></span>
+    </div>
+
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')">
+            <span l10nTranslate>DATA_REPORT-BUTTON_ABORT_STOP</span>
+        </sncr-button>
+        <sncr-button type="primary" [disabled]="!searchText"
+                     (click)="updateExistingTemplate()">
+            <span l10nTranslate>DATA_REPORT-BUTTON_TO_SAVE</span>
+        </sncr-button>
+    </div>
+</ng-template>
+
+
+<!-- template to delete the saved view options -->
+
+<ng-template #delete let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" l10nTranslate>DATA_REPORT-DELETE_TEMP_TITLE</h4>
+        <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+    </div>
+
+    <div class="modal-body">
+        <span [innerHTML]="'DATA_REPORT-DELETE_DESC' | translate:lang:{reportName:reportOptions.reportName}"></span>
+    </div>
+
+    <div class="modal-footer">
+        <sncr-button type="secondary" (click)="c('Close click')">
+            <span l10nTranslate>DATA_REPORT-BUTTON_ABORT_STOP</span>
+        </sncr-button>
+        <sncr-button type="primary" [disabled]="!selectedOption"
+                     (click)="deleteSavedTemplate()">
+            <span l10nTranslate>DATA_REPORT-BUTTON_CLEAR</span>
+        </sncr-button>
+    </div>
+</ng-template>

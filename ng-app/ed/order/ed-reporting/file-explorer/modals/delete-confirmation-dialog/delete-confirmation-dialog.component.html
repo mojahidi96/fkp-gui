@@ -1,0 +1,18 @@
+<button type="button" class="close-popup" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+
+<div class="modal-header">
+  <h4 class="modal-title" l10nTranslate>ED_DRIVE_CONFIRM_DELETE</h4>
+</div>
+
+<div class="modal-body">
+  <p>
+    <strong l10nTranslate>ED_DRIVE_DELETE_MSG_1 <span class="text-primary">{{elementName}}</span></strong>
+    <strong l10nTranslate>ED_DRIVE_DELETE_MSG_2</strong>
+  </p>
+  <p l10nTranslate>ED_DRIVE_DELETE_MSG_3</p>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('Cross click')" l10nTranslate>ED_DRIVE_CANCEL</button>
+  <sncr-button type=“strong” (click)="confirmDelete()" [btnStyle]="'btn btn-primary'" l10nTranslate>ED_DRIVE_DELETE</sncr-button>
+</div>

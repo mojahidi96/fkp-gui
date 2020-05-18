@@ -1,0 +1,35 @@
+<div *ngIf="isVisible()" class="notification -{{ type }}">
+  <svg-icon
+    class="notification__icon"
+    name="notification/{{ type }}"
+    size="auto"
+  ></svg-icon>
+  <div class="notification__content" [ngClass]="contentClass">
+    <div
+      *ngIf="heading"
+      class="notification__heading"
+      [innerHTML]="heading | translate: lang:parameters"
+    ></div>
+    <div
+      *ngIf="message"
+      class="notification__message"
+      [innerHTML]="message | translate: lang:parameters"
+    ></div>
+    <div *ngIf="errors" class="notification__message">
+      <ul>
+        <li *ngFor="let error of errors">{{ error }}</li>
+      </ul>
+    </div>
+    <ng-content></ng-content>
+  </div>
+  <div *ngIf="dismissible" class="notification__close-wrapper">
+    <svg-icon
+      class="notification__close"
+      style="cursor: pointer;"
+      aria-label="Close"
+      (click)="closeNotification()"
+      name="vodafone/close"
+      size="auto"
+    ></svg-icon>
+  </div>
+</div>

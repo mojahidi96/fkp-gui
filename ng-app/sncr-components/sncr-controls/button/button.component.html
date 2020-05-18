@@ -1,0 +1,15 @@
+<button *ngIf="!href" [type]="type === 'submit' ? 'submit' : 'button'"
+        [ngClass]="['btn', 'btn-' + (type === 'submit' && btnStyle === '' ? 'primary' : (btnStyle ? btnStyle: type))]" [disabled]="disabled"
+        [class.buttonLoader]="loading">
+    {{text}}
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+</button>
+
+<a *ngIf="href" [ngClass]="['btn', 'btn-' + type]" [href]="href" [target]="target">
+    {{text}}
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+</a>
+
+<ng-template #content>
+    <ng-content></ng-content>
+</ng-template>

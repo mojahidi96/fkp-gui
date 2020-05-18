@@ -1,0 +1,20 @@
+<div *ngIf="loading">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+
+<div class="warningMessage" *ngIf="customers.length === 0 && !loading">
+    <sncr-notification [message]="'Keine Kunden zum auswählen vorhanden'" type="warning"></sncr-notification>
+</div>
+<div *ngIf="customers.length > 0">
+    <sncr-datatable [value]="customers" [cols]="cols" [sortField]="'fnCustomerNumber'" [sortOrder]="'1'"
+                    [emptyMessage]="emptyMessage" (onRowSelect)="onRowSelect()" radioSelectionName="customer_selection"
+                    [selectionMode]="'radio'" [(selection)]="customerSelected">
+        <sncr-header></sncr-header>
+    </sncr-datatable>
+
+    <div class="next-button">
+        <sncr-button type="strong" [disabled]="isDisabled()" (click)="manageNextSection()">
+            Weiter
+        </sncr-button>
+    </div>
+</div>

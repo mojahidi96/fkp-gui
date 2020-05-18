@@ -1,0 +1,7 @@
+<div>{{showDetails ? address?.fullName : address['street1']}}</div>
+<div *ngIf="showDetails">
+    <div>{{address.poBox}}</div>
+    <div>{{address.streetName}} {{address.houseNumber}}</div>
+    <div>{{address.postalCode}} {{address.city}}</div>
+    <div>{{address.country}}</div>
+</div>

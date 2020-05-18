@@ -1,0 +1,138 @@
+<div class="card">
+    <div class="card-block">
+        <div class="card py-2">
+            <div class="row pl-4"><h4>Details zu Auftrag</h4></div>
+            <div class="row pl-4">{{order.orderNumber}}</div>
+        </div>
+        <div *ngIf="loading">
+            <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+        </div>
+
+        <div class="row mt-2" *ngIf="customerMessage">
+            <div class="col-12">
+                <ngb-accordion [closeOthers]="true">
+                    <ngb-panel [title]="'ORDER-DETAILS-STATUS_SECTION_HEADER' | translate:lang" id="status-panel-1">
+                        <ng-template ngbPanelContent>
+                            <div>
+                                <label class="label font-weight-bold" l10nTranslate>ORDER-CUSTOMER_MESSAGE</label>
+                                <span>{{customerMessage}}</span>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </div>
+        </div>
+
+
+        <div class="" *ngIf="!loading">
+            <div class="">
+                <h3 class="my-3"><span>Ihre Bestellung</span></h3>
+                <div class="card">
+                    <ng-container>
+                        <div class="well order-details-table">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr class="theader">
+                                    <th *ngIf="orderDetails.cartDetails.location.postCode">PLZ</th>
+                                    <th *ngIf="orderDetails.cartDetails.location.city">Stadt</th>
+                                    <th *ngIf="orderDetails.cartDetails.location.street">Straße</th>
+                                    <th *ngIf="orderDetails.cartDetails.location.houseNumber">Nr.</th>
+                                    <th *ngIf="orderDetails.name">Name</th>
+                                    <th *ngIf="orderDetails.cartDetails.product.productName">Produkt</th>
+                                    <th *ngIf="orderDetails.cartDetails.product.salesProdBandWidth">Bandbreite</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td *ngIf="orderDetails.cartDetails.location.postCode">{{orderDetails.cartDetails.location.postCode}}</td>
+                                    <td *ngIf="orderDetails.cartDetails.location.city">{{orderDetails.cartDetails.location.city}}</td>
+                                    <td *ngIf="orderDetails.cartDetails.location.street">{{orderDetails.cartDetails.location.street}}</td>
+                                    <td *ngIf="orderDetails.cartDetails.location.houseNumber">{{orderDetails.cartDetails.location.houseNumber}}</td>
+                                    <td *ngIf="orderDetails.name">{{orderDetails.name}}</td>
+                                    <td *ngIf="orderDetails.cartDetails.product.productName">{{orderDetails.cartDetails.product.productName}}</td>
+                                    <td *ngIf="orderDetails.cartDetails.product.salesProdBandWidth">{{orderDetails.cartDetails.product.salesProdBandWidth}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="">
+                <h3 class="my-3"><span>Kundeninformationen</span></h3>
+                <div class="card">
+                    <ng-container>
+                        <div class="well">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr class="theader">
+                                    <th *ngIf="orderDetails.cartDetails.customerNumber">Kundennummer</th>
+                                    <th *ngIf="orderDetails.cartDetails.billingAccountNo">Rechnungskontonummer</th>
+                                    <th *ngIf="orderDetails.cartDetails.location">Adresse des Vertragspartners</th>
+                                    <th *ngIf="!noContactDetails">Hauptansprechpartner</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td *ngIf="orderDetails.cartDetails.customerNumber">{{orderDetails.cartDetails.customerNumber}}</td>
+                                    <td *ngIf="orderDetails.cartDetails.billingAccountNo">{{orderDetails.cartDetails.billingAccountNo}}</td>
+                                    <td *ngIf="orderDetails.cartDetails.location">{{orderDetails.cartDetails.location.street +' '+ orderDetails.cartDetails.location.houseNumber}} <br /> {{orderDetails.cartDetails.location.postCode +' '+ orderDetails.cartDetails.location.city}}</td>
+                                    <td>
+                                        <span *ngIf="orderDetails.contactName"><b>Name:</b>&nbsp;{{orderDetails.contactName}}<br /></span>
+                                        <span *ngIf="orderDetails.phone"><b>Phone:</b>&nbsp;{{orderDetails.phone}}<br /></span>
+                                        <span *ngIf="orderDetails.mobile"><b>Mobile:</b>&nbsp;{{orderDetails.mobile}}<br /></span>
+                                        <span *ngIf="orderDetails.fax"><b>Fax:</b>&nbsp;{{orderDetails.fax}}<br /></span>
+                                        <span *ngIf="orderDetails.mail"><b>E-Mail:</b>&nbsp;{{orderDetails.mail}}</span>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="my-3">Bestelldetails</h3>
+                <div class="card">
+                    <dynamic-panels [panels]="panels" [readonly]="true"></dynamic-panels>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <div class="row pt-5">
+                <div class="col-md-12 px-0">
+                    <div class="col-md-4 pt-4 pull-left ">
+                        <sncr-button type="secondary" (click)="backbuttonClicked()">Zurück</sncr-button>
+                    </div>
+                    <div *ngIf="!loading && showApproverTab">
+                        <div class="col-md-3 pt-4 pull-right">
+                            <sncr-button type="primary" class="primary pull-right" [disabled]="states === '0' || fnUser?.isReadOnlyUser" [ngClass]="{disableFields:states === '0' || fnUser?.isReadOnlyUser}" (click)="saveApprover()">Änderungen speichern
+                            </sncr-button>
+                        </div>
+                        <div class="col-md-3 px-0 pull-right mar3">
+                            <h4>
+                                <span>Aktion auswählen<span style="color: red">*</span></span>
+                            </h4>
+                            <sncr-select [(ngModel)]="states">
+                                <option value="0" selected>Auswählen</option>
+                                <option *ngFor="let o of actoptions" value="{{o.value}}">{{o.text}}</option>
+                            </sncr-select>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

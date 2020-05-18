@@ -1,0 +1,106 @@
+<h2 class="pageTitle">
+    <div class="row-1">
+        <div class="description"><span *ngIf="cart?.shoppingCartName">{{cart?.shoppingCartName}} - </span>Tarifoptionen verwalten</div>
+    </div>
+</h2>
+<div [hidden]="!orderDetails.orderNumber">
+    <order-confirmation [orderDetails]="orderDetails"></order-confirmation>
+</div>
+<div [hidden]="!cartLoading">
+    <sncr-loader [isLoading]="true"></sncr-loader>
+</div>
+<div [hidden]="orderDetails.orderNumber">
+    <sncr-flow #flow="sncrFlow" [prefilled]="prefilled">
+        <sncr-flow-section titleText="Teilnehmer auswählen" #subsFlow="sncrFlowSection" (clearMessage)="clearNotifier($event)">
+            <div *sncrSummaryTemplate>
+                {{getSubsSummary(subsFlow.model.selected) > 1 ? getSubsSummary(subsFlow.model.selected) : ''}}
+                {{getSubsSummary(subsFlow.model.selected) === 1 ? 'Ein Teilnehmer wurde ausgewählt' : 'Teilnehmer wurden ausgewählt'}}
+            </div>
+
+            <div *sncrSectionTemplate class="dataTableMSoc">
+                <subscriber-selection #subSelection [subscribers]="subscribers" [columns]="columns"
+                                      [subsFlow]="subsFlow" [properties]="constants.getProperties()"
+                                      [csvUpload]="true"></subscriber-selection>
+            </div>
+        </sncr-flow-section>
+
+        <sncr-flow-section titleText="Tarifoptionen verwalten" #availableSocFlow="sncrFlowSection" (clearMessage)="clearNotifier($event)">
+            <div class="selectedItem selectedItemList" *sncrSummaryTemplate>
+                <ul>
+                    <li *ngFor="let soc of availableSocFlow.model.selectedSocs">
+                        <ul>
+                            <li>
+                                <div class="font-weight-bold mr-0" [ngClass]="soc.action === 'A'?'addedIcon':'minusIcon1'"></div>
+                                <div class="soc pull-left">
+                                    <span class="name"> {{soc.quantity}}x {{soc.socName}}</span>
+                                </div>
+                            </li>
+                            <li *ngIf="soc.trigger">
+                                <div [ngClass]="soc.trigger.action === 'A'?'addedIcon':'minusIcon1'"></div>
+                                <div class="soc"><span class="name"> {{soc.trigger.quantity}}x {{soc.trigger.socName}}</span></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div *sncrSectionTemplate>
+                <management-soc [notificationHandler]="socNotify" [subscribers]="subsFlow.model.selected" [showValidation]="showValidation" [reviewFlowSoc]="reviewFlowSoc"
+                                [allavailableSocs]="allAvailableSocs" [subscriberSocMap]="preFilledMap" [cdaCategoryName]="subsFlow.model.cdaCategoryName"
+                                [availableSocFlow]="availableSocFlow" [selectCDA]="subsFlow.model.cdaSelection" (review)="setAvailableSocs($event)"></management-soc>
+            </div>
+        </sncr-flow-section>
+
+        <sncr-flow-section titleText="Bestellübersicht" #reviewFlowSoc="sncrFlowSection">
+            <div *sncrSummaryTemplate></div>
+            <div class="dataTableMSoc" *sncrSectionTemplate>
+                <sncr-notification [handler]="orderReviewCartNotify"></sncr-notification>
+                <sncr-notification [handler]="orderReviewNotify"></sncr-notification>
+
+                <p>Ihre Bestellung ist fast vollständig. Bitte überprüfen Sie ihre Änderungen bevor sie auf "Bestellung Absenden" klicken.</p>
+
+                <client-order-details
+                        #clientOrderDetails="clientOrderDetails"
+                        [prefilledCart]="cart">
+                </client-order-details>
+
+                <order-maintain-soc-review [reviewSubsWithSocs]="reviewFlowSoc.model.reviewFlowSoc"
+                                           [totalMAmount]="totalPrice" [totalOTAmount]="totalOTPrice"
+                                           [vatAmount]="totalVatPrice" [vatOTAmount]="totalOTVatPrice"></order-maintain-soc-review>
+
+
+                <div class="buttons" [ngClass]="{buttons_with_flexend: !deleteCartAccess}">
+                    <delete-shopping-cart *ngIf="deleteCartAccess" [rowData]="cart" [prefix]="'MAINTAIN-SOC-'"
+                                            (deletedResponse)="deleteResponse($event)" class="mr-auto">
+                    </delete-shopping-cart>
+                    <save-shopping-cart *ngIf="!cartProcessing && (editCartAccess || createCartAccess)"
+                            [cart]="cart"
+                            [reviewBtnTitle]="'MAINTAIN-SOC-REVIEW-SAVE_CART' | translate:lang"
+                            [orderType]="'MAINTAIN-SOC-ORDER_TYPE' | translate:lang"
+                            (saveCart)="saveCartDetails()"
+                            (processSaveCartDetails)="processSaveCart($event)"
+                            [shoppingCartType]="'MA_MAINTAIN_SOC'"
+                            #saveCart>
+                    </save-shopping-cart>
+                    <sncr-button type="submit" *ngIf="!isReadOnly && !isReadOnlyVodafoneUser" [disabled]="orderProcessing|| reviewFlowSoc.model.reviewFlowSoc?.length === 0"
+                                    (click)="processMaintainSocOrder()">Bestellung absenden
+                    </sncr-button>
+                    <sncr-button type="submit" *ngIf="isReadOnly || isReadOnlyVodafoneUser" [disabled]="true">
+                        Bestellung absenden
+                    </sncr-button>
+                </div>
+            </div>
+
+        </sncr-flow-section>
+    </sncr-flow>
+</div>
+
+<ng-template #multipleOrderDetails let-context>
+    <sncr-datatable [paginator]="false" [value]="orderRows" [cols]="orderCols">
+    </sncr-datatable>
+</ng-template>
+
+<ng-template class="contentPanel" #orderNumberPDF let-context>
+    <span class="order-number font-weight-bold" (click)="downloadPdf(context.row.orderNumber,context.row.orderType)">{{context.row['orderNumber']}}</span>&nbsp;
+    <i class="fa fa-file-pdf-oIcon" aria-hidden="true"></i>
+</ng-template>

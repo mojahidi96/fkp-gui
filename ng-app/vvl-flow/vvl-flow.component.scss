@@ -1,0 +1,64 @@
+@import '../styles/_custom-variables';
+@import '../styles/page-title';
+@import '../styles/mixins';
+@import '../styles/datatables';
+@import '../styles/info-icon';
+@import '../styles/vodafone';
+
+.next-button-right {
+  float: right;
+  margin: -34px 0 30px auto;
+  padding-right: 15px;
+}
+
+:host ::ng-deep sncr-flow-section .flow-section-summary {
+  .descInner {
+    margin-left: 0px;
+    .desc-icon {
+      margin-left: 0px;
+      position: relative;
+      top: -2px;
+    }
+    .info-text {
+      font-weight: normal !important;
+      font-size: 12px !important;
+    }
+  }
+}
+
+svg-icon.orange ::ng-deep svg,
+svg-icon.orange ::ng-deep svg > * {
+  stroke: $color-international-orange;
+}
+
+.ineligible-subs {
+  color: #ff874b;
+  display: flex;
+  a {
+    color: #ff874b;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0px 5px;
+  }
+}
+
+:host ::ng-deep .ui-datatable {
+  .ui-datatable-thead {
+    .ui-clickable.ui-clickable-wrapper {
+      min-width: 175px;
+    }
+  }
+}
+
+.orderNumber {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.moreDetail {
+  cursor: pointer;
+}
+
+sncr-file-drop {
+  width: 100%;
+}

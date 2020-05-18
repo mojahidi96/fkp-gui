@@ -1,0 +1,1 @@
+module.exports = [{"readOnlyVodafoneUser":false,"text":"Apple iPhone 7 Plus Schwarz (32 GB)","mandatory":false,"show":false,"disabled":false,"length":2,"excluded":0,"displayOrder":0,"imagePaths":[{"type":"SMALL","path":"/assets/images/small/iphone-7-plus-schwarz-s.png"}],"articleNumber":"301368","depCustomerId":"1231231","isArticleNotRequired":0}];

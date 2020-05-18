@@ -1,0 +1,224 @@
+<div class="select-tariff sncr-planned-changes-container">
+    <div class="leftPanel px-20" [ngClass]="{'w-100': selectedTariffGroup === 'new'}">
+        <sncr-notification [handler]="alertMessage"></sncr-notification>
+
+        <p *ngIf="!onlyNewTariff" [innerHTML]="prefix +'TARIFF_SELECTION-SUB_TITLE_MSG'| translate:lang"></p>
+
+        <div class="row marT30 ml-0" *ngIf="!onlyNewTariff">
+            <sncr-check-group *ngIf="!isPreQueryEligible" [(ngModel)]="selectedTariffGroup" (ngModelChange)="loadTariffs(true)">
+                <sncr-radio value="exist" [label]="'TARIFF_SELECTION-CONTINUE_WITH_SAME' | translate:lang"></sncr-radio>
+                <sncr-radio value="new" [label]="'TARIFF_SELECTION-SELECT_NEW' | translate:lang"></sncr-radio>
+            </sncr-check-group>
+            <sncr-check-group *ngIf="isPreQueryEligible && enablePreQuery" [(ngModel)]="selectedPreQuery" (ngModelChange)="loadTariffs(true)">
+                <sncr-radio value="ACT_SIM_ONLY" [label]="'TARIFF_SELECTION-CONTINUE_WITH_SIM_ONLY' | translate:lang"></sncr-radio>
+                <sncr-radio value="ACT_SUBSIDY" [label]="'TARIFF_SELECTION-CONTINUE_WITH_SUBSIDY' | translate:lang"></sncr-radio>
+            </sncr-check-group>
+        </div>
+
+        <div [hidden]="selectedTariffGroup !== 'new'">
+            <span [innerHTML]="prefix +'TARIFF_SELECTION-SELECT_NEW_TARIFF_MSG' | translate:lang"></span>
+        </div>
+
+        <div class="next-button-right" [ngClass]="showTiles?'tilesview':'listview'"
+            [hidden]="selectedTariffGroup !== 'new'">
+            <sncr-button type="{{showTiles?'primary':'secondary'}}" class="btn-grid" (click)="checkSelection(true)">
+                <span class="gridIcon"><svg-icon name="vodafone/grid-view" size="auto"></svg-icon></span>
+            </sncr-button>
+            <sncr-button type="{{!showTiles?'primary':'secondary'}}" class="btn-tiles" (click)="checkSelection(false)">
+                <span class="listIcon"><svg-icon name="vodafone/list-view" size="auto"></svg-icon></span>
+            </sncr-button>
+        </div>
+
+        <ng-container *ngIf="selectedTariffGroup === 'new'" [ngSwitch]="showTiles">
+            <ng-container *ngSwitchCase="true">
+                <div class="filter">
+                    <div>
+                        <sncr-select [label]="'TARIFF_FAMILY' | translate:lang" [(ngModel)]="selectedTariffFamily"
+                            (change)="filterTariffList()" clickStopPropagation>
+                            <option [value]="'choose'" selected l10nTranslate>DROP_DOWN-SELECT</option>
+                            <option *ngFor="let tariffFamily of tariffFamilies" value="{{tariffFamily}}">
+                                {{tariffFamily}}</option>
+                        </sncr-select>
+                    </div>
+                    <div>
+                        <sncr-select [label]="'TARIFF_CATEGORY' | translate:lang" [(ngModel)]="selectedTariffType"
+                            (change)="filterTariffList()" clickStopPropagation>
+                            <option [value]="'choose'" selected l10nTranslate>DROP_DOWN-SELECT</option>
+                            <option *ngFor="let tariffType of tariffTypes" value="{{tariffType}}" l10nTranslate>{{tariffType}}
+                            </option>
+                        </sncr-select>
+                    </div>
+                    <div *ngIf="isEnterpriseUser">
+                        <sncr-checkbox [(ngModel)]="tariffListForEnterPrise"
+                            [label]="'TARIFF_SELECTION-SHOW_ALL_TARIFFS' | translate:lang" (change)="loadTariffs()">
+                        </sncr-checkbox>
+                    </div>
+                </div>
+                <div *ngIf="isLoading" class="my-3">
+                    <sncr-loader class="relative" [isLoading]="isLoading"></sncr-loader>
+                </div>
+                <ng-container *ngIf="!isLoading">
+                    <div class="container" *ngIf="filteredTariffList">
+                        <div class="mx-4 my-1 text-muted">
+                            <div l10nTranslate>
+                                {{prefix}}TARIFF_NOT_AVAILABLE
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tariff-eligibility">
+                        <sncr-loader *ngIf="loadingEliSubs" class="relative small-loader" [isLoading]="loadingEliSubs"></sncr-loader>
+                        <div class="pt-3" *ngIf="(isVvlFlow || !getInEligibleSubs()) && selectedTariff && !hasTariffError && !loadingEliSubs"
+                            [l10nTranslate]="{count: getEligibleSubs()}">
+                            {{prefix}}TARIFF_SELECTION-ELIGIBLE_SUBS
+                        </div>
+                        <div class="pt-3 redfont" *ngIf="selectedTariff && hasTariffError && !loadingEliSubs" l10nTranslate>
+                            {{prefix}}TARIFF_SELECTION-NO_ELIGIBLE_SUBS
+                        </div>
+                        <div *ngIf="isVvlFlow && getExistingSubs() > 0 && !loadingEliSubs">
+                            <div class="desc-icon"><i class="fa infoIcon" aria-hidden="true"></i></div>
+                            <div class="info-text" [l10nTranslate]="{subsQuantity: getExistingSubs()}">{{prefix}}TARIFF_SELECTION-SUMMARY_INFO_TEXT</div>
+                        </div>
+                        <div class="ineligible-subs" *ngIf="(isVvlFlow || !hasTariffError ) && getInEligibleSubs() && !loadingEliSubs">
+                            <svg-icon class="mr-1 orange" name="vodafone/warning" size="small"></svg-icon>
+                            <div [l10nTranslate]="{count: getInEligibleSubs()}">{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT1</div>
+                            <div l10nTranslate><a href="javascript:void(0)" (click)="exportcsv()">{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT2</a></div>
+                            <div l10nTranslate>{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT3</div>
+                        </div>
+                    </div>
+                
+                
+                    <div class="col-md p-2 text-right" [l10nTranslate]="{count: getCount()}">
+                        {{prefix}}TARIFF_SELECTION-RESULTS_FOUND
+                    </div>
+                    <div class="my-2">
+                        <sncr-paginator [totalRecords]="articlesProcessed.length" [first]="hardwareFirst"
+                            [rows]="hardwareRows" (onPageChange)="onPageChange($event)"></sncr-paginator>
+                    </div>
+                    <sncr-check-group *ngIf="currentTariff && currentTariff.length" [(ngModel)]="selectedTariff"
+                        (ngModelChange)="onTariffSelection()">
+                        <div class="carousal-slides">
+                            <ng-container *ngFor="let tariffList of currentTariff">
+                                <div class="carousal-slides-row">
+                                    <ng-container *ngFor="let tariff of tariffList">
+                                        <div *ngIf="tariff" class="tariff">
+                                            <div class="carousal-box"
+                                                [class.active]="selectedTariff ? selectedTariff.tariffOption === tariff.tariffOption:false">
+                                                <div class="carousal-header">
+                                                    <p l10nTranslate>{{tariff.text}}</p>
+                                                </div>
+                                                <div class="carousal-body">
+                                                    <ul>
+                                                        <li><span class="font-dark">{{tariff.description}}</span></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="carousal-footer mt-auto">
+                                                    <div class="carousal-footer-content">
+                                                        <hr />
+                                                        <p *ngIf="tariff.amount" class="mb-1" l10nTranslate>TARIFF_SELECTION-PER_MONTH</p>
+                                                        <h2>{{tariff.amount | currency:'EUR'}}</h2>
+                                                        <p *ngIf="tariff.amount" l10nTranslate>{{prefix}}TARIFF_SELECTION-WITHOUT_SMARTPHONE</p>
+                                                        <a class="tariff-details-popup" (click)="gettariffDetails(tariff)" l10nTranslate>{{prefix}}TARIFF_SELECTION-TARIFF_DETAILS</a>
+                                                        <ng-container *ngIf="enableDateSelection(tariff.tariffOption)">
+                                                            <div class="activation-date mt-2">
+                                                                <i class="question-circle-icon" aria-hidden="true"></i>
+                                                                <label l10nTranslate>SOC_SELECTION-ACTIVATION_DATE</label>
+                                                                <sncr-select [(ngModel)]="selectedTariffDate">
+                                                                    <option value="TODAY" l10nTranslate>TARIFF_SELECTION-BILL_TODAY</option>
+                                                                    <option value="NEXTBILLDATE" l10nTranslate>TARIFF_SELECTION-BILL_NEXTCYCLE</option>
+                                                                </sncr-select>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                    <div class="optionsCheck">
+                                                        <sncr-radio [value]="tariff">
+                                                            <span *ngIf="selectedTariff && selectedTariff.tariffOption === tariff.tariffOption"
+                                                                l10nTranslate>
+                                                                {{prefix}}TARIFF_SELECTION-TARIFF_SELECTED
+                                                            </span>
+                                                            <span *ngIf="!(selectedTariff && selectedTariff.tariffOption === tariff.tariffOption)"
+                                                                l10nTranslate>
+                                                                {{prefix}}TARIFF_SELECTION-SELECT_TARIFF
+                                                            </span>
+                                                        </sncr-radio>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </sncr-check-group>
+                    <div class="my-2">
+                        <sncr-paginator [totalRecords]="articlesProcessed.length" [first]="hardwareFirst"
+                            [rows]="hardwareRows" (onPageChange)="onPageChange($event)"></sncr-paginator>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="false">
+                <div>
+                    <div *ngIf="isEnterpriseUser">
+                        <sncr-checkbox [(ngModel)]="tariffListForEnterPrise"
+                            [label]="'TARIFF_SELECTION-SHOW_ALL_TARIFFS' | translate:lang" (change)="loadTariffs()">
+                        </sncr-checkbox>
+                    </div>
+                    <div class="tariff-eligibility">
+                        <sncr-loader *ngIf="loadingEliSubs" class="relative small-loader" [isLoading]="loadingEliSubs"></sncr-loader>
+                        <div class="pt-3" *ngIf="(isVvlFlow || !getInEligibleSubs()) && listSelectedTariff && !hasTariffError && !loadingEliSubs"
+                             [l10nTranslate]="{count: getListEligibleSubs()}">
+                            {{prefix}}TARIFF_SELECTION-ELIGIBLE_SUBS
+                        </div>
+                        <div class="pt-3 redfont" *ngIf="listSelectedTariff && hasTariffError && !loadingEliSubs" l10nTranslate>
+                            {{prefix}}TARIFF_SELECTION-NO_ELIGIBLE_SUBS
+                        </div>
+                        <div *ngIf="isVvlFlow && getExistingSubs() > 0 && !loadingEliSubs">
+                            <div class="desc-icon"><i class="fa infoIcon" aria-hidden="true"></i></div>
+                            <div class="info-text" [l10nTranslate]="{subsQuantity: getExistingSubs()}">{{prefix}}TARIFF_SELECTION-SUMMARY_INFO_TEXT</div>
+                        </div>
+                        <div class="ineligible-subs" *ngIf="(isVvlFlow || !hasTariffError ) && getInEligibleSubs() && !loadingEliSubs">
+                            <svg-icon class="mr-1 orange" name="vodafone/warning" size="small"></svg-icon>
+                            <div [l10nTranslate]="{count: getInEligibleSubs()}">{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT1</div>
+                            <div l10nTranslate><a href="javascript:void(0)" (click)="exportcsv()">{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT2</a></div>
+                            <div l10nTranslate>{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT3</div>
+                        </div>
+                    </div>
+                    <sncr-datatable [loading]="isLoading"  [cols]="cols" [value]="tariffList" [selection]="selectedTariff" selectionMode="radio"
+                        (onRadioChange)="onListTariffSelection($event)" [sortOrder]="-1" [prefix]="prefix" radioSelectionName="tariff_selection" #tariffDataTable>
+                    </sncr-datatable>
+                </div>
+            </ng-container>
+        </ng-container>
+
+        <div class="next-button-right" [hidden]="selectedTariffGroup !== 'new'">
+            <sncr-button type="strong" (click)="continueFromTariffSelection()" [disabled]="disableOnceClicked" [ngClass]="{disableFields:disableOnceClicked}" l10nTranslate>
+                {{nextButtonLabel}}</sncr-button>
+        </div>
+    </div>
+    <div class="rightPanel" [hidden]="selectedTariffGroup === 'new'" *ngIf="!isPreQueryEligible">
+         <sncr-planned-changes (review)="continueFromTariffSelection()"
+              [buttonLabel]="nextButtonLabel | translate:lang"
+              [plannedChangesService]="tariffSelectionPlannedChanges" cssClass="max-height_226" [disableOnceClicked]="disableOnceClicked"></sncr-planned-changes>
+    </div>
+</div>
+
+<ng-template #price let-context>
+    {{context.row.amount | currency:'EUR'}}
+</ng-template>
+
+<ng-template #detailsContent let-c="close" let-d="dismiss">
+    <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+        <div class="modal-header">
+            <div class="modal-title text-primary">{{tariffFamily}}</div>
+        </div>
+        <div class="modal-body">
+            <ul class="bullets" >
+                <li *ngFor="let detail of tariffDetails">{{detail}}</li>
+            </ul>
+        </div>
+</ng-template>
+<ng-template #ctFlowDate let-context>
+        <sncr-select (change)="updateTariffDate($event)" [(ngModel)]="selectedTariffDate" *ngIf="context.row['_sncrChecked'] !== null && context.row['_sncrChecked'] !== undefined">
+                <option value="TODAY" l10nTranslate>TARIFF_SELECTION-BILL_TODAY</option>
+                <option value="NEXTBILLDATE" l10nTranslate>TARIFF_SELECTION-BILL_NEXTCYCLE</option>
+        </sncr-select>
+</ng-template>

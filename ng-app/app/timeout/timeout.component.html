@@ -1,0 +1,11 @@
+<ng-template #popup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Ihre Sitzung läuft in Kürze ab</h4>
+    </div>
+    <div class="modal-body">
+        <p>Sitzung wird in 0{{min}}:{{sec < 10? '0' + sec: sec}} Minuten ablaufen. Bitte klicken Sie OK um auf dieser Seite zu bleiben.</p>
+    </div>
+    <div class="modal-footer flex-end">
+        <sncr-button type="primary" (click)="keepAlive()">OK</sncr-button>
+    </div>
+</ng-template>

@@ -1,0 +1,17 @@
+<div #socCategoryAsl>
+    <div *ngIf="loader">
+        <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+    </div>
+    <div *ngIf="!loader">
+        <sncr-datatable #sncrtable [value]="socData" [cols]="socCols" [styleClass]="'ui-custom-wrapper'"
+                        [editable]="true" (onOpenEdit)="editOpen($event)" (onEditSave)="updateRow($event)"
+                        [removableContent]="removableContent" (onDelete)="deleteRow($event)"
+                        [resultMessage]="resultMessage">
+            <sncr-header>
+                <div class="datatableHeader">Ausgewählte Kategorie:<br><strong>{{socCategory.categoryName}}</strong></div>
+                <category-aslform #activeT [associateId]="socCategory.id" (saveActiveSoc)="saveRow($event)"></category-aslform>
+            </sncr-header>
+        </sncr-datatable>
+
+    </div>
+</div>

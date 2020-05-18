@@ -1,0 +1,41 @@
+@import '../../../../styles/_custom-variables';
+@import '../../../../styles/mixins';
+@import '../../../../styles/page-title';
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.card-header {
+  border-radius: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.break-word {
+  word-wrap: break-word !important;
+}
+
+.label {
+  width: 33.33333% !important;
+  max-width: 33.33333% !important;
+  font-weight: bolder !important;
+}
+
+.area {
+  background: #ededed;
+  padding: 5px 10px;
+  margin-bottom: 20px;
+}
+
+::ng-deep .leftAlignEle {
+  padding-left: 383px !important;
+}
+
+.card {
+  .card-block {
+    padding: 20px;
+  }
+}

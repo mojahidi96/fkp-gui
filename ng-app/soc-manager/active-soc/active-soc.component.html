@@ -1,0 +1,158 @@
+<div class="row align-items-center">
+    <div class="col-12">
+        <sncr-notification [handler]="alertMessage"></sncr-notification>
+    </div>
+</div>
+
+<div *ngIf="loader; else elsePart">
+    <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+</div>
+<ng-template #elsePart>
+    <sncr-datatable #sncrData [value]="activeSocs" [cols]="columns" [(selection)]="selected"
+                    [columnSelection]="true" [selectionTitle]="'Enabled'" [editable]="true" [resultMessage]="resultMessage"
+                    (onEditSave)="saveChanges($event)" (onOpenEdit)="editOpen($event)"
+                    [removableContent]="removableContent" (onDelete)="deleteRow($event)" (onCancelEdit)="editrow=$event.editing" [sortField]="'status'" [sortOrder]="-1">
+        <sncr-header>
+
+            <div class="margin-bottom-30">
+                <sncr-button type="secondary" (click)="openToggle()">
+                    Neue Tarifoption erstellen
+                    <i class="fa fa-chevron-down" *ngIf="!toggle" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" *ngIf="toggle" aria-hidden="true"></i>
+                </sncr-button>
+            </div>
+
+            <div *ngIf="toggle" class="margin-bottom-30 createTariffFields">
+                <form [formGroup]="saveForm" (ngSubmit)="saveRow(saveForm)">
+                    <div class="row align-items-center">
+                        <div class="col-12 padding-LR0">
+                            <div class="col-6">
+                                <sncr-checkbox label="Aktiv" [formControlName]="'status'"></sncr-checkbox>
+                            </div>
+                            <div class="col-6 uppercase_text">
+                                <sncr-input label="SOC Code" [type]="text" [formControlName]="'socId'" [maxLength]="9"
+                                            autocomplete="off" required></sncr-input>
+                            </div>
+                            <div class="col-6">
+                                <label>Familie<span class="requiredField">*</span></label>
+                                <sncr-select [formControlName]="'familyName'">
+                                    <option value="" disabled selected>Auswählen</option>
+                                    <option *ngFor="let o of socFamilies" value="{{o.value}}">{{o.text}}</option>
+                                </sncr-select>
+                            </div>
+                            <div class="col-6">
+                                <sncr-input label="Name" [type]="text" [formControlName]="'socName'"
+                                            autocomplete="off" required></sncr-input>
+                            </div>
+                            <div class="col-6">
+                                <sncr-textarea label="Beschreibung" [formControlName]="'description'" required></sncr-textarea>
+                            </div>
+                            <div class="col-6">
+                                <sncr-select label="Typ" [formControlName]="'kindText'" required>
+                                    <option value="" disabled selected>Auswählen</option>
+                                    <option value="Daten">Daten</option>
+                                    <option value="Sprache">Sprache</option>
+                                    <option value="Trigger">Trigger</option>
+                                </sncr-select>
+                            </div>
+                            <div class="col-6">
+                                <sncr-select label="Trigger" [formControlName]="'trigger'" [disabled]="triggerdisabled">
+                                    <option value="" disabled selected>Auswählen</option>
+                                    <option *ngFor="let o of triggerSocs" value="{{o.value}}">{{o.text}}</option>
+                                </sncr-select>
+                            </div>
+                            <div class="col-6">
+                                <sncr-input label="Preis (€)" [type]="'text'" [formControlName]="'convertBasePrice'"
+                                            [pattern]="'^\\d{1,3}(?:\\,\\d{2})?$'" required></sncr-input>
+                            </div>
+                            <div class="col-6">
+                                <sncr-input label="Laufzeit" [type]="'number'" [formControlName]="'duration'"
+                                            autocomplete="off"></sncr-input>
+                            </div>
+                            <div class="col-6">
+                                <sncr-checkbox label="Abwählbar" [formControlName]="'removable'"></sncr-checkbox>
+                            </div>
+                            <div class="col-6">
+                                <sncr-input label="Webseite" [type]="text" [formControlName]="'webLink'"
+                                            autocomplete="off"></sncr-input>
+                            </div>
+                            <div class="col-6">
+                                <sncr-input label="PDF-Link" [type]="text" [formControlName]="'documentLink'"
+                                            autocomplete="off"></sncr-input>
+                            </div>
+                            <div class="col-4">
+                                <sncr-button type="submit" [disabled]="formSubmitting">
+                                    <span>Neue Tarifoption erstellen</span>
+                                </sncr-button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </sncr-header>
+        <sncr-header>
+            <div class="row">
+                <div class="margin-top-css col-sm-6 text-left">
+                    <ng-container *ngIf="selected && selected.length == 1">
+                        {{selected.length}} von {{activeSocs.length}} Tarifoption ist aktiviert
+                    </ng-container>
+                    <ng-container *ngIf="selected && selected.length > 1">
+                        {{selected.length}} von {{activeSocs.length}} Tarifoptionen sind aktiviert
+                    </ng-container>
+                    <ng-container *ngIf="!selected || !selected.length">Kein Teilnehmer ausgewählt</ng-container>
+                </div>
+            </div>
+        </sncr-header>
+    </sncr-datatable>
+</ng-template>
+
+
+<ng-template #enable let-context class="checkboxCol">
+    <div class="checkBoxCol" *ngIf="!context.row.editing">
+        <sncr-checkbox
+                [(ngModel)]="context.row[context.col.field]"
+                (change)="formSubmitting ? '' :onSelectEnable(context.row);"
+                [disabled]="context.row.socId != selectedRow.socId && editrow">
+        </sncr-checkbox>
+    </div>
+</ng-template>
+
+<ng-template #content ngbModalContainer></ng-template>
+<ng-template #delete let-context ngbModalContainer>
+    <div *ngIf="!context.row.editing">
+        <delete-model [row]="context.row" [name]="context.row.socName" [title]="'Tarifoption löschen'"
+                      [bodyTitle]="'Die Tarifoption'" [bodyTitle2]="'wird aus dem gesamten Portal inkl. aller Kunden-Shops unwiderruflich gelöscht. Möchten Sie die Tarifoption trotzdem löschen?'"
+                      (onDelete)="deleteRow($event)"></delete-model>
+    </div>
+</ng-template>
+
+<ng-template #description let-context>
+    <div *ngIf="!context.row.editing" class="description" (click)="context.row.ellipsis = !context.row.ellipsis">
+        <span *ngIf="context.row.ellipsis">{{context.row.description}}</span>
+        <span *ngIf="!context.row.ellipsis">{{context.row.description | slice:0:30}}<span *ngIf="(context.row.description).length >=30">...</span></span>
+    </div>
+</ng-template>
+
+<ng-template #weblink let-context>
+    <div *ngIf="!context.row.editing">
+        <a href="{{context.row.webLink}}" target="_blank">
+            {{context.row.webLink | slice:0:15}}<span *ngIf="(context.row.webLink) && (context.row.webLink).length >=15">...</span>
+        </a>
+    </div>
+</ng-template>
+
+<ng-template #doclink let-context>
+    <div *ngIf="!context.row.editing">
+        <a href="{{context.row.documentLink}}" target="_blank">
+            {{context.row.documentLink | slice:0:15}}<span *ngIf="(context.row.documentLink) && (context.row.documentLink).length >=15">...</span>
+        </a>
+    </div>
+</ng-template>
+
+<ng-template #kind let-context class="checkboxCol">
+    <div *ngIf="!context.row.editing">
+        <div *ngIf="context.row.kind === 'DATA'">Daten</div>
+        <div *ngIf="context.row.kind === 'VOICE'">Sprache</div>
+        <div *ngIf="context.row.kind === 'TRIGGER'">Trigger</div>
+    </div>
+</ng-template>

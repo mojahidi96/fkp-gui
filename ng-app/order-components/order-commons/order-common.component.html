@@ -1,0 +1,121 @@
+<div class="card">
+    <div class="card-header">
+        <div class="text" l10nTranslate>ORDER_HEADER-TITLE</div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6" l10nTranslate><strong>ORDER_NUMBER-TITLE</strong></div>
+            <div class="col-6" l10nTranslate><strong>ORDER_TYPE-TITLE</strong></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6">{{orderDetail?.orderNumber}}</div>
+            <div class="col-6">{{orderDetail?.orderType}}</div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" l10nTranslate><strong>ORDER_DATE-TITLE</strong></div>
+            <div class="col-6" l10nTranslate><strong>ORDER_STATUS-TITLE</strong></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6">{{orderDetail?.date | date: 'dd.MM.yyyy'}}</div>
+            <div class="col-6">{{orderDetail?.orderStatus}}</div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" l10nTranslate><strong>CUSTOMER_NUMBER-TITLE</strong></div>
+            <div class="col-6" l10nTranslate><strong>GENERAL_AGREEMENT-TITLE</strong></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6">{{orderDetail?.ban}}</div>
+            <div class="col-6">{{orderDetail?.skeletonContractNumber}}</div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" l10nTranslate><strong>CUSTOMER-TITLE</strong></div>
+            <div class="col-6" l10nTranslate><strong>INPUT_CHANNEL-TITLE</strong></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6">{{orderDetail?.userName}}</div>
+            <div class="col-6">{{orderDetail?.internalId}}</div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" l10nTranslate><strong>CONTACT-USER-NAME</strong></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6">{{orderDetail.contactUsername}}</div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" l10nTranslate><strong>DELIVERY_DATE-TITLE</strong></div>
+            <div class="col-6" l10nTranslate><strong>VO_ID-TITLE</strong></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" *ngIf="orderDetail.orderDate && orderDetail.orderDate !== 0">{{orderDetail?.orderDate | date: 'dd.MM.yyyy'}}</div>
+            <div class="col-6" *ngIf="orderDetail.orderDate === 0">...</div>
+            <div class="col-6">{{orderDetail?.voId}}</div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" l10nTranslate><strong>CUSTOMER_INTERNAL_ORDER-NUMBER</strong></div>
+            <div class="col-6" *ngIf="!hideCustOrderInfo" l10nTranslate><strong>CUSTOMER_ORDER-INFORMATION</strong></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" >{{orderDetail?.customerOrderNo}}</div>
+            <div class="col-6" *ngIf="!hideCustOrderInfo">{{orderDetail?.clientOrderId}}</div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div class="card" *ngIf="vvlType || ctType || actType">
+    <div class="card-header">
+        <div class="text" l10nTranslate>BILLING-INFORMATION</div>
+    </div>
+    <div class="card-body">
+        <div class="row" *ngIf="vvlType || actType" >
+            <div class="col-12" l10nTranslate><strong>CUSTOMER-NUMBER</strong></div>
+            <div class="col-12" *ngIf="isDebitorExists">{{adress?.debitorNumber}}{{orderDetail.debitorType === 'T' ? '(T)' : ''}}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-6" l10nTranslate><strong>BILLING_ADESS-TITLE</strong></div>
+            <div class="col-6" l10nTranslate><strong>SHIPPING_ADESS-TITLE</strong></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row" *ngIf="isDebitorExists">
+            <div class="col-6"><p style="white-space: pre-wrap;">{{adress?.billingAdress}}</p></div>
+            <div class="col-6"><p style="white-space: pre-wrap;">{{adress?.shippingAdress}}</p></div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<ngb-accordion #accordion (panelChange)="hideShippingDetails()" *ngIf="vvlType || ctType || actType">
+    <ngb-panel>
+        <ng-template ngbPanelTitle>
+            <span class="history" l10nTranslate>DELIVERY-TITLE</span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <shipment-tracking></shipment-tracking>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>
+<ngb-accordion #accordion1 (panelChange)="displayAdminComments()">
+    <ngb-panel>
+        <ng-template ngbPanelTitle>
+            <span class="history" l10nTranslate>ADMIN_COMMENTS-TITLE</span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <div *ngFor="let comment of adminComments">
+                <span>{{comment.transComment}}</span>&nbsp;
+            </div>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>

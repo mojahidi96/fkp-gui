@@ -1,0 +1,27 @@
+//DataTable Icons
+
+:host ::ng-deep .fa-selected-rows {
+  background-image: url(~/public/icons/svg/notification/success.svg) !important;
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+
+  &:before {
+    content: '';
+  }
+}
+
+:host ::ng-deep .ui-state-highlight .fa-selected-circle {
+  background-image: url(~/public/icons/svg/notification/success.svg) !important;
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+
+  &:before {
+    content: '';
+  }
+}

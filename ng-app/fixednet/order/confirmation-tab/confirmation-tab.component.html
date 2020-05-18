@@ -1,0 +1,27 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th class="header">PLZ</th>
+        <th class="header">Stadt</th>
+        <th class="header">Straße</th>
+        <th class="header">Nr.</th>
+        <th class="header">Name</th>
+        <th class="header">Produkt</th>
+        <th class="header">Bandbreite</th>
+        <th class="header">Bestellnummer</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let order of data">
+        <td>{{order.detail.location.postCode}}</td>
+        <td>{{order.detail.location.city}}</td>
+        <td>{{order.detail.location.street}}</td>
+        <td>{{order.detail.location.houseNumber}}</td>
+        <td>{{order.detail.location.cName}}</td>
+        <td>{{order.detail.product.productName}}</td>
+        <td>{{order.detail.product.salesProdBandWidth}}</td>
+        <td>{{order.detail.orderNumber}}</td>
+    </tr>
+    </tbody>
+</table>

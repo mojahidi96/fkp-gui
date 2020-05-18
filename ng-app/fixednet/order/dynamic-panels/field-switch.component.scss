@@ -1,0 +1,16 @@
+.tableField > * {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+}
+
+.validationAccordion {
+  :host ::ng-deep .ui-cell-data {
+    .form-group.cardSelection {
+      margin-bottom: 0px !important;
+    }
+  }
+}
+legend.label {
+  font-size: 18px;
+}

@@ -1,0 +1,27 @@
+.form-group {
+  margin-bottom: 20px;
+}
+legend {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+:host
+  ::ng-deep
+  .has-danger
+  .radioBoxDiv
+  .form-check-label
+  .radioBox
+  .radioContent {
+  color: #e60000;
+}
+
+:host ::ng-deep .cardSelection {
+  .form-check {
+    padding-left: 0px;
+  }
+}
+
+:host-context(dynamic-fields, sncr-check-group) fieldset {
+  margin-bottom: 0px;
+}

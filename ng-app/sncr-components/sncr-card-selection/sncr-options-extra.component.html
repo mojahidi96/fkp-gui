@@ -1,0 +1,176 @@
+<div [ngClass]="option.length > 0 && option.value !== 'none' ? 'descriptions' : 'description'">
+    <div class="mainCardSel">
+        <ng-container *ngIf="option.infoDesc && option.length && !isLazy; else lazyInfoDesc">
+            <div class="info-status">
+                <span class="info-icon" aria-hidden="true"></span>
+                <span class="info-text">{{option.length}} von {{totalLength}} {{option.infoDesc}}</span>
+            </div>
+        </ng-container>
+        <ng-template #lazyInfoDesc>
+            <ng-container *ngIf="option.length && option.canOnly != 'D'">
+                <div class="info-status">
+                    <span class="info-icon" aria-hidden="true"></span>
+                    <span class="info-text" [l10nTranslate]="{length: option.length, totalLength: totalLength}">{{getInfoKey(option.length)}}</span>
+                </div>
+            </ng-container>
+        </ng-template>
+
+        <div *ngIf="option.value !== 'none' && option.charge && (option.model !== 'D' || (option.model === 'D' && option.duration > 0))" class="creditCardRow">
+            <div class="desc-icon" *ngIf="((option.charge.amount - 0) === 0 || option.charge.amount > 0) && ((isCheckbox && option.model !== 'D') || (!isCheckbox))"><i class="fa fa-credit-cardIcon" aria-hidden="true"></i></div>
+            <div class="currencyTxt">
+                <ng-container *ngIf="option.charge.amount > 0 && ((isCheckbox && option.model !== 'D') || (!isCheckbox))">
+                    {{option.charge.amount | currency:'EUR'}}
+                    {{getChargeType(option)}}
+                    {{getOptionDuration(option)}}
+                </ng-container>
+                <ng-container *ngIf="(option.charge.amount - 0) === 0 && ((isCheckbox && option.model !== 'D') || (!isCheckbox))">
+                    {{'SOC_SELECTION-FREE_OF_CHARGE' | translate:lang}} {{getOptionDuration(option)}}
+                </ng-container>
+                <ng-container *ngIf="option.model === 'D'">
+                    {{getOptionDuration(option)}}
+                </ng-container>
+            </div>
+        </div>
+        <div *ngIf="option.value === 'none' && option.model === 'D'" class="creditCardRow">
+            <div class="currencyTxt">
+                <ng-container *ngIf="option.model === 'D'">
+                    {{getOptionDuration(option)}}
+                </ng-container>
+            </div>
+        </div>
+
+        <ng-container *ngIf="!option.bookedSoc && (((getLength() && !isLazy) || (subsCountForLazy && isLazy)) && ['A', 'D'].includes(option.model) || (!isCheckbox && showSelected) || option.mandatory)">
+            <div class="selected" *ngIf="isCheckbox">
+                <ng-container *ngIf="option.model === 'A' || option.mandatory">
+                    <i class="fa fa-plus iconPlus"></i>
+                    <div class="infoText">
+                        {{'SOC_SELECTION-TARIFF_BOOKED_PRE_MSG' | translate:lang }}{{' ' + getLength() + ' '}}{{'SOC_SELECTION-TARIFF_BOOKED_POST_MSG' | translate:lang }}
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="option.model === 'D'">
+                    <i class="fa fa-minus iconPlus"></i>
+                    <div  class="infoText">
+                        {{properties.get('remove.label.pre')}}{{getLength()}}{{properties.get('remove.label.post')}}
+                    </div>
+                </ng-container>
+                <i role="button" class="fa fa-times fa-2x closeIcon" title="{{revertChangesLabel}}" *ngIf="!option.mandatory"
+                   (click)="closeClicked()">
+                </i>
+                <div class="clearfix"></div>
+            </div>
+            <div class="selected" *ngIf="!isCheckbox">
+                <ng-container *ngIf="option.value !== 'none'">
+                    <i class="fa fa-plus iconPlus"></i>
+                    <div class="infoText" *ngIf="!infomsg">
+                        {{'SOC_SELECTION-TARIFF_BOOKED_PRE_MSG' | translate:lang }}{{' ' + getLength() + ' '}}{{'SOC_SELECTION-TARIFF_BOOKED_POST_MSG' | translate:lang }}
+                    </div>
+                    <div class="infoText" *ngIf="infomsg" [l10nTranslate]="{length: getLength()}">
+                        {{infomsg}}
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="option.value === 'none'">
+                    <i class="fa fa-minus iconPlus"></i>
+                    <div class="infoText">
+                            {{properties.get('remove.label.pre')}}{{getLength()}}{{properties.get('remove.label.post')}}
+                    </div>
+                </ng-container>
+                <i role="button" class="fa fa-times fa-2x closeIcon" title="{{revertChangesLabel}}"
+                   (click)="closeClicked()"></i>
+                <div class="clearfix"></div>
+            </div>
+        </ng-container>
+
+        <ng-template #notLazyRemove>
+            <div class="infoText">
+                {{properties.get('remove.label.pre')}}{{getLength()}}{{properties.get('remove.label.post')}}
+            </div>
+        </ng-template>
+
+        <div class="questionIcon" *ngIf="!option.bookedSoc && !option.disabled && !option.masterList && !option.masterSocs && !properties.get('activation.order') && !option.isTrigger && option.charge && (option.mandatory || showSelected)">
+            <div class="dateMain">
+                <div class="desc-icon"><i class="fa fa-question-circleIcon" aria-hidden="true"></i></div>
+                <div class="dateTxt">
+                    <ng-container *ngIf="isAddition()">{{'SOC_SELECTION-ACTIVATION_DATE' | translate:lang}}</ng-container>
+                    <ng-container *ngIf="!isAddition()">{{'SOC_SELECTION-TERMINATION_DATE' | translate:lang}}</ng-container>
+                </div>
+                <div class="dateSelect">
+                    <sncr-select [(ngModel)]="option.charge.selected">
+                        <ng-container *ngFor="let cycle of option.charge.billingCycles">
+                            <option value="{{cycle}}">{{getTodayLabel(cycle)}}</option>
+                        </ng-container>
+                    </sncr-select>
+                </div>
+
+                <ng-container *ngIf="option.charge.selected === 'custom'">
+                    <sncr-datepicker class="CustomDatePicker" [(ngModel)]="option.charge.date" [minDate]="getMinDate()" [maxDate]="properties.get('next.billing.cycle')"></sncr-datepicker>
+                </ng-container>
+            </div>
+
+        </div>
+
+        <ng-container *ngIf="(option.mandatory || showSelected) && isAddition() && option.wifi">
+            <div class="mt-2">
+                <sncr-notification 
+                    type="warning" 
+                    heading="{{'SOC_SELECTION-NOTE' | translate:lang}}"
+                    message="{{ 'SOC_SELECTION-WIFI_NOTE_MSG' | translate:lang:{url: properties.get('wifi.url')} }}" >
+                </sncr-notification>
+            </div>
+        </ng-container>
+
+        <div *ngIf="(option.mandatory || showSelected) && isAddition()">
+            <div class="additionalOpt">
+                <ng-container *ngIf="(option.masterList || isLazy) && isMasterVisible()">
+                    <sncr-notification type="warning" heading="{{ 'SOC_SELECTION-MASTER_LABEL' | translate:lang:{length: getMasterLength()} }}">
+                        <p>{{properties.get('master.description') | translate:lang}}</p>
+                        <ng-container *ngIf="masterSocsList">
+                            <sncr-radio-options #masterSocRadio [(value)]="option.isMasterSelected"
+                                                [options]="masterSocsList"
+                                                *ngIf="masterSocsList.length !== 1"
+                                                [totalLength]="totalLength"
+                                                [properties]="properties"
+                                                [groupTitle]="'Master Soc for '+ option.text"
+                                                [showValidation]="showValidation" [flowType]="flowType"
+                                                [isLazy]="isLazy" [lazyUrl]="lazyUrl"
+                                                [mandatory]="true">
+                            </sncr-radio-options>
+
+                            <sncr-checkbox-options #masterSocCheckBox [(value)]="option.isMasterSelected"
+                                                   [options]="masterSocsList"
+                                                   *ngIf="masterSocsList.length === 1"
+                                                   [totalLength]="totalLength"
+                                                   [properties]="properties"
+                                                   [groupTitle]="'Master Soc for '+ option.text"
+                                                   [isLazy]="isLazy" [lazyUrl]="lazyUrl"
+                                                   [showValidation]="showValidation">
+                            </sncr-checkbox-options>
+                        </ng-container>
+                    </sncr-notification>
+                </ng-container>
+
+                <ng-container *ngIf="triggerOption && option.trigger">
+                    <sncr-notification type="info-gray" heading="Zusatzoption">
+                        <sncr-checkbox-options [(value)]="option.trigger.isSelected"
+                                               [options]="[option.trigger]"
+                                               [totalLength]="getLength()"
+                                               [properties]="properties"
+                                               [groupTitle]="'Zusatzoption'"
+                                               [isLazy]="isLazy" [lazyUrl]="lazyUrl"
+                                               [showValidation]="showValidation">
+                        </sncr-checkbox-options>
+                    </sncr-notification>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="descInner1" *ngIf="showDescription && option.description">
+            <div class="desc-icon"><i class="fa docIcon" aria-hidden="true"></i></div>
+            <div class="docContent" *ngIf="isDescString; else optionDes">{{option.description}}</div>
+            <ng-template #optionDes>
+                <div class="docContent">
+                    <ng-container *ngTemplateOutlet="option.description"></ng-container>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

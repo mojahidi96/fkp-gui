@@ -1,0 +1,27 @@
+<ngb-tabset (tabChange)="tabChange($event,false,false);" #tab>
+    <ngb-tab title="{{tab.title}}" id="{{tab.id}}" *ngFor="let tab of tabs">
+        <ng-template ngbTabContent>
+            <ng-container *ngIf="loading">
+                <load-data [loading]="true"></load-data>
+            </ng-container>
+            <ng-container *ngIf="!loading">
+                <sncr-datatable [value]="tab.rows" [cols]="tab.columns" [sortField]="tab.sortField"
+                                (onRowSelect)="onSelect(tab.rows,tab.id)" [(selection)]="selected" [selectionMode]="'radio'">
+                </sncr-datatable>
+                <div class="next-button">
+                    <sncr-button type="strong" (click)="manageNextSection(tab.id)" [disabled]="tab.disabled">
+                        Weiter
+                    </sncr-button>
+                </div>
+            </ng-container>
+        </ng-template>
+    </ngb-tab>
+</ngb-tabset>
+
+<ng-template #address let-context>
+    <div class="">
+        <span>
+            {{context.row.locationAddress1}} <br /> {{context.row.locationAddress2}}
+        </span>
+    </div>
+</ng-template>

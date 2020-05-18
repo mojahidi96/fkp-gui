@@ -1,0 +1,1 @@
+module.exports = {"monthlyTotalValue":162.54000000000002,"oneTimeTotalValue":745.5,"monthlyTotalVAT":30.882600000000004,"oneTimeTotalVAT":141.645,"monthlyTotalValueWithVAT":193.42260000000002,"oneTimeTotalValueWithVAT":887.145,"availableTariffs":null,"hardware":null,"socs":null};

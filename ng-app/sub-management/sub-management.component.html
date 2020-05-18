@@ -1,0 +1,26 @@
+<div class="container subManagementMain">
+    <sncr-notification [handler]="alertNotify"></sncr-notification>
+    <p class="infoText" [innerHtml]="'MANAGE_DETAILS-EDIT_INFO_MESSAGE' | translate:lang"></p>
+    <div class="row marT30 ml-0" *ngIf="isPreQueryEligible">
+        <sncr-check-group *ngIf="enablePreQuery" [(ngModel)]="selectedSim" (ngModelChange)="resetColumns()">
+            <sncr-radio value="NEW_SIM" [label]="'SUB-MULTI-NEW-SIM' | translate:lang"></sncr-radio>
+            <sncr-radio value="EXISTING_SIM" [label]="'SUB-MULTI-EXISTING-SIM' | translate:lang"></sncr-radio>
+        </sncr-check-group>
+    </div>
+
+    <sncr-datatable [cols]="manageCols"
+                    [lazy]="lazy"
+                    [lazyLoadUrl]="lazyLoadUrl" [sortField]="'1'" [sortOrder]="1"
+                    [allEditable]="true" [countAlreadySet]="false"
+                    [(allEditForm)]="form"
+                    [loading]="lazyColsLoad" [ngClass]="{disableFields:processing}"
+                    [columnSelection]="columnSelection"
+                    [hideColSelect]="true"
+                    (assignAll)="resetManageTable($event)"
+                    #manageTable>
+    </sncr-datatable>
+
+    <div class="review" *ngIf="!lazyColsLoad">
+        <sncr-button type="strong" (click)="reviewUpdate()" [disabled]="processing"><span l10nTranslate>{{continueLabel}}</span></sncr-button>
+    </div>
+</div>

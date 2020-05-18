@@ -1,0 +1,68 @@
+@import '../styles/_custom-variables';
+@import '../styles/page-title';
+@import '../styles/mixins';
+
+.next-button {
+  text-align: right;
+}
+
+:host ::ng-deep .ui-datatable {
+  .ui-datatable-scrollable-view {
+    margin-left: 0px !important;
+  }
+}
+
+.selectedItem ul {
+  margin-bottom: 0px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-top-30 {
+  margin-top: 30px;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+::ng-deep .custom-dropdown {
+  min-width: 350px !important;
+}
+
+.dataTableCbillF {
+  padding: 0 20px;
+  margin-top: 30px;
+  .alert-danger {
+    margin-bottom: 30px;
+  }
+}
+
+/*::ng-deep .modal, ::ng-deep .modal-backdrop {
+  z-index: 99999;
+}
+*/
+.padLR20 {
+  padding: 0px 20px;
+}
+
+.padTB30 {
+  padding: 30px 0px;
+}
+
+.next-button {
+  margin-bottom: 30px;
+}
+
+.alertDiv #message {
+  margin: 30px 10px;
+  .alert {
+    margin-bottom: 0px;
+  }
+}

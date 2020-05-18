@@ -1,0 +1,130 @@
+@import '../../styles/mixins';
+@import '../../styles/vodafone';
+
+:host {
+  width: 100%;
+}
+
+.select-wrapper {
+  float: left;
+  width: 65px;
+}
+
+.buttons-wrapper {
+  float: right;
+}
+
+.ui-paginator-element.ui-state-active,
+.ui-paginator-element.ui-state-highlight,
+.ui-paginator-element.ui-state-active:hover,
+.ui-paginator-element.ui-state-highlight:hover {
+  background-color: #666 !important;
+  color: #ffffff;
+  border: none !important;
+  box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.5) !important;
+  cursor: default !important;
+}
+
+.ui-paginator-next,
+.ui-paginator-first {
+  margin-right: 5px !important;
+}
+
+.ui-paginator-rpp-options {
+  margin-left: 5px;
+}
+
+.ui-paginator-element.ui-state-disabled {
+  background: #eeeeee !important;
+  cursor: not-allowed !important;
+}
+
+.datatableResult {
+  font-weight: normal;
+  margin-top: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+.ui-paginator-element.ui-state-disabled .fa {
+  color: #ccc;
+  cursor: not-allowed !important;
+}
+
+.ui-paginator-element .fa:before {
+  content: '';
+}
+
+.ui-paginator .ui-state-disabled ::ng-deep svg * {
+  stroke: $color-silver;
+}
+
+.ui-paginator .ui-paginator-first,
+.ui-paginator .ui-paginator-prev,
+.ui-paginator .ui-paginator-next,
+.ui-paginator .ui-paginator-last,
+.ui-paginator .ui-paginator-pages .ui-paginator-page {
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  color: #666;
+  line-height: 31px;
+  margin-right: 10px;
+  font-weight: normal;
+  min-width: 31px;
+  height: 31px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.ui-paginator .ui-paginator-first,
+.ui-paginator .ui-paginator-prev {
+  margin-right: 20px;
+}
+
+.ui-paginator .fa.fa-angle-left,
+.ui-paginator .fa.fa-angle-right {
+  font-size: 18px;
+  position: relative;
+  top: 2px;
+}
+
+.ui-paginator .ui-paginator-first,
+.ui-paginator .ui-paginator-next {
+  margin-left: 10px;
+  margin-right: 0px !important;
+}
+
+.ui-paginator {
+  padding: 10px 0;
+}
+
+.ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active {
+  color: #fff;
+}
+
+.editing ::ng-deep .ui-paginator a {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.ellipsis {
+  margin-right: 10px;
+}
+
+.digits-3 {
+  width: 38px;
+}
+
+.digits-4 {
+  width: 46px;
+}
+
+.digits-5 {
+  width: 58px;
+}

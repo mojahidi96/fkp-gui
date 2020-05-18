@@ -1,0 +1,125 @@
+<div class="noDataMes">
+    <sncr-notification [handler]="subscriberNotify"></sncr-notification>
+    <p class="infoText" [innerHtml]="properties.get('subscriber.section.label') | translate:lang"></p>
+    <div class="warningMessage" *ngIf="subscribers.length === 0 && !lazy">
+        <sncr-notification [message]="noSubscriberInfo" type="warning"></sncr-notification>
+    </div>
+    <div class="warningMessage" *ngIf="lazyCount === 0 && lazy">
+        <sncr-notification [message]="noSubscriberInfo" type="warning"></sncr-notification>
+    </div>
+
+    <div>
+        <div *ngIf="subscribers.length > 0 && !lazy">
+            <sncr-datatable #subscriberTable [cols]="columns" prefix="SELECTION"
+                            [(selection)]="subsFlow.model.selected" [multiSelection]="true" [columnSelection]="true"
+                            [resultMessage]="resultMessage"
+                            [value]="subscribers" [resultCount]="true"
+                            (onHeaderCheckboxToggle)="disableCda()">
+                <sncr-header></sncr-header>
+            </sncr-datatable>
+        </div>
+        <div *ngIf="lazy && lazyCount > 0">
+            <sncr-datatable #subscriberTable [cols]="columns" prefix="SELECTION" (onDataChange)="updateFlowEvent($event)"
+                            [(selection)]="subsFlow.model.selected" [multiSelection]="true" [columnSelection]="true"
+                            [lazy]="lazy" [sortField]="'1'" [sortOrder]="1" [lazyLoadUrl]="lazyLoadUrl"
+                            [ngClass]="{disableFields:processing}">
+                <sncr-header>
+
+                </sncr-header>
+            </sncr-datatable>
+        </div>
+        <div *ngIf="lazy && (configId === properties.get('subscriber.selections.configId'))" class="row">
+            <div class="col-sm-6 text-left">
+                <span class="d-inline-block mr-2">
+                    <sncr-download-selections [downloadParams]="downloadParams" [prefix]="'SELECTION-'"
+                                              [dataTableDetails]="subscriberTable"
+                                              [disable]="processing" [checkSelectCount]="true"
+                                              [manageConfigId]="manageSubsConfigId">
+                    </sncr-download-selections>
+                </span>
+                <sncr-button type="strong" (click)="manageUploadSection()" [disabled]="processing">
+                    {{properties.get('subscriber.uploadChanges.button')}}
+                </sncr-button>
+            </div>
+
+            <div class="col-sm-6 right next-button-right">
+                <sncr-button type="strong" (click)="manageNextSection(subscriberTable?.selectCount==1)"
+                             [disabled]="processing" [ngClass]="{disableFields:processing}">
+                    {{properties.get('subscriber.next.button')}}
+                </sncr-button>
+            </div>
+        </div>
+
+        <div *ngIf="!lazy || (configId !== properties.get('subscriber.selections.configId'))" class="row">
+            <div class="col-sm-12">
+                <sncr-notification type="success" *ngIf="csvSelectCount !== -1" [l10nTranslate]="{count: csvSelectCount}">
+                    <strong>CSV-VALID_RECORDS</strong>
+                </sncr-notification>
+
+                <sncr-notification type="error" *ngIf="errorCsvFile.count" [l10nTranslate]="{count: errorCsvFile.count}">
+                    <strong>CSV-INVALID_RECORDS</strong> &nbsp;
+                    <sncr-button (click)="downloadErrorCsv()" type="secondary" l10nTranslate>
+                        <img class="resize-height" src="public/icons/svg/vodafone/download.svg" alt="Download">&nbsp;
+                        CSV-INVALID_RECORDS-DOWNLOAD
+                    </sncr-button>
+                </sncr-notification>
+
+                <sncr-notification type="error" *ngIf="csvError" l10nTranslate><strong>{{csvError}}</strong></sncr-notification>
+
+                <div class="file-drop mt-0" *ngIf="uploading">
+                    <ngx-file-drop dropZoneClassName="file-drop" contentClassName="file-drop" (onFileDrop)="processDrop($event)">
+                        <ng-template ngx-file-drop-content-tmp>
+                            <div class="content">
+                            <div class="xslIcon marB25 marT80"><svg-icon name="misc/file-format-csv" size="large"></svg-icon></div>
+                            <div class="dAndDropTxt marB80">
+                                <div l10nTranslate><strong>CSV-UPLOAD_AREA-TITLE</strong></div>
+                                <div>
+                                    <span l10nTranslate>CSV-UPLOAD_AREA-UPLOAD_1</span>
+                                    <label class="href" for="csvFile" l10nTranslate>CSV-UPLOAD_AREA-UPLOAD_2</label>
+                                    <input id="csvFile" type="file" style="visibility:hidden;"
+                                           (change)="processCsvUpload($event, $event.target.files)"/>
+                                    <span l10nTranslate>CSV-UPLOAD_AREA-UPLOAD_3</span>
+                                </div>
+                                <div class="text-muted" l10nTranslate>CSV-UPLOAD_AREA-SUPPORTED_FORMAT</div>
+                                <div class="text-muted" l10nTranslate>CSV-UPLOAD_AREA-CSV</div>
+                            </div>
+                        </div>
+                        </ng-template>
+                    </ngx-file-drop>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <sncr-button type="strong" *ngIf="csvUpload" (click)="uploading = !uploading">
+                    <span *ngIf="!uploading" l10nTranslate>CSV-UPLOAD_BUTTON</span>
+                    <span *ngIf="uploading" l10nTranslate>CSV-UPLOAD_BUTTON-CANCEL</span>
+                </sncr-button>
+            </div>
+
+            <div class="col-sm-6 next-button-right">
+                <sncr-button type="strong"
+                             (click)="manageNextSection(subscriberTable?.selectCount==1)"
+                             [disabled]="processing"
+                             [ngClass]="{disableFields:processing}">
+                    {{properties.get('subscriber.next.button')}}
+                </sncr-button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #socs let-context>
+    <div class="margin-bottom-30">
+        <div (click)="context.ellipse = !context.ellipse" class="moreDetail">
+            <div *ngIf="getSocs(context.row['40']).length > 0">
+                <i class="fa fa-chevron-down" *ngIf="!context.ellipse" aria-hidden="true"></i>
+                <i class="fa fa-chevron-up" *ngIf="context.ellipse" aria-hidden="true"></i>
+                <span>{{getSocs(context.row['40']).length}} Tarifoptionen</span>
+            </div>
+        </div>
+    </div>
+    <ul *ngIf="context.ellipse" class="margin-bottom-30 createTariffFields">
+        <li *ngFor="let soc of getSocs(context.row['40'])">
+            {{soc}}
+        </li>
+    </ul>
+</ng-template>

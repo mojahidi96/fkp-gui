@@ -1,0 +1,30 @@
+@import '../../styles/page-title';
+
+.title {
+  font-style: italic;
+  padding: 9px;
+  font-size: 15px;
+  @extend .pageTitle;
+}
+
+.dataTableInfo {
+  .dataTable {
+    padding: 30px 20px;
+    box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+    background: #ffffff;
+    margin-top: 21px;
+    overflow-x: hidden;
+    border-radius: 4px;
+  }
+}
+
+:host ::ng-deep .ui-datatable .ui-datatable-data > tr {
+  cursor: pointer;
+}
+
+.info-icon {
+  float: left;
+  background-image: url(~/public/icons/svg/notification/info.svg);
+  @include icon-sizes20;
+  margin-right: 5px;
+}

@@ -1,0 +1,31 @@
+<h2 class="pageTitle" l10nTranslate *ngIf="fnUser.vfUser">SEARCH-HEADER_TITLE</h2>
+<h2 class="pageTitle" l10nTranslate *ngIf="!fnUser.vfUser">HISTORY-HEADER_TITLE</h2>
+
+
+<div class="card">
+    <div class="card-block">
+        <div *ngIf="loading">
+            <sncr-loader class="custom-inline" [isLoading]="true"></sncr-loader>
+        </div>
+        <div class="row">
+            <div class="col-md-12" *ngIf="!loading">
+                <ng-container>
+                    <sncr-datatable #sncrData [value]="orders" [cols]="orderListCols" [(selection)]="selected" [sortField]="'orderNumber'"
+                                    [sortOrder]="'-1'" [selectionMode]="'single'">
+                    </sncr-datatable>
+                    <div class="next-button">
+                        <div class="col-md-12">
+                            <sncr-button type="secondary" class="pull-left" (click)="backbuttonClicked()">Zurück</sncr-button>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #orderNo let-context>
+    <div class="ellipiss">
+        <span class="href" (click)="showorderdetails(context.row)">{{context.row.orderNumber}}</span>
+    </div>
+</ng-template>

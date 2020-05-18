@@ -1,0 +1,9 @@
+@import '../../styles/common-imports';
+
+a .fa {
+  color: $body-color;
+}
+
+.disabled {
+  opacity: 0.6;
+}

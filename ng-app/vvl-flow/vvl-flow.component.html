@@ -1,0 +1,224 @@
+<h2 class="pageTitle">
+    <span *ngIf="cart?.shoppingCartName">{{cart?.shoppingCartName}} - </span>
+    <span l10nTranslate>PAGE_TITLE</span>
+</h2>
+<div *ngIf="orderSubmitted">
+    <order-confirmation [orderDetails]="orderDetails"></order-confirmation>
+</div>
+<div [hidden]="!cartLoading">
+    <sncr-loader [isLoading]="true"></sncr-loader>
+</div>
+<div *ngIf="!orderSubmitted">
+    <sncr-flow #flow="sncrFlow" [ngClass]="{disableFields: orderProcessing}"  [prefilled]="prefilled">
+        <sncr-flow-section [titleText]="'SELECTION-TITLE' | translate:lang" modelSortKey="selectionMap" modelSortVal="id" #subsFlow="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <div *ngIf="subsFlowModel?.selectCount > 0">
+                    <span *ngIf="subsFlowModel.selectCount === 1" l10nTranslate>SELECTION-ONE_SUBS_SELECTED</span>
+                    <span *ngIf="subsFlowModel.selectCount !== 1"
+                          [l10nTranslate]="{selectCount: subsFlowModel.selectCount}">SELECTION-SUBSCRIBERS_WERE_SELECTED</span>
+                </div>
+            </div>
+
+            <div *sncrSectionTemplate class="dataTableMSoc">
+                <div class="mb-2">
+                    <sncr-notification [handler]="subsAlert" [dismissible]="false"></sncr-notification>
+                </div>
+                <p class="infoText" [innerHTML]="'SELECTION_TABLE-SUB_TITLE_MSG'| translate:lang"></p>
+                <sncr-datatable-op #subscriberTable [state]="datatableState$ | async" [multiSelection]="true" [columnSelection]="true"
+                                   (onLazyLoad)="onLazyLoad($event)" [sortField]="subsFlowSortField" sortOrder="1" prefix="VVL" [maxSelectKey]="'prolong-subscriber_max-selection'"
+                                   (onSelectionChange)="onSelectionChange($event)" [ngClass]="{disableFields:processing}" (onColumnChange)="onColumnChange($event)">
+                </sncr-datatable-op>
+                <p *ngIf="showExtendedAvailability" class="infoText" [innerHTML]="'SELECTION_TABLE-EXTENDED_AVAILABILITY'| translate:lang"></p>
+
+                <sncr-file-drop fileName="TeilnehmerdatenError" [disableMessage] = "disableMessage" [uploadUrl]="uploadUrl" (response)="reloadSubsTable($event)"></sncr-file-drop>
+                <div class="row">
+                    <div class="next-button-right">
+                        <sncr-button type="strong" (click)="nextSectionAfterSubscriber()" [disabled]="processing" [ngClass]="{disableFields:processing}">
+                            <span l10nTranslate>SELECTION-NEXT_BUTTON</span>
+                        </sncr-button>
+                    </div>
+                </div>
+            </div>
+        </sncr-flow-section>
+        <sncr-flow-section [titleText]="'TARIFF_SELECTION-TITLE' | translate:lang" #tariffFlow="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <p><span l10nTranslate>TARIFF_SELECTION-SUMMARY_TEXT</span></p>
+                <ng-container *ngIf="tariffFlow.model" [ngSwitch]="tariffFlow.model?.selectedTariffGroup">
+                    <ng-container *ngSwitchCase="'new'">
+                        <div>
+                            <span>{{tariffFlow.tariffModel?.affectedSubscribers}} {{tariffFlow.tariffModel?.selectedTariff.subsCount}} x {{tariffFlow.tariffModel?.selectedTariff.text}} </span>
+                        </div>
+                        <div class="descInner" *ngIf="tariffFlow.tariffModel?.subsQuantity && tariffFlow.tariffModel?.subsQuantity > 0">
+                            <div class="desc-icon"><i class="fa infoIcon" aria-hidden="true"></i></div>
+                            <div class="info-text" [l10nTranslate]="{subsQuantity: tariffFlow.tariffModel?.subsQuantity}">TARIFF_SELECTION-SUMMARY_INFO_TEXT</div>
+                        </div>
+                        <div class="ineligible-subs" *ngIf="tariffFlow.tariffModel?.selectedTariff?.inEligibleSubs && tariffFlow.tariffModel.selectedTariff.inEligibleSubs.length > 0">
+                            <svg-icon class="mr-1 orange" name="vodafone/warning" size="small"></svg-icon>
+                            <div [l10nTranslate]="{count: tariffFlow.tariffModel?.selectedTariff?.inEligibleSubs.length}">TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT1</div>
+                            <div l10nTranslate><a href="javascript:void(0)" (click)="exportcsv()">TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT2</a></div>
+                            <div l10nTranslate>TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT3</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'exist'">
+                        <div l10nTranslate>TARIFF_SELECTION-SUMMARY_NO_CHANGE_TEXT</div>
+                        <div *ngFor="let tariff of tariffFlow.tariffModel.existingTariffList.tariffs">{{tariff?.subsCount}} x {{tariff?.text}}</div>
+                    </ng-container>
+                </ng-container>
+            </div>
+
+            <div *sncrSectionTemplate>
+                <tariffgrid-selection (nextSelection)="nextSection($event, tariffFlow)" [prefilled]="prefilled"
+                  [(selectedTariffGroup)] = "tariffFlow.model.selectedTariffGroup" [reload]="tariffFlow?.reload"
+                  [selectedTariff]="tariffFlow.tariffModel?.selectedTariff"
+                  [isVvlFlow]="true"
+                  (selectedTariffChange)="tariffFlow.model.selectedTariff = $event">
+                </tariffgrid-selection>
+            </div>
+        </sncr-flow-section>
+        <sncr-flow-section [titleText]="'HARDWARE_SELECTION-TITLE' | translate:lang" #hardwareFlow="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <p l10nTranslate>HARDWARE_SELECTION-SUMMARY_TEXT</p>
+                <ng-container *ngIf="hardwareFlow.model" [ngSwitch]="hardwareFlow.model?.isArticleNotRequired">
+                    <ng-container *ngSwitchCase="0">
+                        <span>{{eligibleSubsHardware}} x {{hardwareFlow.model.selectedHardware?.text}}</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="1">
+                        <span>{{eligibleSubsHardware}} x <span
+                                l10nTranslate>HARDWARE_SELECTION-SUMMARY_CREDIT_VOUCHER</span></span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="2">
+                        <span>{{eligibleSubsHardware}} x <span
+                                l10nTranslate>HARDWARE_SELECTION-SUMMARY_DELAYED_SUBSIDY</span></span>
+                    </ng-container>
+                </ng-container>
+            </div>
+        
+            <div *sncrSectionTemplate class="dataTableMSoc hardwareAuswahlen">
+                <article-selection [selectedTariff]="tariffFlow?.tariffModel"
+                    (selectedHardware)="hardwareFlow.model.selectedHardware = $event"
+                    [(isArticleNotRequired)]="hardwareFlow.model.isArticleNotRequired"
+                    [selectedArticle]="hardwareFlow.model?.selectedArticle"
+                    [eligibleSubsCount]="hardwareFlow.model?.eligibleSubsHardware"
+                    [totalSubsCount]="hardwareFlow.model?.tariffSubsCount"
+                    [reload]="hardwareFlow.reload && hardwareFlow.active"
+                    [prefilled]="prefilled"
+                    [showNewESimMessage] = "portalEsimEnabled.toLowerCase() === 'true'"
+                    (output)="nextSectionAfterHardware($event)"></article-selection>
+            </div>
+        </sncr-flow-section>
+        <sncr-flow-section [titleText]="'SOC_SELECTION-TITLE' | translate:lang" #socFlow="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <p *ngIf="socFlow.model?.selectedSocs.length > 0" l10nTranslate>SOC_SELECTION-SUMMARY_TEXT</p>
+                <ng-container *ngIf="socFlow.model?.selectedSocs && socFlow.model?.selectedSocs.length > 0">
+                    <ng-container *ngFor="let change of socFlow.model?.selectedSocs">
+                        <ng-container *ngFor="let soc of change.socs">
+                            <div *ngIf="soc.quantity">
+                                <div class="soc">
+                                    <div class="name">{{soc.quantity}}x {{soc.name}}</div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!socFlow.model?.selectedSocs || socFlow.model?.selectedSocs.length === 0">
+                    <span l10nTranslate>SOC_SELECTION-NONE_SELECTED</span>
+                </ng-container>
+
+            </div>
+
+            <div *sncrSectionTemplate>
+                <soc-selection [showValidation]="showValidation"
+                               [orderType]="orderType"
+                               (review)="nextSectionAfterSoc($event)"
+                               [isChanged]="isArticleChanged"
+                               [prefilledSocs]="socFlow.model.selectedSocs"
+                               [subscribers]="subsFlow.model.selected"
+                               [eligibleSubsHardware]="eligibleSubsHardware"
+                               flowType="PROLONG"
+                               [continueLabel]="hardwareFlow.model?.isArticleNotRequired === 0 ? 'SOC_SELECTION-NEXT_BUTTON' : 'PROLONG_SHIPMENT-CONTINUE_TO_ORDER_REVIEW'">
+                </soc-selection>
+            </div>
+        </sncr-flow-section>
+        <sncr-flow-section [hideStepper]="isArticleNotRequired" [titleText]="'DEBITOR_SELECTION-TITLE' | translate:lang" #debitorFlow="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <ng-container *ngIf="debitorAddress">
+                    <p *ngIf="debitorAddress.debitorNumber">
+                        {{'DEBITOR_SELECTION-DEBITOR_NUMBER_LABEL' | translate:lang}}: {{debitorAddress.debitorNumber}}
+                        <span *ngIf="debitorAddress.debitorType === 'T'">({{'DEBITOR_SELECTION-TECHFUND' | translate:lang }})</span>
+                    </p>
+                    <sncr-display-address [address]="debitorAddress"
+                                          [showDetails]="showDebitorInfo()">
+                    </sncr-display-address>
+                </ng-container>
+            </div>
+
+            <div *sncrSectionTemplate class="dataTableMSoc">
+                <debitor-selection addressSelectionType="DEBITOR" [countries]="countries" [pattern]="pattern"
+                                   [isSammelDChanged]="isSammelDChanged" [reload]="debitorFlow?.reload"
+                                   [debitorSelected] = "debitorAddress?.debitorId ? debitorAddress?.debitorId: ''"
+                                   (debitorSetting)="debitorSetting = $event"
+                                   (nextSelection)="nextSection($event, debitorFlow)"></debitor-selection>
+            </div>
+        </sncr-flow-section>
+        <sncr-flow-section [hideStepper]="isArticleNotRequired" [titleText]="'SHIPMENT_SELECTION-TITLE' | translate:lang" #shippingFlow="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+                <ng-container *ngIf="shippingFlow.selectedShipmentAddress">
+                    <sncr-display-address *ngIf="shippingFlow.selectedShipmentAddress.selectionOption === 'T'"
+                                          [address]="shippingFlow.selectedShipmentAddress"></sncr-display-address>
+                    <span *ngIf="shippingFlow.selectedShipmentAddress.selectionOption !== 'T'"
+                       l10nTranslate>{{shippingFlow.selectedShipmentAddress.selectedDescription}}</span>
+                </ng-container>
+            </div>
+
+            <div *sncrSectionTemplate class="dataTableMSoc">
+                <shipment-selection addressSelectionType="SHIPMENT" [pattern]="pattern"
+                                    [selectedShipmentAction] = "selectedShipmentAction" [prefilled]="prefilled"
+                                    [debitorAddress]="debitorAddress" (nextSelection)="nextSection($event, shippingFlow)"></shipment-selection>
+            </div>
+        </sncr-flow-section>
+        <sncr-flow-section [titleText]="'REVIEW-TITLE' | translate:lang" #reviewFlow="sncrFlowSection">
+            <div *sncrSummaryTemplate>
+
+            </div>
+
+            <div *sncrSectionTemplate class="dataTableMSoc">
+                <order-review [reloadSummary]="isSocChanged" (output)="processOrderSubmit()" #orderreview="orderReview" [isLoading]="isLoading"
+                              [isShipmentChanged]="isShipmentChanged" [selectedHandy]="hardwareFlow.model['selectedHardware']" (pscOutput)="processPSC($event)"
+                              [orderType]="'PROLONG_SUBSCRIBER'" isPSCEnabled="true"
+                              [prefilled]="prefilled"></order-review>
+            </div>
+        </sncr-flow-section>
+    </sncr-flow>
+</div>
+
+
+<ng-template #socs let-context>
+    <div class="margin-bottom-30">
+        <div (click)="context.ellipse = !context.ellipse" class="moreDetail">
+            <div *ngIf="getSocs(context.row['40']).length > 0">
+                <i class="fa fa-chevron-down" *ngIf="!context.ellipse" aria-hidden="true"></i>
+                <i class="fa fa-chevron-up" *ngIf="context.ellipse" aria-hidden="true"></i>
+                <span>{{getSocs(context.row['40']).length}} Tarifoptionen</span>
+            </div>
+        </div>
+    </div>
+    <ul *ngIf="context.ellipse" class="margin-bottom-30 createTariffFields">
+        <li *ngFor="let soc of getSocs(context.row['40'])">
+            {{soc}}
+        </li>
+    </ul>
+</ng-template>
+
+<ng-template #prolongEligible let-context>
+    <span [innerHTML]="context.row['57'] | translate:lang"></span>
+</ng-template>
+
+<ng-template #multipleOrderDetails let-context>
+    <sncr-datatable [paginator]="false" [value]="orderRows" [cols]="orderCols">
+    </sncr-datatable>
+</ng-template>
+
+<ng-template class="contentPanel" #orderNumberPDF let-context>
+    <span class="orderNumber font-weight-bold" (click)="downloadPdf(context.row.orderNumber,context.row.orderType)">{{context.row['orderNumber']}}</span>&nbsp;
+    <i class="fa fa-file-pdf-oIcon" aria-hidden="true"></i>
+</ng-template>

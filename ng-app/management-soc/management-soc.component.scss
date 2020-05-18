@@ -1,0 +1,39 @@
+@import '../styles/planned-changes';
+
+.padLR20 {
+  padding: 0px 20px;
+}
+
+.padLR15 {
+  padding: 0px 15px;
+}
+
+.marT30 {
+  margin-top: 30px;
+}
+.labelBold {
+  padding: 0px 20px;
+  label {
+    font-weight: bold;
+  }
+}
+
+:host ::ng-deep .inline-loader .wrapper {
+  position: inherit !important;
+  top: 0% !important;
+}
+
+:host ::ng-deep .inline-loader .loader {
+  margin-top: 0% !important;
+}
+
+.marginr {
+  margin-right: -17px;
+}
+hr.bg-inverse {
+  border-top: solid 1px #000000;
+}
+
+.px-20 {
+  padding: 0 20px;
+}

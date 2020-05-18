@@ -1,0 +1,472 @@
+@import '../../styles/mixins';
+@import '../../styles/custom-variables';
+
+.card-header sncr-button {
+  white-space: nowrap;
+}
+.card-header {
+  background: #ebebeb !important;
+  min-height: 44px;
+  padding: 0px;
+  .row {
+    padding: 11px 25px;
+    margin: 0px;
+  }
+  .landline-callIcon {
+    background-image: url(~/public/icons/svg/vodafone/landline-or-call.svg);
+    @include icon-sizes24;
+  }
+
+  .g3Icon {
+    background-image: url(~/public/icons/svg/vodafone/3g.svg);
+    @include icon-sizes24;
+  }
+  .g4Icon {
+    background-image: url(~/public/icons/svg/vodafone/4g.svg);
+    @include icon-sizes24;
+  }
+  .g4PlusIcon {
+    background-image: url(~/public/icons/svg/vodafone/4g-plus.svg);
+    @include icon-sizes24;
+  }
+  .boldIcon {
+    background-image: url(~/public/icons/svg/vodafone/bold.svg);
+    @include icon-sizes24;
+  }
+  .calls-contactsIcon {
+    background-image: url(~/public/icons/svg/vodafone/calls-contacts.svg);
+    @include icon-sizes24;
+  }
+  .confidentialIcon {
+    background-image: url(~/public/icons/svg/vodafone/privacy-or-confidential.svg);
+    @include icon-sizes24;
+  }
+  .connectivityIcon {
+    background-image: url(~/public/icons/svg/vodafone/connectivity.svg);
+    @include icon-sizes24;
+  }
+  .customersIcon {
+    background-image: url(~/public/icons/svg/vodafone/customers-or-users.svg);
+    @include icon-sizes24;
+  }
+  .dataIcon {
+    background-image: url(~/public/icons/svg/vodafone/data.svg);
+    @include icon-sizes24;
+  }
+  .deliveryIcon {
+    background-image: url(~/public/icons/svg/vodafone/delivery.svg);
+    @include icon-sizes24;
+  }
+  .fixed-lineIcon {
+    background-image: url(~/public/icons/svg/vodafone/fixed-line.svg);
+    @include icon-sizes24;
+  }
+  .info-circleIcon {
+    background-image: url(~/public/icons/svg/vodafone/info-circle.svg);
+    @include icon-sizes24;
+  }
+  .international-minutes {
+    background-image: url(~/public/icons/svg/vodafone/country-or-international.svg);
+    @include icon-sizes24;
+  }
+  .landline-or-call {
+    background-image: url(~/public/icons/svg/vodafone/landline-or-call.svg);
+    @include icon-sizes24;
+  }
+  .locationIcon {
+    background-image: url(~/public/icons/svg/vodafone/location.svg);
+    @include icon-sizes24;
+  }
+  .mail-newIcon {
+    background-image: url(~/public/icons/svg/vodafone/mail-new.svg);
+    @include icon-sizes24;
+  }
+  .minutes-smsIcon {
+    background-image: url(~/public/icons/svg/vodafone/minutes-sms.svg);
+    @include icon-sizes24;
+  }
+  .mobileIcon {
+    background-image: url(~/public/icons/svg/vodafone/mobile.svg);
+    @include icon-sizes24;
+  }
+  .number-portabilityIcon {
+    background-image: url(~/public/icons/svg/vodafone/number-portability.svg);
+    @include icon-sizes24;
+  }
+  .privacyIcon {
+    background-image: url(~/public/icons/svg/vodafone/privacy.svg);
+    @include icon-sizes24;
+  }
+  .roamingIcon {
+    background-image: url(~/public/icons/svg/vodafone/roaming.svg);
+    @include icon-sizes24;
+  }
+  .screen-sizeIcon {
+    background-image: url(~/public/icons/svg/vodafone/screen-size.svg);
+    @include icon-sizes24;
+  }
+  .securityIcon {
+    background-image: url(~/public/icons/svg/vodafone/security.svg);
+    @include icon-sizes24;
+  }
+  .simIcon {
+    background-image: url(~/public/icons/svg/vodafone/sim.svg);
+    @include icon-sizes24;
+  }
+  .sim-swapIcon {
+    background-image: url(~/public/icons/svg/vodafone/sim-swap.svg);
+    @include icon-sizes24;
+  }
+  .storageIcon {
+    background-image: url(~/public/icons/svg/vodafone/upload-cloud.svg);
+    @include icon-sizes24;
+  }
+  .tabletIcon {
+    background-image: url(~/public/icons/svg/vodafone/tablet.svg);
+    @include icon-sizes24;
+  }
+  .unified-communicationIcon {
+    background-image: url(~/public/icons/svg/vodafone/unified-communication.svg);
+    @include icon-sizes24;
+  }
+  .virus-protectionIcon {
+    background-image: url(~/public/icons/svg/vodafone/virus-protection.svg);
+    @include icon-sizes24;
+  }
+  .wifiIcon {
+    background-image: url(~/public/icons/svg/vodafone/broadband-or-wifi.svg);
+    @include icon-sizes24;
+  }
+}
+
+.card-block.innerCard-block {
+  padding: 30px 20px !important;
+}
+
+.billType {
+  font-size: 16px;
+  padding-left: 0px;
+  padding-right: 0px;
+  display: flex;
+  .iconMax {
+    display: table-cell;
+    width: 24px;
+    margin-right: 15px;
+    float: left;
+    vertical-align: top;
+  }
+  .cardsubTitle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    display: table-cell;
+    color: #333333;
+    overflow-wrap: normal;
+    word-break: normal;
+    vertical-align: top;
+    position: relative;
+    top: 4px;
+  }
+}
+
+:host ::ng-deep .secondary {
+  background: transparent;
+  box-shadow: none;
+  padding: 0px;
+  margin: 0px;
+  text-decoration: none;
+  font-weight: bold;
+  outline: none;
+  color: #9c2aa0;
+  padding-right: 10px;
+}
+
+:host ::ng-deep .secondary:hover {
+  text-decoration: underline !important;
+}
+
+.editLink {
+  cursor: pointer;
+  color: #333333;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.moreOffer {
+  padding-right: 0px;
+  margin-right: -5px;
+}
+
+:host ::ng-deep .padding0 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+:host ::ng-deep .padL0 {
+  padding-left: 0px;
+}
+
+:host ::ng-deep .padR10 {
+  padding-right: 10px;
+}
+
+:host ::ng-deep .pdfIcon,
+:host ::ng-deep .externalLink {
+  margin-left: 10px;
+  width: 20px;
+  .fa-external-linkIcon {
+    background-image: url(~/public/icons/svg/vodafone/pop-out.svg);
+    @include icon-sizes20;
+  }
+  .fa-file-pdf-oIcon {
+    background-image: url(~/public/icons/svg/vodafone/document-pdf.svg);
+    @include icon-sizes20;
+  }
+}
+:host ::ng-deep .externalLink + .pdfIcon {
+  margin-left: 5px;
+}
+
+:host
+  ::ng-deep
+  .additionalOpt
+  sncr-checkbox-options:last-child
+  fieldset.form-group {
+  margin-bottom: 0px;
+}
+:host ::ng-deep .cardSelection.form-group {
+  .radio-option {
+    margin-top: 25px;
+    &:first-of-type {
+      margin-top: 0px;
+    }
+
+    .radioBoxDiv {
+      margin-bottom: 0px !important;
+      .form-check-label {
+        height: 100%;
+        display: inline-block;
+      }
+    }
+  }
+
+  .mainCardSel {
+    margin-top: 14px;
+    .selected {
+      margin-top: 10px;
+      width: 463px;
+      background: $toolTip;
+      padding: 6px 10px;
+      color: #fff;
+      border-radius: 4px;
+      display: flex;
+      .iconPlus.fa-plus,
+      .fa-minus {
+        font-size: 20px;
+        padding-top: 0px;
+      }
+      .infoText {
+        font-weight: bold;
+        padding: 0px 10px;
+        word-wrap: break-word;
+        flex-grow: 1;
+      }
+
+      .closeIcon.fa-2x {
+        font-size: 20px !important;
+      }
+    }
+    .selected + .questionIcon .fm-select {
+      margin-bottom: 0px;
+    }
+
+    .descInner1 {
+      margin-top: 10px;
+      position: relative;
+      display: block;
+      width: 95%;
+      &:last-of-type {
+        margin-bottom: 0px;
+      }
+      .infoCont {
+        margin-top: 5px;
+        margin-left: 4px;
+      }
+      .docContent {
+        display: table-cell;
+      }
+      .desc-icon {
+        float: left;
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        .docIcon {
+          color: transparent;
+          background-image: url(~/public/icons/svg/vodafone/document.svg);
+          @include icon-sizes24;
+          display: inline-block;
+          margin-top: -1px;
+        }
+      }
+      ul {
+        margin-left: 20px;
+        margin-bottom: 0px;
+      }
+    }
+    .questionIcon {
+      margin-top: 10px;
+      width: 100%;
+      clear: both;
+
+      .form-group {
+        margin-bottom: 0px;
+      }
+    }
+
+    .creditCardRow + .selected {
+      width: auto;
+    }
+
+    .creditCardRow {
+      display: flex;
+      margin-top: 10px;
+      clear: both;
+
+      .desc-icon {
+        display: inline;
+      }
+
+      .currencyTxt {
+        display: inline-block;
+        padding-left: 10px;
+        vertical-align: middle;
+        position: relative;
+        padding-top: 2px;
+      }
+
+      .fa-credit-cardIcon {
+        background-image: url(~/public/icons/svg/vodafone/payment.svg);
+        background-position: 0 0;
+        @include icon-sizes24;
+      }
+
+      &:first-of-type {
+        margin-top: 0px;
+      }
+    }
+
+    #message {
+      margin-top: 10px;
+    }
+
+    .additionalOpt {
+      margin-top: 10px !important;
+      clear: both;
+
+      .dateSelect {
+        height: 33px;
+        max-width: 99px;
+        min-width: 90px;
+      }
+
+      .radio-option {
+        .mainCardSel {
+          .additionalOpt {
+            .creditCardRow {
+              height: auto;
+              .desc-icon {
+                vertical-align: top;
+              }
+              .currencyTxt {
+                width: 240px;
+              }
+            }
+            .selected {
+              width: 290px;
+              .infoText {
+                width: 88%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .minus {
+    .Checkbox {
+      > input:checked + .Checkbox-visible {
+        background-image: url(~/public/icons/svg/checkbox/minus.svg) !important;
+      }
+    }
+  }
+
+  .minus + sncr-options-extra {
+    .descriptions {
+      .selected {
+        width: auto;
+      }
+    }
+  }
+
+  .plus {
+    .Checkbox {
+      > input:checked + .Checkbox-visible {
+        background-image: url(~/public/icons/svg/checkbox/plus.svg) !important;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .option2 {
+  margin-bottom: 0px;
+  margin-top: 25px;
+
+  h4.cardsubTitle {
+    margin-bottom: 18px;
+  }
+  .form-group {
+    margin-bottom: 10px !important;
+  }
+}
+
+:host ::ng-deep .leftLabel {
+  margin-left: 20px;
+  border: solid 1px red;
+}
+
+:host ::ng-deep .rightLabel .form-group.dropdown {
+  margin-right: 20px;
+}
+
+:host ::ng-deep .padLR20 {
+  padding: 0px 20px;
+}
+
+:host ::ng-deep .next-button {
+  margin-bottom: 30px;
+}
+
+:host ::ng-deep .disabled .form-check label {
+  cursor: default;
+}
+
+:host ::ng-deep .form-group.dropdown label {
+  width: 100%;
+  margin-bottom: 8px !important;
+  font-weight: bold;
+  .fa.infoGreyIcon {
+    float: right;
+    @include icon-sizes20;
+    background-image: url(~/public/icons/svg/notification/info-gray.svg);
+    margin-right: 6px;
+  }
+}
+
+:host ::ng-deep .group {
+  color: #333333;
+}
+
+:host ::ng-deep .mx-4.my-1.text-muted > .selectedItem.selectedItemList {
+  margin: 0px;
+}

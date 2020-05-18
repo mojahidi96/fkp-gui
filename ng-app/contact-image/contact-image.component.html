@@ -1,0 +1,102 @@
+<div class="contact-block">
+    <div class="header">
+        <div class="l">
+            <div class="r">
+                <h3>
+                    <span class="cursor-pointer">
+                    <span class="contact" l10nTranslate><i class="contact-header-cion"></i> CONTACT_US_HEADER</span>
+                    <i class="fa fa-minus pull-right" (click)="toggleContact(false)" *ngIf="toggle" aria-hidden="true"></i>
+                    <i class="fa fa-plus pull-right" (click)="toggleContact(true)" *ngIf="!toggle" aria-hidden="true"></i>
+                    </span>
+                </h3>
+            </div>
+        </div>
+    </div>
+    <span *ngIf="toggle">
+        <div class="contact-content">
+            <div class="banner"></div>
+            <div><span class="fa fa-angle-right"></span>
+                <a (click)="openPopUp();" l10nTranslate>CONTACT_US_SEND_EMAIL</a>
+            </div>
+            <div *ngIf="formSubmitting" class="contact-message">
+                <div l10nTranslate>MESSAGE_SEND_SUCCESS</div>
+            </div>
+            <div class="mt-2">
+                <span class="fa fa-angle-right"></span>
+                <span l10nTranslate>CONTACT_US_LABEL</span><br>
+                <span l10nTranslate class="ml-2">CONTACT_US_PHONE_NUMBER</span>
+            </div>
+        </div>
+    </span>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+    <div id="contact-popup">
+        <form [formGroup]="saveForm" (ngSubmit)="saveContact()">
+            <div class="modal-header">
+                <h4 class="modal-title" l10nTranslate></h4>
+                <button type="button" class="close-popup" aria-label="Close closePopup" (click)="d('Cross click')"></button>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6 d-flex align-items-end" l10nTranslate>
+                        <label>SEND_REQUEST_TO_TITLE</label>
+                    </div>
+                    <div class="col-6">
+                        <sncr-select formControlName="sendRequestTo">
+                            <option value="" selected l10nTranslate>CONTACT_US_CHOOSE</option>
+                            <option *ngFor="let emailOptions of sendEmailOptions" [value]="emailOptions.value" l10nTranslate>
+                                {{emailOptions.text}}
+                            </option>
+                        </sncr-select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex align-items-end mb-4" l10nTranslate>
+                        <label>YOUR_CONCERN</label>
+                    </div>
+                    <div class="col-6">
+                        <sncr-textarea  formControlName="concern" maxlength="500" required ></sncr-textarea>
+                        <div l10nTranslate>DESCRIPTION_LIMIT</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex align-items-end" l10nTranslate>
+                        <label>CONTACTED_BY_US</label>
+                    </div>
+                    <div class="col-6">
+                        <sncr-check-group formControlName="contactedBy">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <sncr-radio *ngFor="let o of radioButtonOptions" [value]="o.value" l10nTranslate>{{o.text}}</sncr-radio>
+                                </div>
+                            </div>
+                        </sncr-check-group>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex align-items-end" l10nTranslate>
+                        <label>ENTER_PHONE_NUMBER</label>
+                    </div>
+                    <div class="col-6">
+                        <sncr-input formControlName="enterPhoneNumber" [disabled]="this.saveForm.controls['contactedBy'].value==='Email'?true:false"></sncr-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex align-items-end" l10nTranslate>
+                        <label>CUSTOMER_OR_PHONE_NUMBER</label>
+                    </div>
+                    <div class="col-6">
+                        <sncr-input formControlName="customerOrPhoneNumber"></sncr-input>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <sncr-button type="secondary" (click)="c('Close click')">
+                    <span l10nTranslate>ABORT_OR_STOP</span>
+                </sncr-button>
+                <sncr-button l10nTranslate>SEND_MAIL</sncr-button>
+            </div>
+        </form>
+    </div>
+</ng-template>

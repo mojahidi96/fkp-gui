@@ -1,0 +1,76 @@
+@import '../../styles/common-imports';
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  background: $body-bg;
+  z-index: 10000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:host(.relative) {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 200px;
+}
+
+:host(.custom-inline) .wrapper {
+  min-height: 260px;
+}
+
+:host(.small-loader) {
+  height: 2.5rem;
+  .wrapper {
+    .loader {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+}
+
+:host(.dark) {
+  .wrapper {
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  .loader {
+    border: 12px solid rgba(#e60000, 0.2);
+    border-radius: 50%;
+    border-top: 12px solid #e60000;
+    width: 100px !important;
+    height: 100px !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0 auto;
+    transform: translate(-50%, -50%);
+    animation: spin 2s linear infinite;
+    background: transparent;
+
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

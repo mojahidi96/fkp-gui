@@ -1,0 +1,26 @@
+@import '../../ng-app/styles/vodafone';
+
+h1:host {
+  font: $weight-normal 45px/50px Arial, sans-serif;
+  color: $color-vodafone-red;
+}
+
+h2:host {
+  font: $weight-light 30px/34px Arial, sans-serif;
+  color: $color-mine-shaft;
+}
+
+h3:host {
+  font: $weight-bold 22px/26px Arial, sans-serif;
+  color: $color-mine-shaft;
+}
+
+h4:host {
+  font: $weight-bold 16px/22px Arial, sans-serif;
+  color: $color-mine-shaft;
+}
+
+h5:host {
+  font: $weight-bold 14px/20px Arial, sans-serif;
+  color: $color-mine-shaft;
+}

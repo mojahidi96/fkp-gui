@@ -1,0 +1,224 @@
+@import '../../../styles/common-imports';
+@import '../../../styles/mixins';
+
+.modal-content {
+  border-radius: 3px !important;
+  box-shadow: none !important;
+}
+
+.dropdown-menu {
+  width: 100%;
+}
+
+.buttonSection {
+  margin-top: 30px;
+  margin-bottom: 22px;
+}
+
+::ng-deep .buttonSection .btn-secondary {
+  margin-left: 0px;
+}
+
+::ng-deep .dropdown-item:focus,
+.dropdown-item:hover,
+.dropdown-item:active {
+  background-color: #ffffff;
+}
+
+::ng-deep .custom-dropdown .btn-primary {
+  max-height: 328px;
+  overflow-y: auto;
+  width: 240px;
+}
+
+::ng-deep .custom-button .btn-primary {
+  display: inline-block;
+  color: #8d9191 !important;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  border-radius: 3px !important;
+  box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+  cursor: pointer;
+  vertical-align: middle;
+  width: 100%;
+  padding: 4px 30px 4px 12px;
+  height: 31px;
+  text-align: left;
+  margin-bottom: 5px;
+  position: relative;
+
+  .dropDownTxt {
+    border-right: 1px solid #dadada;
+    display: inline-block;
+    width: 87%;
+    color: #333333;
+  }
+}
+
+.requiredField {
+  color: #e60000;
+}
+
+.margin-top-20 {
+  margin-top: 20px !important;
+}
+
+::ng-deep .custom-button .btn-primary:hover,
+::ng-deep .custom-button .btn-primary:focus {
+  background: #ffffff;
+  border-color: #fff;
+  box-shadow: 0 1px 3px rgba(50, 50, 50, 0.6);
+}
+
+::ng-deep .btn-secondary {
+  margin-left: 10px;
+}
+
+::ng-deep .btn-secondary:hover {
+  background: #ffffff !important;
+}
+
+.borderR {
+}
+
+::ng-deep label {
+  color: #000000;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+::ng-deep sncr-button {
+  padding: 0px !important;
+  margin-bottom: 10px;
+}
+
+.dropdown-toggle::after {
+  position: absolute;
+  color: #8d9191 !important;
+  top: 6px;
+  right: 25px;
+  border-right: 0em solid transparent;
+  border-top: 0em solid;
+  content: '\f078';
+  font-family: FontAwesome;
+  cursor: pointer;
+  padding-left: 10px;
+  border-left: 1px #dadada solid;
+  min-height: 20px;
+}
+
+.truncateSocName {
+  display: inline-block;
+  width: 95%;
+  overflow: hidden;
+}
+
+.custom-button.dropdown.show .dropdown-toggle::after {
+  content: '\f077';
+  font-family: FontAwesome;
+}
+
+.dropdown-scroll {
+  max-height: 159px;
+  overflow-y: scroll;
+}
+
+.validation {
+  color: red;
+}
+
+:host ::ng-deep .inline-loader .wrapper {
+  position: inherit !important;
+  top: 0% !important;
+}
+
+:host ::ng-deep .inline-loader .loader {
+  margin-top: 0% !important;
+}
+
+:host ::ng-deep .popover.bs-popover-top {
+  background-color: $error-message;
+  bottom: 128px;
+  color: $white;
+  left: inherit !important;
+  top: inherit !important;
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 5px;
+  max-width: inherit;
+  border-radius: 3px;
+  box-shadow: none;
+  min-width: 100%;
+
+  &::before,
+  &::after {
+    left: 30px;
+  }
+
+  .arrow {
+    left: 22px !important;
+    &::after {
+      border-top-color: $primary;
+    }
+  }
+  .popover-body {
+    padding: 8px;
+    min-height: 50px;
+    color: #fff;
+    .message {
+      font-size: 14px;
+      text-align: left;
+      margin-left: 10px;
+      padding-top: 5px;
+      white-space: normal;
+      width: 90%;
+      display: inline-block;
+    }
+  }
+}
+
+.icon {
+  float: left;
+  margin-left: 4px;
+  display: inline;
+  .fa.fa-2x.fa-exclamation-circle {
+    font-size: 32px;
+  }
+}
+
+.content-wrapper {
+  display: inline-block;
+
+  &::after {
+    content: '';
+    clear: both;
+  }
+}
+
+:host ::ng-deep .form-group {
+  margin-bottom: 20px;
+}
+
+::ng-deep .padding-LR0 div.col-6,
+::ng-deep .padding-LR0 div.col-4 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+:host ::ng-deep .form-check {
+  margin-bottom: 20px !important;
+}
+
+.marginLeft50 {
+  margin-left: 50%;
+}
+
+.buttonSectionWidth {
+  margin-top: 30px;
+  margin-bottom: 51px;
+}
+
+:host ::ng-deep .buttonSectionWidth .btn-secondary {
+  margin-left: 0px;
+}

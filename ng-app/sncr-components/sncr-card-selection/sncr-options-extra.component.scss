@@ -1,0 +1,103 @@
+@import '../../styles/mixins';
+@import '../../styles/custom-variables';
+
+.descriptions {
+  padding-left: 0px;
+  margin-bottom: 0px;
+  margin-left: 26px;
+  position: relative;
+
+  .descInner {
+    margin-top: 0px;
+    margin-left: 20px;
+    display: block;
+    width: 95%;
+    position: relative;
+
+    .infoCont {
+      margin-top: 0px;
+      margin-left: 4px;
+    }
+    .desc-icon {
+      float: left;
+      margin-left: 6px;
+      margin-right: 10px;
+      width: 24px;
+      height: 24px;
+      .infoIcon {
+        color: transparent;
+        background-image: url(~/public/icons/svg/vodafone/info-circle.svg);
+        @include icon-sizes24;
+        display: inline-block;
+        margin-top: -1px;
+      }
+    }
+    .descInner + .descInner1 {
+      clear: both;
+    }
+  }
+}
+.descInner + .clearfix + .selected {
+  margin-top: 0px;
+}
+
+.questionIcon {
+  display: flex;
+
+  .dateMain {
+    display: flex;
+    flex: 1;
+    align-items: center;
+
+    & > *:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    .dateSelect {
+      min-width: 120px;
+    }
+
+    .desc-icon {
+      display: flex;
+      flex: 0 0 auto;
+
+      .fa-question-circleIcon {
+        @include icon(24px);
+        background-image: url(~/public/icons/svg/vodafone/help-circle.svg);
+      }
+    }
+  }
+}
+
+.description {
+  padding-left: 0px;
+  margin-bottom: 0px;
+  position: relative;
+  margin-left: 26px;
+}
+
+.info-status {
+  display: flex;
+  align-items: center;
+
+  .info-icon {
+    width: 24px;
+    height: 24px;
+    background-image: url(~/public/icons/svg/vodafone/info-circle.svg);
+    display: inline-block;
+    background-size: contain;
+  }
+
+  .info-text {
+    margin-left: 10px;
+  }
+}
+
+:host ::ng-deep sncr-datepicker {
+  flex: 1 1 120px;
+  .form-group {
+    label {
+      margin-bottom: 0;
+    }
+  }
+}

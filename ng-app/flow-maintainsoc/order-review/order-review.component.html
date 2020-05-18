@@ -1,0 +1,45 @@
+<sncr-datatable #maintainSocReview [value]="reviewSubsWithSocs" [cols]="reviewOrderCols" [filter]="true" [columnSelection]="true"
+                [sortField]="'ban'" [sortOrder]="1" [resultMessage]="resultMessage"></sncr-datatable>
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-8">
+        <table class="table table-condensed customTable">
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Einrichtungspreis</th>
+                <th>Basispreis (mtl.)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Gesamtbetrag</td>
+                <td>{{totalOTAmount | currency:'EUR'}}</td>
+                <td>{{totalMAmount | currency:'EUR'}}</td>
+            </tr>
+            <tr>
+                <td>MwSt. (19%)</td>
+                <td>{{vatOTAmount | currency:'EUR'}}</td>
+                <td>{{vatAmount | currency:'EUR'}}</td>
+            </tr>
+            <tr>
+                <td>Gesamtbetrag (inkl. MwSt.)</td>
+                <td>{{totalOTAmount + vatOTAmount | currency:'EUR'}}</td>
+                <td>{{totalMAmount + vatAmount | currency:'EUR'}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #price let-context>
+    <div *ngIf="context.row.activationType === 'A'">
+        {{context.row.monthlyCharge | currency:'EUR'}}
+    </div>
+</ng-template>
+
+<ng-template #OTprice let-context>
+    <div *ngIf="context.row.activationType === 'A'">
+        {{context.row.oneTimeCharge | currency:'EUR'}}
+    </div>
+</ng-template>

@@ -1,0 +1,82 @@
+<div *ngIf="processing" class="p-3">
+    <sncr-loader class="relative" [isLoading]="processing"></sncr-loader>
+</div>
+<div class="container" *ngIf="!allavailableSocs && !processing">
+    <div class="mx-4 my-1 text-muted">
+        <div l10nTranslate>
+            SOC_SELECTION-NO_SOCS
+        </div>
+    </div>
+</div>
+<div *ngIf="allavailableSocs && !processing">
+    <div class="d-flex sncr-planned-changes-container">
+        <div class="leftPanel" [style.min-height]="getMaxHeight()">
+           <div class="px-20 pb-2">
+                <div>
+                    <sncr-notification [handler]="alert"></sncr-notification>
+                </div>
+                <p [innerHTML]="'SOC_SELECTION-SUB_TITLE_MSG'| translate:lang"></p>
+                <div class="d-flex">
+                    <div class="flex-fill mr-4">
+                        <sncr-select [label]="'SOC_SELECTION-CATEGORIES'| translate:lang" [(ngModel)]="selectedCategory" (ngModelChange)="updateValueSelected($event)" required>
+                            <option *ngFor="let category of allavailableSocs.categories" value="{{category.name}}">{{category.name}}</option>
+                        </sncr-select>
+                    </div>
+                    <div class="flex-fill">
+                        <sncr-input [label]="'SOC_SELECTION-FILTER_TARIFF_OPTIONS'| translate:lang" name="textFilter" [placeholder]="'SOC_SELECTION-SEARCH'| translate:lang" [(ngModel)]="textFilter"
+                                    (ngModelChange)="textFilterChange()"></sncr-input>
+                    </div>
+                </div>
+           </div>
+            <div *ngFor="let option of allavailableSocs.groups">
+                <div [hidden]="!option.show">
+                    <sncr-card-selection [showText]="'SOC_SELECTION-SHOW_DESCRIPTION'| translate:lang" [hideText]="'SOC_SELECTION-HIDE_DESCRIPTION'| translate:lang" titleText="{{option.name}}"
+                                         [icon]="option.icon"
+                                         [properties]="properties"
+                                         [titleText]="option.name" #options="sncrCardSelection" [filter]="textFilter">
+                        <div *ngFor="let family of option.families; let firstFamily = first" [hidden]="!family.show">
+                            <hr class="bg-inverse" *ngIf="!firstFamily && family.show && family.previousShow" />
+                            <sncr-checkbox-options [(value)]="family.isSelected"
+                                                   [properties]="properties"
+                                                   [options]="getValidSocs(family.socs)"
+                                                   [totalLength]="selectedSubs ? selectedSubs : subscribersCount"
+                                                   *ngIf="getValidSocs(family.socs).length === 1"
+                                                   [showDescription]="options.showDescriptions"
+                                                   [masterOptions]="true" [triggerOption]="true" [showAllOptions]="false"
+                                                   [showValidation]="showValidation"
+                                                   [isLazy]="true" [lazyUrl]="lazyUrl"
+                                                   [flowType]="flowType">
+                            </sncr-checkbox-options>
+                            <sncr-radio-options [(value)]="family.isSelected"
+                                                [properties]="properties"
+                                                [options]="getValidSocs(family.socs)"
+                                                [totalLength]="selectedSubs ? selectedSubs : subscribersCount"
+                                                *ngIf="getValidSocs(family.socs).length !== 1"
+                                                [showDescription]="options.showDescriptions"
+                                                [masterOptions]="true" [triggerOption]="true" [showAllOptions]="false"
+                                                [showValidation]="showValidation" [mandatory]="family.mandatory"
+                                                [isLazy]="true" [lazyUrl]="lazyUrl"
+                                                [flowType]="flowType"
+                                                (changeRadio)="radioChanged($event, family)">
+                            </sncr-radio-options>
+                        </div>
+                    </sncr-card-selection>
+                </div>
+            </div>
+            <p *ngIf="allavailableSocs.groups && allavailableSocs.groups.length>0" class="pull-left small mt-4 padLR20" l10nTranslate>
+                SOC_SELECTION-STANDARD_BASE_PRICE_MSG
+            </p>
+            <p *ngIf="!(allavailableSocs.groups && allavailableSocs.groups.length>0)" l10nTranslate
+                class="pull-left small mt-4 padLR20">
+                SOC_SELECTION-NO_AVAILABLE_SOCS 
+            </p>
+        </div>
+
+        <div class="rightPanel">
+            <sncr-sticky>
+                    <sncr-planned-changes [plannedChangesService]="sncrPlannedChangesService" (review)="nextButton()"
+                    [buttonLabel]="continueLabel | translate:lang"  [disableOnceClicked]="disableOnceClicked"></sncr-planned-changes>
+            </sncr-sticky>
+        </div>
+    </div>
+</div>

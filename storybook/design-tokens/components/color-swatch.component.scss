@@ -1,0 +1,46 @@
+@import '../../../ng-app/styles/vodafone';
+
+.c-color-swatch {
+  margin-right: 20px;
+  margin-bottom: 20px;
+
+  width: 210px;
+  border-radius: $radius-default;
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05),
+    0 1px 3px 0 rgba(63, 63, 68, 0.15);
+}
+
+.c-color-swatch__swatch {
+  position: relative;
+  border-top-left-radius: $radius-default;
+  border-top-right-radius: $radius-default;
+  height: 128px;
+}
+
+.c-color-swatch__swatch::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to bottom, #cccccc 0%, white 100%);
+}
+
+.c-color-swatch__info {
+  padding: 10px;
+  color: $color-mine-shaft;
+}
+
+.c-color-swatch__display-name {
+  font-weight: $weight-bold;
+}
+
+.c-color-swatch__color-code::before {
+  content: 'RGB: ';
+}
+
+.c-color-swatch__variable-name::before {
+  content: 'SCSS: ';
+}

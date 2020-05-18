@@ -1,0 +1,1 @@
+module.exports = {"creditVoucher": "true", "delayedSubsidy": "true", "handy": "true", "subsCount": 3};

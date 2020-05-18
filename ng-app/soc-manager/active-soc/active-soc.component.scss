@@ -1,0 +1,182 @@
+@import '../../styles/_custom-variables';
+
+:host ::ng-deep .ui-datatable {
+  td label {
+    display: block;
+  }
+
+  .ui-cell-data {
+    /*
+	  	height: 100%;
+	  	display: flex;
+	  	align-items: flex-end!important;
+	  */
+
+    .ui-cell-data textarea {
+      width: 100%;
+    }
+  }
+
+  .ui-datatable-data label[for='kind'] + .fm-select,
+  .ui-datatable-data label[for='trigger'] + .fm-select,
+  .ui-datatable-data label[for='familyName'] + .fm-select {
+    min-width: 120px;
+  }
+
+  .ui-datatable-data td:first-child,
+  .ui-datatable-thead th:first-child {
+    position: absolute;
+    left: 0;
+    top: auto;
+    height: 50px !important;
+    width: 90px !important;
+    margin-left: 0px;
+    padding-left: 0px;
+  }
+
+  .ui-datatable-data td:first-child {
+    border-top: 1px solid #979797 !important;
+    margin-top: -1px;
+  }
+
+  td.ui-datatable-emptymessage:first-child {
+    position: relative;
+  }
+
+  .ui-datatable-tablewrapper {
+    width: calc(100% - 80px) !important;
+    overflow-x: scroll;
+    margin-left: 80px;
+    overflow-y: visible;
+    padding: 0;
+  }
+
+  .ui-datatable-data > tr td {
+    height: 50px !important;
+    margin-left: 3px;
+  }
+
+  .ui-datatable-data > tr.editRow td:first-child {
+    height: 118px !important;
+    margin-left: 0px;
+    background-color: #fef5cc !important;
+  }
+
+  .ui-datatable-data > tr.editRow td {
+    height: 120px !important;
+  }
+}
+
+.datatableHeader {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  p {
+    margin-bottom: 0px;
+  }
+}
+
+.margin-bottom-30 {
+  margin-bottom: 30px !important;
+}
+
+.checkBoxCol {
+  margin: 0 auto;
+  text-align: center;
+}
+
+:host ::ng-deep .createTariffFields textarea {
+  width: 100% !important;
+}
+
+:host ::ng-deep .createTariffFields .fm-select {
+  margin-bottom: 0px;
+  background: none;
+  border: 0px;
+}
+
+:host ::ng-deep .margin-top-css {
+  margin-bottom: -18px;
+}
+
+:host ::ng-deep .editRow {
+  sncr-checkbox {
+    top: 5px;
+    position: relative;
+  }
+  #description {
+    min-width: 200px;
+  }
+  #socName {
+    min-width: 200px;
+  }
+}
+
+::ng-deep .ui-datatable-data .col-editable .btn-secondary:first-child {
+  margin-left: 0px;
+}
+
+::ng-deep .ui-datatable-data > tr.editRow .form-group {
+  margin-bottom: 0px;
+}
+
+::ng-deep .ui-datatable-data > tr.editRow td textarea {
+  max-height: 70px;
+  min-height: 70px;
+}
+
+:host ::ng-deep .custom-dropdown {
+  min-width: 350px !important;
+}
+
+:host ::ng-deep .dropdown-menu label {
+  margin-bottom: 1px !important;
+}
+
+.requiredField {
+  color: $primary;
+}
+
+:host ::ng-deep .createTariffFields .form-check {
+  margin-bottom: 20px !important;
+  .Checkbox {
+    span {
+      margin-left: 8px;
+    }
+  }
+}
+
+:host ::ng-deep .createTariffFields .form-group {
+  margin-bottom: 20px;
+}
+
+:host ::ng-deep .createTariffFields .form-check label {
+  margin-bottom: 0px;
+}
+
+:host ::ng-deep .description {
+  white-space: normal;
+  width: 19em;
+  word-break: normal;
+}
+
+:host ::ng-deep .ellipiss {
+  white-space: nowrap;
+  width: 8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.updating ::ng-deep th {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+:host ::ng-deep .desEllipiss {
+  width: 16.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .uppercase_text input {
+  text-transform: uppercase;
+}

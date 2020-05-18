@@ -1,0 +1,70 @@
+@import '../../styles/custom-variables';
+@import '../../styles/mixins';
+
+:host ::ng-deep .card {
+  ::ng-deep {
+    border-radius: 4px !important;
+    box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.6);
+    border-bottom: none;
+  }
+}
+
+:host ::ng-deep .card-header {
+  background: $txt-white;
+  border-radius: 0px;
+  border-bottom: 1px solid $input-text-border-color;
+  font-size: 20px;
+  color: $cardH-txt-color;
+  padding: 0px 20px;
+  height: 43px;
+  border-top: 1px solid $input-text-border-color;
+  .text {
+    top: 6px;
+    position: relative;
+    display: inline-block;
+    color: #1d1e1f;
+  }
+}
+
+.card-header:last-child {
+  border-bottom: 0px solid $input-text-border-color;
+}
+
+.card-header.card-primary {
+  box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.3);
+  border-top: 1px solid $input-text-border-color;
+  border-bottom: 0px solid $input-text-border-color;
+}
+
+.card-header.done {
+  box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.3);
+  border-top: 1px solid $input-text-border-color;
+  border-bottom: 0px solid $input-text-border-color;
+}
+
+.card-header.text-muted {
+  color: $muted !important;
+  cursor: default !important;
+}
+
+.fa.fa-check-circle {
+  display: none;
+}
+
+.editLink {
+  cursor: pointer;
+  color: #333333;
+  text-decoration: underline;
+  font-size: 14px;
+  margin-top: 11px;
+}
+
+.history {
+  font-size: 20px;
+}
+
+:host ::ng-deep ngb-accordion {
+  .btn {
+    padding: 0px;
+  }
+}

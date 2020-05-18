@@ -1,0 +1,88 @@
+<div class="card">
+    <div class="card-block">
+        <ngb-accordion activeIds="panel-1" (panelChange)="panelChange($event)" #accordion>
+            <ngb-panel id="panel-1" title="Auftragsstatus">
+                <ng-template ngbPanelContent>
+                    <ng-container *ngIf="customer && (customer | json) != '{}';">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4 break-word"><strong>Kundennummer</strong><br>{{customer.fnCustomerNumber}}</div>
+                            <div class="col-sm-4 col-md-4 break-word"><strong>Kundenname</strong><br>{{customer.customerName}}</div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 break-word">
+                                {{customer.address1}}<br>
+                                {{customer.address2}}<br>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!customer || (customer | json) == '{}';">
+                        <span>No customer details to display</span>
+                    </ng-container>
+                </ng-template>
+            </ngb-panel>
+            <ngb-panel id="panel-2" title="Bestellinformationen">
+                <ng-template ngbPanelContent>
+                    <ng-container *ngIf="isOrderDetailLoading">
+                        <load-data [loading]="true"></load-data>
+                    </ng-container>
+                    <ng-container *ngIf="orderDetails && (orderDetails| json) != '{}';">
+                        <div><label class="label">Bestellnummer: </label><span>{{orderDetails.barCodeId}}</span></div>
+                        <div><label class="label">Status vom: </label><span *ngIf="orderDetails.statuslist?.length>0">{{orderDetails.statuslist[0].statusUpdatedAt| date: 'medium'}}</span></div>
+                        <div><label class="label">Status: </label><span>{{orderRequest.orderStatus}}</span></div>
+                        <div><label class="label">Statusdetails: </label><span *ngIf="orderDetails.statuslist?.length>0">{{orderDetails.statuslist[0].statusDetails}}</span></div>
+                        <div><label class="label" [innerHTML]="'ORDER-CUSTOMER_MESSAGE' | translate:lang"></label><span *ngIf="customerMessage">{{customerMessage}}</span></div>
+
+                        <br />
+                        <ng-container *ngIf="orderDetails.shortPositionList?.length>0">
+                            <div class="row" *ngFor="let status of orderDetails.shortPositionList;let first = first;let index = index;">
+                                <div class="col-md-4">
+                                    <label class="label" *ngIf="first">Auftragsvorgang: </label><br />
+                                    <span>{{status.statusType}}</span>
+                                </div>
+                                <div class="col-md-4 pl-1">
+                                    <label class="label" *ngIf="first">Vorgangsinhalt: </label><br />
+                                    <span>{{status.productName}}</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="label" *ngIf="first">Vorgangsstatus: </label><br />
+                                    <span>{{status.status}}</span>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <div class="pt-3"><label class="label">Standort: </label>
+                            <span>{{orderDetails.street?orderDetails.street:''}}&nbsp;
+                                  {{orderDetails.houseNumber?orderDetails.houseNumber:''}}
+                            </span><br />
+                            <span class="leftAlignEle"> {{orderDetails.postalCode?orderDetails.postalCode:''}}&nbsp;
+                                   {{orderDetails.city?orderDetails.city:''}}
+                            </span>
+
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!orderDetails || (orderDetails| json) == '{}' && !isOrderDetailLoading">
+                        <span>No order details to display</span>
+                    </ng-container>
+                </ng-template>
+            </ngb-panel>
+            <ngb-panel id="panel-3" title="Bestellpositionen" [disabled]="positionId?false:true">
+                <ng-template ngbPanelContent>
+                    <ng-container *ngIf="isPositionDetailLoading">
+                        <load-data [loading]="true"></load-data>
+                    </ng-container>
+                    <ng-container *ngIf="orderPosDetails && (orderPosDetails| json) != '{}';else elsePart3">
+                        <div><label class="label">Hauptrufnummer: </label><span>{{orderPosDetails.mainAccessNumber}}</span></div>
+                        <div><label class="label">Gew&#252;nschtes Anschaltedatum: </label><span>{{orderPosDetails.plannedActivationDate| date: 'dd.MM.yyyy'}}</span></div>
+                        <div><label class="label">Best&#228;tigtes Anschaltedatum: </label><span>{{orderPosDetails.activationDate| date: 'dd.MM.yyyy'}}</span></div>
+                        <div><label class="label">Alternatives Anschaltedatum: </label><span>{{orderPosDetails.secondActivationDate}}</span></div>
+                        <div><label class="label">Lage Netzabschluss: </label><span>{{orderPosDetails.locationTAE}}</span></div>
+                    </ng-container>
+                    <ng-container *ngIf="!orderPosDetails || (orderPosDetails| json)=='{}' && !isPositionDetailLoading;">
+                        <span>Keine Bestellpositionen vorhanden</span>
+                    </ng-container>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+</div>

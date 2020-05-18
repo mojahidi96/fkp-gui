@@ -1,0 +1,74 @@
+@import '../../../../../../styles/mixins';
+@import '../../../../../../styles/modal';
+
+.bg-t {
+  background: transparent;
+}
+
+.btn-secondary {
+  color: #333;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  padding: 0px 15px;
+  font-size: 14px;
+  height: 34px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.href {
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  box-shadow: 0;
+  text-decoration: underline;
+}
+
+.h-60 {
+  min-height: 200px !important;
+}
+
+.table {
+  .btn-outline-secondary {
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+}
+
+img.resize-med {
+  width: 35px; /* you can use % */
+  height: 35px; /* IE 11 issue when using auto */
+}
+
+img.resize-small {
+  width: 20px; /* you can use % */
+  height: 20px; /* IE 11 issue when using auto */
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333 !important;
+  background-color: #fff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+.folder-list {
+  overflow-y: auto;
+  max-height: calc(100vh - 300px);
+}
+
+.navigation-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    flex: 1;
+  }
+}

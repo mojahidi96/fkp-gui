@@ -1,0 +1,60 @@
+@import '../styles/mixins';
+
+:host ::ng-deep .card {
+  border: none;
+  width: 100%;
+}
+
+label {
+  font-weight: bold;
+}
+
+:host ::ng-deep .readOnly {
+  padding: 0px !important;
+}
+
+.pad-btn-select {
+  padding-top: 26px;
+}
+
+.pad-btn-input {
+  padding-top: 22px;
+}
+
+:host ::ng-deep .showInfo.fa.infoGreyIcon {
+  @include icon-sizes20;
+  background-image: url(~/public/icons/svg/notification/info-gray.svg);
+  margin-right: 2px;
+  & + .popover {
+    min-width: 153px !important;
+    max-width: 149px !important;
+    background: #ffffeb !important;
+    pointer-events: none !important;
+  }
+}
+
+:host ::ng-deep .resetCheckBox {
+  margin-top: 30px !important;
+}
+
+:host ::ng-deep .labelText1 .popover.show.popover-top {
+  min-width: 153px !important;
+  max-width: 153px !important;
+  min-height: 82px !important;
+  margin: -11px 0px 0 !important;
+  background: #ffffeb;
+  display: inline-block;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: normal;
+  &:before {
+    background: #ffffeb;
+  }
+}
+
+.saveBtn {
+  text-align: right;
+  margin-bottom: 30px;
+  padding-right: 15px;
+  padding-left: 15px;
+}

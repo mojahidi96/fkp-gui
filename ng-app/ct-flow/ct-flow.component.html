@@ -1,0 +1,88 @@
+<h2 class="pageTitle">
+  <span *ngIf="cart?.shoppingCartName">{{cart?.shoppingCartName}} - </span>
+  <span l10nTranslate>CT-PAGE_TITLE</span>
+</h2>
+<div *ngIf="orderSubmitted">
+  <order-confirmation [orderDetails]="orderDetails"></order-confirmation>
+</div>
+<div *ngIf="!orderSubmitted">
+  <sncr-flow #flow="sncrFlow" [ngClass]="{disableFields:orderProcessing}" [prefilled]="prefilled">
+    <sncr-flow-section [titleText]="'CT-SELECTION-TITLE' | translate:lang" [eventType]="eventType"
+                       modelSortKey="selected" modelSortVal="2" #subsFlow="sncrFlowSection">
+      <div *sncrSummaryTemplate>
+        <div *ngIf="subsFlow.model?.selectCount > 0">
+          <span *ngIf="subsFlow.model.selectCount === 1" l10nTranslate>CT-SELECTION-ONE_SUBS_SELECTED</span>
+          <span *ngIf="subsFlow.model.selectCount !== 1"
+            [l10nTranslate]="{selectCount: subsFlow.model.selectCount}">CT-SELECTION-SUBSCRIBERS_WERE_SELECTED</span>
+        </div>
+      </div>
+
+      <div *sncrSectionTemplate class="dataTableMSoc">
+        <div class="mb-2">
+          <sncr-notification [handler]="subsAlert" [dismissible]="false"></sncr-notification>
+        </div>
+        <p class="infoText" [innerHTML]="'CT-SELECTION_TABLE-SUB_TITLE_MSG'| translate:lang"></p>
+        <sncr-datatable #subscriberTable prefix="CT" [cols]="columns" (onDataChange)="eventType = $event"
+                        [(selection)]="subsFlow.model.selected" [multiSelection]="true" [columnSelection]="true"
+                        [lazy]="true" [sortField]="subsFlowSortField" [sortOrder]="1" [lazyLoadUrl]="lazyLoadUrl"
+                        [maxSelectKey]="'ct-subscriber_max-selection'" [ngClass]="{disableFields:processing}">
+          <sncr-header></sncr-header>
+        </sncr-datatable>
+
+        <p *ngIf="showExtendedAvailability" class="infoText" [innerHTML]="'CT-SELECTION_TABLE-EXTENDED_AVAILABILITY'| translate:lang"></p>
+
+        <sncr-file-drop fileName="TeilnehmerdatenError" [disableMessage] = "disableMessage" [uploadUrl]="uploadUrl" (response)="reloadSubsTable($event)"></sncr-file-drop>
+        <div class="row">
+          <div class="next-button-right">
+            <sncr-button type="strong" (click)="nextSectionAfterSubscriber()" [disabled]="processing" [ngClass]="{disableFields:processing}">
+               <span l10nTranslate>CT-SELECTION-NEXT_BUTTON</span>
+            </sncr-button>
+          </div>
+        </div>
+            </div>
+      </sncr-flow-section>
+
+    <sncr-flow-section [titleText]="'CT-TARIFF_SELECTION-TITLE' | translate:lang" #tariffFlow="sncrFlowSection">
+      <div *sncrSummaryTemplate>
+        <ng-container *ngIf="tariffFlow.model.selectedTariffGroup === 'new'">
+          <p><span l10nTranslate>CT-TARIFF_SELECTION-SUMMARY_TEXT</span></p>
+          <div>
+            <span>{{tariffFlow.tariffModel?.affectedSubscribers}} {{tariffFlow.tariffModel?.selectedTariff.subsCount}} x {{tariffFlow.tariffModel?.selectedTariff.text}} </span>
+          </div>
+          <div class="ineligible-subs" *ngIf="tariffFlow.tariffModel?.selectedTariff?.inEligibleSubs && tariffFlow.tariffModel.selectedTariff.inEligibleSubs.length > 0
+           && !hasTariffError && !loadingEliSubs">
+            <svg-icon class="mr-1 orange" name="vodafone/warning" size="small"></svg-icon>
+            <div [l10nTranslate]="{count: tariffFlow.tariffModel?.selectedTariff?.inEligibleSubs.length}">{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT1</div>
+            <div l10nTranslate><a href="javascript:void(0)" (click)="exportcsv()">{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT2</a></div>
+            <div l10nTranslate>{{prefix}}TARIFF_SELECTION-IN_ELIGIBLE_SUBS_TEXT3</div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div *sncrSectionTemplate>
+        <tariffgrid-selection (nextSelection)="nextSection($event, tariffFlow)" [nextButtonLabel]="'CT-TARIFF_SELECTION-CONTINUE_TO_ORDER_REVIEW'"
+                              [prefilled]="prefilled" [reload]="tariffFlow?.reload" [prefix]="prefix"
+                              [onlyNewTariff]="true" [(selectedTariffGroup)]="tariffFlow.model.selectedTariffGroup" [showDateSelection]="true"
+                              [selectedTariff]="tariffFlow.tariffModel?.selectedTariff" (selectedTariffChange)="tariffFlow.model.selectedTariff = $event">
+        </tariffgrid-selection>
+      </div>
+      </sncr-flow-section>
+    <sncr-flow-section [titleText]="'CT-REVIEW-TITLE' | translate:lang" #reviewFlow="sncrFlowSection">
+      <div *sncrSectionTemplate class="dataTableMSoc">
+          <order-review [reloadSummary]="isTariffChanged" (output)="processOrderSubmit()" (pscOutput)="processPSC($event)"
+          #orderreview="orderReview" [isLoading]="isLoading" [orderType]="'MA_CHANGE_TARIFF'" isPSCEnabled="true"
+          [prefilled]="prefilled" [prefix]="prefix"></order-review>
+      </div>
+    </sncr-flow-section>
+  </sncr-flow>
+</div>
+
+<ng-template #multipleOrderDetails let-context>
+  <sncr-datatable [paginator]="false" [value]="orderRows" [cols]="orderCols">
+  </sncr-datatable>
+</ng-template>
+
+<ng-template class="contentPanel" #orderNumberPDF let-context>
+  <span class="orderNumber font-weight-bold" (click)="downloadPdf(context.row.orderNumber,context.row.orderType)">{{context.row['orderNumber']}}</span>&nbsp;
+  <i class="fa fa-file-pdf-oIcon" aria-hidden="true"></i>
+</ng-template>

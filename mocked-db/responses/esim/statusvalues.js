@@ -1,0 +1,1 @@
+module.exports = {"11":"Abgelehnt","5":"Abgeschlossen","1":"Gestartet"};

@@ -1,0 +1,43 @@
+:host ::ng-deep {
+  nouislider {
+    margin: 0;
+  }
+
+  .noUi-handle {
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    border: 1px solid #979797;
+    border-radius: 20px;
+    outline: none;
+    margin-top: 4px;
+
+    &:after,
+    &:before {
+      content: none;
+    }
+  }
+
+  .noUi-horizontal {
+    height: 10px;
+    width: 98%;
+    position: relative;
+    .noUi-tooltip {
+      background: none;
+      border: none;
+      bottom: -150%;
+      position: absolute;
+    }
+  }
+
+  .noUi-connect {
+    background-color: #e60000 !important;
+    width: 101%;
+    height: 10px;
+    border-radius: 13px;
+  }
+  .noUi-origin {
+    position: absolute;
+    top: -5px;
+  }
+}

@@ -1,0 +1,19 @@
+<div *ngIf="!hideStepper" class="card-header" role="button" #header
+     [ngClass]="{'card-primary': active, 'text-muted': disabled, 'done': showSummary()}"
+     (click)="activate()">
+    <div class="stepCircle"><span class="number">{{sectionNumber}}</span></div>
+    <i class="fa fa-check-circle float-left"></i>
+    <div class="text" l10nTranslate>{{titleText}}</div>
+    <span *ngIf="!active && !disabled && changeLink" class="editLink float-right" l10nTranslate>{{changeLink}}</span>
+    <span *ngIf="!active && !disabled && !changeLink" class="editLink float-right" l10nTranslate>SELECTION-EDIT</span>
+</div>
+
+<div class="flow-section-summary" *ngIf="showSummary()">
+    <ng-template [ngTemplateOutlet]="sectionSummary.templateRef"></ng-template>
+</div>
+
+<div class="card-block" *ngIf="alreadyActivated && sectionTemplate" [hidden]="!active">
+    <div class="card-text">
+        <ng-template [ngTemplateOutlet]="sectionTemplate.templateRef"></ng-template>
+    </div>
+</div>

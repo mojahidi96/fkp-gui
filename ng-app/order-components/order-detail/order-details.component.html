@@ -1,0 +1,50 @@
+<h2 class="pageTitle">
+    <span *ngIf="!isApprovalPage && timeoutService.vfUser" l10nTranslate>ORDER_DETAILS-TITLE</span>
+    <span *ngIf="!isApprovalPage && !timeoutService.vfUser" l10nTranslate>ORDER_HISTORY-TITLE</span>
+    <span *ngIf="isApprovalPage" l10nTranslate>APPROVER_PAGE-TITLE</span>
+</h2>
+
+<order-common [orderDetail]="orderDetail" [adminComments]="adminComments" [adress]="adress"></order-common>
+
+<div class="card" *ngIf="vvlType || ctType || actType">
+    <div class="card-header">
+        <div class="text" l10nTranslate>OVER_VIEW-TITLE</div>
+    </div>
+    <order-overview [orderSummary]="orderSummary" ></order-overview>
+</div>
+<div class="card card-lazy">
+    <div class="card-header" *ngIf="!actType">
+        <div class="text">{{orderDetail.header}}</div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <sncr-datatable [cols]="columns"
+                                [lazy]="true" [sortField]="orderDetail.sortedField" [sortOrder]="1"
+                                [lazyLoadUrl]="lazyLoadUrl" *ngIf="!actType">
+                </sncr-datatable>
+                <br>
+                <div class="row buttonPadding">
+                    <div class="col-md-12">
+                        <div class="col-md-4 pl-3">
+                            <sncr-button *ngIf="isApprovalPage" type="secondary" class="pull-left pt-4" (click)="backButtonApproval()" l10nTranslate>BACK_BUTTON-TITLE</sncr-button>
+                            <sncr-button *ngIf="!isApprovalPage" type="secondary" class="pull-left" (click)="backButton()" l10nTranslate>BACK_BUTTON-TITLE</sncr-button>
+                        </div>
+                        <div class="col-md-8 pull-right pr-3" *ngIf="isApprovalPage">
+                            <div class="col-md-5 pull-right pt-4">
+                                <sncr-button type="primary" [disabled]="isDisabledButton()"  class="primary pull-right" (click)="saveApprover()" l10nTranslate>SAVE_BUTTON-TITLE</sncr-button>
+                            </div>
+                            <div class="col-md-4 pull-right mar3">
+                                <label><span l10nTranslate>SELECT_ACTION_LABLE</span><span class="red-color">*</span></label>
+                                <sncr-select [(ngModel)]="states">
+                                    <option value="0" selected l10nTranslate>ORDER_DETAILS-CHOOSE</option>
+                                    <option *ngFor="let o of actoptions" value="{{o.value}}" l10nTranslate>{{o.text}}</option>
+                                </sncr-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

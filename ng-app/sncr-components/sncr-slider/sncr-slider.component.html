@@ -1,0 +1,9 @@
+<nouislider
+  *ngIf="forceRerenderToggle"
+  [min]="rangeMin"
+  [max]="rangeMax"
+  [config]="config"
+  [ngModel]="value"
+  (ngModelChange)="valueChange.emit($event)"
+  (change)="change.emit($event)"
+></nouislider>

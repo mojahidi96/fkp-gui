@@ -1,0 +1,13 @@
+@import '../../styles/custom-variables';
+@import '../../styles/page-title';
+
+.contentPanel {
+  background: $txt-white;
+  margin-top: 20px;
+  border-right: 2px solid $layout-border;
+  border-bottom: 2px solid $layout-border;
+
+  .contentPanelBody {
+    padding: 20px;
+  }
+}

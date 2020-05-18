@@ -1,0 +1,32 @@
+@import 'custom-variables';
+@import 'mixins';
+
+//Tab Styles
+
+:host ::ng-deep .nav-tabs {
+  & + .tab-content {
+    padding-top: 20px;
+  }
+  background-color: #f4f4f4;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  justify-content: space-around;
+
+  .nav-item {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+
+    .nav-link {
+      border: none;
+      display: inline-block;
+      padding: 15px 10px;
+      &.active,
+      &:hover {
+        color: $primary;
+        border-bottom: 2px solid $primary;
+      }
+    }
+  }
+}

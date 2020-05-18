@@ -1,0 +1,62 @@
+<div class="card">
+    <div class="card-block">
+        <div class="fixed-hieght-block">
+            <sncr-notification [handler]="socNotify" scrollableSelector=".fixed-hieght-block" (onScroll)="scrollWindow()"></sncr-notification>
+            <div class="row">
+                <div class="col-sm-6">
+                    <sncr-select [label]="'SOC_SELECTION-CATEGORIES'| translate:lang" [(ngModel)]="selectedCategory" (ngModelChange)="updateSelectedValue($event)" required>
+                        <option *ngFor="let category of allavailableSocs.categories" value="{{category.name}}">{{category.name}}</option>
+                    </sncr-select>
+                </div>
+
+                <div class="col-sm-6">
+                    <sncr-input [label]="'SOC_SELECTION-FILTER_TARIFF_OPTIONS'| translate:lang" name="textFilter" [placeholder]="'SOC_SELECTION-SEARCH'| translate:lang" [(ngModel)]="textFilter"></sncr-input>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div *ngFor="let option of allavailableSocs.groups">
+                        <div [hidden]="!option.show">
+                            <sncr-card-selection [showText]="showText" [hideText]="hideText" titleText="{{option.name}}"
+                                                 [titleText]="option.name"
+                                                 [icon] = "option.icon"
+                                                 [properties]="properties" #options="sncrCardSelection" [filter]="textFilter">
+                                <div *ngFor="let family of option.families; let firstFamily = first" [hidden]="!family.show">
+                                    <hr class="bg-inverse" *ngIf="!firstFamily && family.show && family.previousShow" />
+                                    <sncr-checkbox-options [(value)]="family.isSelected"
+                                                           [properties]="properties"
+                                                           [options]="getValidSocs(family.socs)"
+                                                           [totalLength]="allavailableSocs.tariffLength"
+                                                           *ngIf="getValidSocs(family.socs).length === 1"
+                                                           [showDescription]="options.showDescriptions"
+                                                           [masterOptions]="false" [triggerOption]="true" [showAllOptions] = "false"
+                                                           [showValidation]="showValidation">
+                                    </sncr-checkbox-options>
+                                    <sncr-radio-options [(value)]="family.isSelected"
+                                                        [properties]="properties"
+                                                        [options]="getValidSocs(family.socs)"
+                                                        [totalLength]="allavailableSocs.tariffLength"
+                                                        *ngIf="getValidSocs(family.socs).length !== 1"
+                                                        [showDescription]="options.showDescriptions"
+                                                        [masterOptions]="false" [triggerOption]="true"
+                                                        [showValidation]="showValidation" [showAllOptions] = "false"
+                                                        [mandatory]="family.mandatory">
+                                    </sncr-radio-options>
+                                </div>
+                            </sncr-card-selection>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p *ngIf="allavailableSocs.groups.length !== 0" class="pull-left small mt-4 padLR20">
+                {{superScript}}
+            </p>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <sncr-button class="pull-left red btn" type="toolbar" target="_top" href="{{backButton}}">Zur&uuml;ck</sncr-button>
+                <sncr-button class="pull-right red btn" type="toolbar" (click)="nextButton()">Weiter</sncr-button>
+            </div>
+        </div>
+    </div>
+</div>

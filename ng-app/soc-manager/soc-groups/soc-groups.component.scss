@@ -1,0 +1,68 @@
+@import '../../styles/_custom-variables';
+@import '../../styles/modal';
+
+.margin-bottom-30 {
+  margin-bottom: 30px !important;
+}
+
+.datatableHeader {
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  p {
+    margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep .new-group-form label {
+  color: #000000;
+  font-weight: bold;
+  margin-top: 0px !important;
+  margin-bottom: 10px;
+}
+
+::ng-deep .fm-select {
+  margin-bottom: 0px !important;
+}
+
+.gHeader {
+  margin-top: 10px;
+}
+
+:host ::ng-deep .form-group {
+  margin-bottom: 20px;
+}
+
+:host ::ng-deep .ui-datatable {
+  .col-editable + th,
+  .col-editable + td {
+    height: auto !important;
+    left: 0;
+    top: auto;
+    border: none !important;
+  }
+
+  td input.form-control {
+    display: inline;
+    width: 70% !important;
+  }
+
+  .ui-datatable-data > tr.editRow td,
+  .ui-datatable-data > tr td {
+    height: auto !important;
+  }
+}
+
+:host ::ng-deep .clickableDataRows {
+  .ui-datatable-data > tr:not(.editRow):hover td {
+    cursor: pointer;
+  }
+
+  .ui-datatable-data > tr.ui-state-highlight {
+    background-color: #d8d8d8;
+  }
+
+  .ui-datatable-data .col-editable sncr-button:first-of-type button {
+    margin-left: 0px !important;
+  }
+}
